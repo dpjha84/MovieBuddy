@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+  <string-array name="sections">
+    <item>NOW PLAYING</item>
+    <item>UPCOMING</item>
+    <item>TRENDING</item>
+  </string-array>
+<string-array name="movieDetails">
+    <item>SUMMARY</item>
+    <item>TRAILER</item>
+    <item>REVIEWS</item>
+    <item>CAST</item>
+  </string-array>
+  <string-array name="castDetails">
+    <!--<item>SUMMARY</item>-->
+    <item>MOVIES</item>
+  </string-array>
+</resources>
