@@ -26,7 +26,7 @@ namespace MovieBuddy
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.MovieInfoView);
             string castName = Intent.GetStringExtra("castName");
-            long castId = Intent.GetLongExtra("castId", 0);
+            int castId = Intent.GetIntExtra("castId", 0);
              
             imageView = (ImageView)FindViewById(Resource.Id.backdrop);
 

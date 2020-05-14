@@ -13,11 +13,11 @@ namespace MovieBuddy
     public class MovieGridAdapter : RecyclerView.Adapter
     {
         public event EventHandler<int> ItemClick;
-        public List<TmdbMovie> mPhotoAlbum;
+        public List<TMDbLib.Objects.Search.SearchMovie> mPhotoAlbum;
         private bool mainPage = false;
         private bool trailerView = false;
 
-        public MovieGridAdapter(List<TmdbMovie> movies, bool mainPage = false, bool trailerView = false)
+        public MovieGridAdapter(List<TMDbLib.Objects.Search.SearchMovie> movies, bool mainPage = false, bool trailerView = false)
         {
             mPhotoAlbum = movies;
             this.mainPage = mainPage;

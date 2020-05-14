@@ -41,11 +41,11 @@ namespace MovieBuddy
 
         protected override void OnItemClick(object sender, int position)
         {
-            var movie = (sender as MovieGridAdapter).mPhotoAlbum[position];
-            Intent viewIntent =
-          new Intent("android.intent.action.VIEW",
-            Uri.Parse($"https://www.youtube.com/embed/{movie.Trailer}"));
-            StartActivity(viewIntent);
+          //  var movie = (sender as MovieGridAdapter).mPhotoAlbum[position];
+          //  Intent viewIntent =
+          //new Intent("android.intent.action.VIEW",
+          //  Uri.Parse($"https://www.youtube.com/embed/{movie.Trailer}"));
+          //  StartActivity(viewIntent);
         }
     }
 }

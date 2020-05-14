@@ -9,25 +9,10 @@ namespace MovieBuddy
 {
     public class LocalDataProvider : ILocalDataProvider
     {
-        public static Movie[] PreviousMonthMovies { get; set; }
-        public static Movie[] CurrentMonthMovies { get; set; }
-        public static Movie[] NextMonthMovies { get; set; }
-        public static int PreviousMonth { get; set; }
-        public static int CurrentMonth { get; set; }
-        public static int NextMonth { get; set; }
-        public static int PreviousMonthYear { get; set; }
-        public static int CurrentMonthYear { get; set; }
-        public static int NextMonthYear { get; set; }
-
         public void Reset()
         {
             var prefs = Application.Context.GetSharedPreferences("MySharedPrefs", FileCreationMode.Private);
             prefs.Edit().Clear().Commit();
-            //prefs.Edit().Apply();  
-            //Set("201710", null);
-            //Set("201711", null);
-            //Set("201712", null);
-            //Set("201712", null);
         }
 
         public string Get(string key)

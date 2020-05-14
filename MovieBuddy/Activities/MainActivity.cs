@@ -10,7 +10,7 @@ using Android.Widget;
 
 namespace MovieBuddy
 {
-    [Activity (Label = "Movie Buff", MainLauncher = false, Icon = "@drawable/icon")]
+    [Activity (Label = "Movie Buddy", MainLauncher = false, Icon = "@drawable/icon")]
 	public class MainActivity : AppCompatActivity
     {
         DrawerLayout drawerLayout;

@@ -46,10 +46,13 @@ namespace MovieBuddy
     public class CastViewHolder : RecyclerView.ViewHolder
     {
         public TextView CastName { get; private set; }
+
+        //public TextView Character { get; private set; }
         public ImageView CastImage { get; private set; }
 
         public CastViewHolder(View itemView, Action<int> listener) : base(itemView)
         {
+            //Character = itemView.FindViewById<TextView>(Resource.Id.CharacterName);
             CastName = itemView.FindViewById<TextView>(Resource.Id.CastName);
             CastImage = itemView.FindViewById<ImageView>(Resource.Id.CastImage);
             itemView.Click += (sender, e) => listener(base.LayoutPosition);

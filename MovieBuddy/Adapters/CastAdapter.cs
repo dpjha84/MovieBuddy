@@ -13,9 +13,9 @@ namespace MovieBuddy
     public class CastAdapter : RecyclerView.Adapter
     {
         public event EventHandler<int> ItemClick;
-        public List<Cast> Cast;
+        public List<TMDbLib.Objects.Movies.Cast> Cast;
 
-        public CastAdapter(List<Cast> cast)
+        public CastAdapter(List<TMDbLib.Objects.Movies.Cast> cast)
         {
             this.Cast = cast;
         }
@@ -32,6 +32,7 @@ namespace MovieBuddy
             var vh = holder as CastViewHolder;
             //vh.CastImage. = movie.Overview;// $"{mPhotoAlbum[position].Title}\n{mPhotoAlbum[position].Date.ToString("m")}";
             vh.CastName.Text = Cast[position].Name;
+            //vh.Character.Text = Cast[position].Character;
             Context context = vh.CastImage.Context;
             if (string.IsNullOrWhiteSpace(Cast[position].ProfilePath))
                 //Glide.With(context).Load(Resource.Drawable.NoCast).Into(vh.CastImage);

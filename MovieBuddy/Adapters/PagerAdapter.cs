@@ -100,11 +100,12 @@ namespace MovieBuddy
                 case 0:
                     return SummaryFragment.NewInstance(movieName, movieId);
                 case 1:
-                    return TrailerFragment.NewInstance(movieName, movieId);
-                case 2:
-                    return ReviewsFragment.NewInstance(movieName, movieId, imdbId);
-                case 3:
                     return CastFragment.NewInstance(movieName, movieId);
+                case 2:
+                    return ReviewFragment.NewInstance(movieName, movieId);
+                case 3:
+                    return SimilarMoviesFragment.NewInstance(movieId);
+                
             }
             return null;
         }
@@ -119,7 +120,7 @@ namespace MovieBuddy
     {
         string[] tabTitles;
         string castName;
-        long castId;
+        int castId;
 
         public override int Count
         {
@@ -129,7 +130,7 @@ namespace MovieBuddy
             }
         }
 
-        public CastPagerAdapter(Context context, Android.Support.V4.App.FragmentManager fm, string castName, long castId) : base(fm)
+        public CastPagerAdapter(Context context, Android.Support.V4.App.FragmentManager fm, string castName, int castId) : base(fm)
         {
             tabTitles = context.Resources.GetTextArray(Resource.Array.castDetails);
             this.castName = castName;

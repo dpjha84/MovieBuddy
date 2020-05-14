@@ -11,8 +11,8 @@
   <color name="secondaryText">#727272</color>
   <color name="divider">#B6B6B6</color>
   <color name="activated_color">#E8E8E8</color>
-  <color name="colorPrimary">#2c3e50</color>
-  <color name="colorPrimaryDark">#1B3147</color>
+  <color name="colorPrimary">#6a1b9a</color>
+  <color name="colorPrimaryDark">#4a148c</color>
   <color name="colorAccent">#3498db</color>
   <color name="ic_launcher_background">#3498db</color>
 </resources>

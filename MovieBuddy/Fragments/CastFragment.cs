@@ -13,13 +13,13 @@ namespace MovieBuddy
         //long castId = 0;
         MovieGridAdapter movieAdapter;
         CastAdapter castAdapter;
-        public static CastFragment NewInstance(string name, int Id, long castId = 0, bool isMovie = false)
+        public static CastFragment NewInstance(string name, int Id, int castId = 0, bool isMovie = false)
         {
             var frag1 = new CastFragment();
             Bundle bundle = new Bundle();
             bundle.PutInt("Id", Id);
             bundle.PutString("name", name);
-            bundle.PutLong("castId", castId);
+            bundle.PutInt("castId", castId);
             bundle.PutBoolean("isMovie", isMovie);
             frag1.Arguments = bundle;            
             return frag1;
@@ -29,31 +29,32 @@ namespace MovieBuddy
         {
             movieName = Arguments.GetString("name");
             movieId = Arguments.GetInt("Id");
-            long castId = Arguments.GetLong("castId");
+            int castId = Arguments.GetInt("castId");
             bool isCast = Arguments.GetBoolean("isMovie");
             View rootView = inflater.Inflate(Resource.Layout.fragment_blank, container, false);
 
             var rv = (RecyclerView)rootView.FindViewById(Resource.Id.rv_recycler_view);            
             rv.HasFixedSize = true;
 
-            var llm = new GridLayoutManager(this.Context, 2, GridLayoutManager.Vertical, false);
+            var llm = new GridLayoutManager(this.Context, 3, GridLayoutManager.Vertical, false);
             rv.SetLayoutManager(llm);
             //rv.AddItemDecoration(new DividerItemDecoration(rv.Context, llm.Orientation));
 
             if (Arguments.GetBoolean("isMovie"))
             {
-                var movieList = new List<TmdbMovie>();
+                var movieList = new List<TMDbLib.Objects.Search.SearchMovie>();
+                //int castId = Arguments.GetInt("castId");
                 foreach (var item in MovieManager.Instance.GetMovieCredits(castId).Cast)
-                    movieList.Add(new TmdbMovie
+                    movieList.Add(new TMDbLib.Objects.Search.SearchMovie
                     {
                         Id = item.Id,
                         Title = item.Title,
                         OriginalTitle = item.OriginalTitle,
-                        BackdropPath = item.BackdropPath,
+                        BackdropPath = item.PosterPath,
                         PosterPath = item.PosterPath,
-                        ReleaseDate = string.IsNullOrWhiteSpace(item.ReleaseDate) ? DateTime.MinValue : DateTime.Parse(item.ReleaseDate),
-                        Overview = item.Overview,
-                        OriginalLanguage = item.OriginalLanguage
+                        ReleaseDate = item.ReleaseDate,//string.IsNullOrWhiteSpace(item.ReleaseDate) ? DateTime.MinValue : DateTime.Parse(item.ReleaseDate),
+                        Overview = item.Title,
+                        //OriginalLanguage = item.OriginalLanguage
                     });
                 movieAdapter = new MovieGridAdapter(movieList);
                 movieAdapter.ItemClick += OnItemClick;
@@ -61,7 +62,7 @@ namespace MovieBuddy
             }
             else
             {
-                castAdapter = new CastAdapter(MovieManager.Instance.GetCast(movieId, movieName).Cast);
+                castAdapter = new CastAdapter(MovieManager.Instance.GetCastAndCrew(movieId).Cast);
                 castAdapter.ItemClick += OnItemClick;
                 rv.SetAdapter(castAdapter);
             }
@@ -87,10 +88,10 @@ namespace MovieBuddy
             {
                 Intent intent = new Intent(this.Context, typeof(CastInfoActivity));
                 Bundle b = new Bundle();
-                b.PutLong("castId", (sender as CastAdapter).Cast[position].Id);
+                b.PutInt("castId", (sender as CastAdapter).Cast[position].Id);
                 b.PutString("castName", (sender as CastAdapter).Cast[position].Name);
                 var cast = (sender as CastAdapter).Cast[position];
-                var backdrop = cast.BackdropPath;
+                var backdrop = cast.ProfilePath;
                 b.PutString("imageUrl", !string.IsNullOrWhiteSpace(backdrop) ? backdrop : cast.ProfilePath);
                 intent.PutExtras(b);
                 StartActivity(intent);
