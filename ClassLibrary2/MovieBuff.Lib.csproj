@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>MovieBuff.Lib</AssemblyName>
+    <RootNamespace>MovieBuff.Lib</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Google.Apis.YouTube.v3" Version="1.32.1.1079" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.6.10" />
+    <PackageReference Include="TMDbLib" Version="1.6.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Data\Reviews\" />
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="Copy $(SolutionDir)\ClassLibrary2\Data\* $(SolutionDir)\MovieBuff.Lib.Desktop\Data\* /y&#xD;&#xA;Copy $(SolutionDir)\ClassLibrary2\Data\*.cs $(SolutionDir)\MovieBuff.Lib.Desktop\Data\*.cs /y&#xD;&#xA;Copy $(SolutionDir)\ClassLibrary2\Data\Reviews\* $(SolutionDir)\MovieBuff.Lib.Desktop\Data\Reviews\* /y" />
+  </Target>
+
+</Project>

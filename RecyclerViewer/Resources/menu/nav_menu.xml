@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <group android:checkableBehavior="single">
+    <item
+        android:id="@+id/nav_home_1"
+        android:icon="@drawable/ic_home_1"
+        android:title="Feedback" />
+    <!--<item
+        android:id="@+id/nav_home_2"
+        android:icon="@drawable/ic_home_2"
+        android:title="Feedback" />-->
+  </group>
+
+  <!--<item android:title="Sub items">
+    <menu>
+      <item
+          android:icon="@drawable/ic_home_1"
+          android:title="Sub item 1" 
+          android:checkable="true" />
+      <item
+          android:icon="@drawable/ic_home_2"
+          android:title="Sub item 2"
+          android:checkable="true"  />
+    </menu>
+  </item>-->
+
+</menu>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/cardviewBig"
+    android:layout_width="320sp"
+    android:layout_height="180sp"
+    card_view:cardUseCompatPadding="true"
+    card_view:cardCornerRadius="4sp"
+    card_view:cardElevation="4sp">
+    <FrameLayout
+        android:id="@+id/video_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#000">
+        <ImageView
+            android:layout_width="320sp"
+            android:layout_height="180sp"
+            android:id="@+id/imageViewBig"
+            android:scaleType="centerCrop" />
+        <TextView
+            android:id="@+id/movie_info_big"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="hello movie"
+            android:layout_gravity="bottom|left"
+            android:layout_marginLeft="4sp"
+            android:layout_marginBottom="4sp"
+            android:layout_weight="1"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/movie_name_big"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="hello movie"
+            android:textSize="16sp"
+            android:layout_gravity="top|left"
+            android:layout_marginLeft="4sp"
+            android:layout_marginBottom="4sp"
+            android:layout_weight="1"
+            android:textStyle="bold" />
+        <ImageView
+            android:layout_width="15sp"
+            android:layout_height="15sp"
+            android:id="@+id/imdbView"
+            android:scaleType="centerCrop"
+            android:layout_gravity="bottom|right"
+            android:layout_marginRight="30sp"
+            android:layout_marginBottom="4sp" />
+        <TextView
+            android:id="@+id/movie_rating_big"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="8.5"
+            android:layout_gravity="bottom|right"
+            android:layout_margin="4sp"
+            android:layout_weight="1"
+            android:textStyle="bold" />
+    </FrameLayout>
+</android.support.v7.widget.CardView>
