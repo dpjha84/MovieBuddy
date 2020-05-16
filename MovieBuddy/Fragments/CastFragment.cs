@@ -9,8 +9,6 @@ namespace MovieBuddy
 {
     public class CastFragment : BaseFragment
     {
-        //bool isMovie = false;
-        //long castId = 0;
         MovieGridAdapter movieAdapter;
         CastAdapter castAdapter;
         public static CastFragment NewInstance(string name, int Id, int castId = 0, bool isMovie = false)
@@ -33,7 +31,8 @@ namespace MovieBuddy
             bool isCast = Arguments.GetBoolean("isMovie");
             View rootView = inflater.Inflate(Resource.Layout.fragment_blank, container, false);
 
-            var rv = (RecyclerView)rootView.FindViewById(Resource.Id.rv_recycler_view);            
+            var rv = (RecyclerView)rootView.FindViewById(Resource.Id.rv_recycler_view);
+            rv.NestedScrollingEnabled = false;
             rv.HasFixedSize = true;
 
             var llm = new GridLayoutManager(this.Context, 3, GridLayoutManager.Vertical, false);
@@ -82,7 +81,6 @@ namespace MovieBuddy
                 b.PutString("imageUrl", !string.IsNullOrWhiteSpace(backdrop) ? backdrop : movie.PosterPath);
                 intent.PutExtras(b);
                 StartActivity(intent);
-                
             }
             else
             {
@@ -98,11 +96,13 @@ namespace MovieBuddy
             }            
         }
 
-        //public override void OnDestroy()
-        //{
-        //    //movieAdapter.ItemClick -= OnItemClick;
-        //    //castAdapter.ItemClick -= OnItemClick;
-        //}
-
+        public override void OnDestroy()
+        {
+            if(movieAdapter != null)
+                movieAdapter.ItemClick -= OnItemClick;
+            if(castAdapter != null)
+                castAdapter.ItemClick -= OnItemClick;
+            base.OnDestroy();
+        }
     }
 }

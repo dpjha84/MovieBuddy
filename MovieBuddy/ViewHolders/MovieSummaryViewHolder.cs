@@ -16,32 +16,32 @@ namespace MovieBuddy
         }
     }
 
-    public class MovieTrailorViewHolder : RecyclerView.ViewHolder
-    {
-        public TextView MovieTrailor { get; private set; }
+    //public class MovieTrailorViewHolder : RecyclerView.ViewHolder
+    //{
+    //    public TextView MovieTrailor { get; private set; }
 
-        public MovieTrailorViewHolder(View itemView, Action<int> listener) : base(itemView)
-        {
-            MovieTrailor = itemView.FindViewById<TextView>(Resource.Id.textMovieSummary);
-            itemView.Click += (sender, e) => listener(base.LayoutPosition);
-        }
-    }
+    //    public MovieTrailorViewHolder(View itemView, Action<int> listener) : base(itemView)
+    //    {
+    //        MovieTrailor = itemView.FindViewById<TextView>(Resource.Id.textMovieSummary);
+    //        itemView.Click += (sender, e) => listener(base.LayoutPosition);
+    //    }
+    //}
 
-    public class MovieReviewsViewHolder : RecyclerView.ViewHolder
-    {
-        public TextView ReviewerName { get; private set; }
-        public TextView Rating { get; private set; }
-        public ImageView ReviewerImage { get; private set; }
+    //public class MovieReviewsViewHolder : RecyclerView.ViewHolder
+    //{
+    //    public TextView ReviewerName { get; private set; }
+    //    public TextView Rating { get; private set; }
+    //    public ImageView ReviewerImage { get; private set; }
 
-        public MovieReviewsViewHolder(View itemView, Action<int> listener) : base(itemView)
-        {
-            ReviewerImage = itemView.FindViewById<ImageView>(Resource.Id.ReviewerImage);
-            ReviewerName = itemView.FindViewById<TextView>(Resource.Id.ReviewerName);
-            Rating = itemView.FindViewById<TextView>(Resource.Id.ReviewerRating);
+    //    public MovieReviewsViewHolder(View itemView, Action<int> listener) : base(itemView)
+    //    {
+    //        ReviewerImage = itemView.FindViewById<ImageView>(Resource.Id.ReviewerImage);
+    //        ReviewerName = itemView.FindViewById<TextView>(Resource.Id.ReviewerName);
+    //        Rating = itemView.FindViewById<TextView>(Resource.Id.ReviewerRating);
 
-            //itemView.Click += (sender, e) => listener(base.LayoutPosition);
-        }
-    }
+    //        //itemView.Click += (sender, e) => listener(base.LayoutPosition);
+    //    }
+    //}
 
     public class CastViewHolder : RecyclerView.ViewHolder
     {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using TMDbLib.Client;
 using TMDbLib.Objects.Movies;
 using TMDbLib.Objects.People;
@@ -30,12 +31,20 @@ namespace MovieBuddy
             LocalDataProvider = provider;
             tmdbClient = new TMDbClient("c6b31d1cdad6a56a23f0c913e2482a31");
         }
-
+        Dictionary<int, string> GenresMap;
         public void Load()
         {
+            GenresMap = new Dictionary<int, string>();
+            var list = tmdbClient.GetMovieGenresAsync().Result;
+            foreach (var g in list)
+            {
+                GenresMap.Add(g.Id, g.Name);
+            }
             Upcoming = tmdbClient.GetMovieUpcomingListAsync().Result.Results;
             NowPlaying = tmdbClient.GetMovieNowPlayingListAsync().Result.Results;
             Trending = tmdbClient.GetTrendingMoviesAsync(TimeWindow.Week).Result.Results;
+            TopRated = tmdbClient.GetMovieTopRatedListAsync().Result.Results;
+            Popular = tmdbClient.GetMoviePopularListAsync().Result.Results;
             //..Select(x => new TmdbMovie
             //{
             //    Id = x.Id,
@@ -66,6 +75,10 @@ namespace MovieBuddy
         public List<TMDbLib.Objects.Search.SearchMovie> NowPlaying { get; private set; }
         public List<TMDbLib.Objects.Search.SearchMovie> Trending { get; private set; }
 
+        public List<TMDbLib.Objects.Search.SearchMovie> Popular { get; private set; }
+
+        public List<TMDbLib.Objects.Search.SearchMovie> TopRated { get; private set; }
+
         public string GetTrailer(int movieId, string name) => "";
 
         public List<TmdbMovie> GetReleased()
@@ -90,10 +103,6 @@ namespace MovieBuddy
         public Credits GetCast(int movieId, string name)
         {
             return new Credits { Cast = new List<Cast>() };
-            //var data = MovieData[GetKey(movieId, name)].Credits;
-            //if (data == null)
-            //    return new Credits { Cast = new List<Cast>() };
-            //return data;
         }
 
         public TMDbLib.Objects.Movies.Credits GetCastAndCrew(int movieId) => tmdbClient.GetMovieCreditsAsync(movieId).Result;
@@ -102,10 +111,7 @@ namespace MovieBuddy
 
         public List<TMDbLib.Objects.Reviews.ReviewBase> GetReviews(int movieId) => tmdbClient.GetMovieReviewsAsync(movieId).Result.Results;
 
-        public MovieCredits GetMovieCredits(int personId)
-        {
-            return tmdbClient.GetPersonMovieCreditsAsync(personId).Result;
-        }
+        public MovieCredits GetMovieCredits(int personId) => tmdbClient.GetPersonMovieCreditsAsync(personId).Result;
 
         public string GetGenres(TmdbMovie movie, int count = 0)
         {
@@ -117,15 +123,60 @@ namespace MovieBuddy
             return join;
         }
 
-        public string GetFullOverview(int movieId)
+        public List<string> GetFullOverview(int movieId)
         {
+            var result = new List<string>();            
             var movie = Upcoming.Find(x => x.Id == movieId);
-            if (movie != null) return movie.Overview;
-            movie = NowPlaying.Find(x => x.Id == movieId);
-            if (movie != null) return movie.Overview;
-            movie = Trending.Find(x => x.Id == movieId);
-            if (movie != null) return movie.Overview;
-            return "";
+            if (movie == null)
+            {
+                movie = NowPlaying.Find(x => x.Id == movieId);
+                if (movie == null)
+                {
+                    movie = Trending.Find(x => x.Id == movieId);
+                    if (movie == null)
+                    {
+                        movie = Popular.Find(x => x.Id == movieId);
+                        if(movie == null)
+                            movie = TopRated.Find(x => x.Id == movieId);
+                    }
+                }
+            }            
+            if (movie != null)
+            {
+                result.Add("Overview:");
+                result.Add(movie.Overview);
+                if (movie.ReleaseDate.HasValue)
+                {
+                    result.Add("\nYear:");
+                    result.Add(movie.ReleaseDate.Value.Year.ToString());
+                }
+                if (movie.GenreIds != null)
+                {
+                    result.Add("\nGenres:");
+                    result.Add(string.Join(", ", movie.GenreIds.Select(x => GenresMap[x])));
+                }
+                result.Add("\nLanguage:");
+                result.Add(movie.OriginalLanguage);
+            }
+            else
+            {
+                var movie1 = tmdbClient.GetMovieAsync(movieId).Result;
+                result.Add("Overview:");
+                result.Add(movie1.Overview);
+                if (movie1.ReleaseDate.HasValue)
+                {
+                    result.Add("\nYear:");
+                    result.Add(movie1.ReleaseDate.Value.Year.ToString());
+                }
+                if (movie1.Genres != null)
+                {
+                    result.Add("\nGenres:");
+                    result.Add(string.Join(", ", movie1.Genres.Select(x => GenresMap[x.Id])));
+                }
+                result.Add("\nLanguage:");
+                result.Add(movie1.OriginalLanguage);
+            }
+            return result;
         }
     }
 }

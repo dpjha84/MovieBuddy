@@ -6,6 +6,7 @@ using Android.Text.Style;
 using Android.Views;
 using Square.Picasso;
 using System;
+using System.Collections.Generic;
 using TMDbLib.Objects.Search;
 
 namespace MovieBuddy
@@ -13,11 +14,11 @@ namespace MovieBuddy
     public class MovieSummaryAdapter : RecyclerView.Adapter
     {
         public event EventHandler<int> ItemClick;
-        public string movie;
+        public List<string> content;
 
-        public MovieSummaryAdapter(string movie)
+        public MovieSummaryAdapter(List<string> content)
         {
-            this.movie = movie;
+            this.content = content;
         }
 
         public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
@@ -30,18 +31,20 @@ namespace MovieBuddy
         public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
         {
             MovieSummaryViewHolder vh = holder as MovieSummaryViewHolder;
-            //String normalBefore = "First Part Not Bold ";
-            //String normalBOLD = "BOLD ";
-            //String normalAfter = "rest not bold";
-            //String finalString = normalBefore + normalBOLD + normalAfter;
-
-            //String boldText = "id";
-            //String normalText = "name";
-            SpannableString str = new SpannableString(movie);
-            //str.SetSpan(new TypefaceSpan(Typeface.Create("", TypefaceStyle.Bold)), 0, boldText.Length, 
-            //    SpanTypes.ExclusiveExclusive);
-            
-            vh.MovieSummary.TextFormatted = str;// $"{mPhotoAlbum[position].Title}\n{mPhotoAlbum[position].Date.ToString("m")}";
+            var data = string.Join('\n', content);
+            SpannableString str = new SpannableString(data);
+            int prev = 0;
+            for (int i = 0; i < content.Count; i++)
+            {
+                if (i % 2 == 0)
+                {
+                    str.SetSpan(new StyleSpan(TypefaceStyle.Bold), prev, prev + content[i].Length,
+                        SpanTypes.ExclusiveExclusive);
+                }
+                prev += content[i].Length;
+                prev++;
+            }
+            vh.MovieSummary.TextFormatted = str;
         }
 
         public override int ItemCount
@@ -55,4 +58,24 @@ namespace MovieBuddy
                 ItemClick(this, position);
         }
     }
+
+    public class CustomTypefaceSpan : MetricAffectingSpan
+{
+    readonly Typeface typeFace;
+
+    public CustomTypefaceSpan(Typeface typeFace)
+    {
+        this.typeFace = typeFace;
+    }
+
+    public override void UpdateDrawState(TextPaint tp)
+    {
+        tp.SetTypeface(typeFace);
+    }
+
+    public override void UpdateMeasureState(TextPaint p)
+    {
+        p.SetTypeface(typeFace);
+    }
+}
 }

@@ -48,6 +48,10 @@ namespace MovieBuddy
                     return MoviesFragment.NewInstance(MovieListType.Upcoming);
                 case 2:
                     return MoviesFragment.NewInstance(MovieListType.Trending);
+                case 3:
+                    return MoviesFragment.NewInstance(MovieListType.Popular);
+                case 4:
+                    return MoviesFragment.NewInstance(MovieListType.TopRated);
             }
             return null;
         }

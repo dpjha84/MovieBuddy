@@ -4,6 +4,8 @@
     <item>NOW PLAYING</item>
     <item>UPCOMING</item>
     <item>TRENDING</item>
+    <item>POPULAR</item>
+    <item>TOP RATED</item>
   </string-array>
 <string-array name="movieDetails">
     <item>SUMMARY</item>

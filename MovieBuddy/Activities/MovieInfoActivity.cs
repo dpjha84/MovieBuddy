@@ -7,6 +7,7 @@ using Android.Support.V7.App;
 using Android.Support.V4.View;
 using Android.Support.Design.Widget;
 using Com.Bumptech.Glide;
+using System;
 
 namespace MovieBuddy
 {
@@ -22,45 +23,52 @@ namespace MovieBuddy
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
-            base.OnCreate(savedInstanceState);
-            string movieName = Intent.GetStringExtra("movieName");
-            int movieId = Intent.GetIntExtra("movieId", 0);
-            //var imdbId = Intent.GetIntExtra("imdbId", 0);
-            string castName = Intent.GetStringExtra("castName");
-            int castId = Intent.GetIntExtra("castId", 0);
-            bool isCast = Intent.GetBooleanExtra("isCast", false);
-
-            savedInstanceState = new Bundle();
-            savedInstanceState.PutInt("Id", movieId);
-            savedInstanceState.PutString("name", movieName);
-            savedInstanceState.PutLong("castId", castId);
-            savedInstanceState.PutBoolean("isCast", isCast);
-
-            
-            SetContentView(Resource.Layout.MovieInfoView);
-            
-             
-            imageView = (ImageView)FindViewById(Resource.Id.backdrop);
-
-            collapsingToolbar = (CollapsingToolbarLayout)FindViewById(Resource.Id.collapsing_toolbar);
-            collapsingToolbar.SetTitle(movieName);
-
-            SetToolbar();
-            SetImage();
-
-            mViewPager = (ViewPager)FindViewById(Resource.Id.viewpager);
-            mViewPager.OffscreenPageLimit = 0;
-            mTabLayout = (TabLayout)FindViewById(Resource.Id.tabs);
-            tabPagerAdapter = new MoviePagerAdapter(this, SupportFragmentManager, movieName, movieId, 0);
-            
-            mViewPager.Adapter = tabPagerAdapter;
-            mTabLayout.SetupWithViewPager(mViewPager);
-
-            for (int i = 0; i < mTabLayout.TabCount; i++)
+            try
             {
-                TabLayout.Tab tab = mTabLayout.GetTabAt(i);
-                tab.SetCustomView(tabPagerAdapter.GetTabView(toolbar, i));
+                base.OnCreate(savedInstanceState);
+                string movieName = Intent.GetStringExtra("movieName");
+                int movieId = Intent.GetIntExtra("movieId", 0);
+                //var imdbId = Intent.GetIntExtra("imdbId", 0);
+                string castName = Intent.GetStringExtra("castName");
+                int castId = Intent.GetIntExtra("castId", 0);
+                bool isCast = Intent.GetBooleanExtra("isCast", false);
+
+                savedInstanceState = new Bundle();
+                savedInstanceState.PutInt("Id", movieId);
+                savedInstanceState.PutString("name", movieName);
+                savedInstanceState.PutInt("castId", castId);
+                savedInstanceState.PutBoolean("isCast", isCast);
+
+
+                SetContentView(Resource.Layout.MovieInfoView);
+
+
+                imageView = (ImageView)FindViewById(Resource.Id.backdrop);
+
+                collapsingToolbar = (CollapsingToolbarLayout)FindViewById(Resource.Id.collapsing_toolbar);
+                collapsingToolbar.SetTitle(movieName);
+
+                SetToolbar();
+                SetImage();
+
+                mViewPager = (ViewPager)FindViewById(Resource.Id.viewpager);
+                mViewPager.OffscreenPageLimit = 0;
+                mTabLayout = (TabLayout)FindViewById(Resource.Id.tabs);
+                tabPagerAdapter = new MoviePagerAdapter(this, SupportFragmentManager, movieName, movieId, 0);
+
+                mViewPager.Adapter = tabPagerAdapter;
+                mTabLayout.SetupWithViewPager(mViewPager);
+
+                for (int i = 0; i < mTabLayout.TabCount; i++)
+                {
+                    TabLayout.Tab tab = mTabLayout.GetTabAt(i);
+                    tab.SetCustomView(tabPagerAdapter.GetTabView(toolbar, i));
+                }
             }
+            catch (Exception ex)
+            {
+                Toast.MakeText(Application.Context, ex.ToString(), ToastLength.Long).Show();
+            }            
         }
 
         public override bool OnOptionsItemSelected(IMenuItem item)

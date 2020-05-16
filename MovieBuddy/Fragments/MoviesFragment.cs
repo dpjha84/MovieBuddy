@@ -15,8 +15,11 @@ namespace MovieBuddy
     {
         NowPlaying,
         Upcoming,
-        Trending
+        Trending,
+        Popular,
+        TopRated
     }
+
     public class SimilarMoviesFragment : MoviesFragment
     {
         public static SimilarMoviesFragment NewInstance(int movieId)
@@ -34,6 +37,7 @@ namespace MovieBuddy
             return MovieManager.Instance.GetSimilar(movieId);
         }
     }
+
     public class MoviesFragment : BaseFragment
     {
         MovieGridAdapter adapter;
@@ -55,6 +59,7 @@ namespace MovieBuddy
                 View rootView = inflater.Inflate(Resource.Layout.fragment_blank, container, false);
 
                 RecyclerView rv = (RecyclerView)rootView.FindViewById(Resource.Id.rv_recycler_view);
+                rv.NestedScrollingEnabled = false;
                 rv.HasFixedSize = true;
 
                 var llm = new GridLayoutManager(this.Context, 3, GridLayoutManager.Vertical, false);
@@ -65,7 +70,7 @@ namespace MovieBuddy
                 rv.SetAdapter(adapter);
                 return rootView;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
             return null;
@@ -74,30 +79,42 @@ namespace MovieBuddy
         protected virtual List<TMDbLib.Objects.Search.SearchMovie> GetMovies()
         {
             movieListType = (MovieListType)Arguments.GetInt("movieListType");
-            switch (movieListType)
+            return movieListType switch
             {
-                case MovieListType.NowPlaying:
-                    return MovieManager.Instance.NowPlaying;
-                case MovieListType.Upcoming:
-                    return MovieManager.Instance.Upcoming;
-                case MovieListType.Trending:
-                    return MovieManager.Instance.Trending;
-                default:
-                    throw new ArgumentException("Invalid Movie List Type");
-            }
+                MovieListType.NowPlaying => MovieManager.Instance.NowPlaying,
+                MovieListType.Upcoming => MovieManager.Instance.Upcoming,
+                MovieListType.Trending => MovieManager.Instance.Trending,
+                MovieListType.Popular => MovieManager.Instance.Popular,
+                MovieListType.TopRated => MovieManager.Instance.TopRated,
+                _ => throw new ArgumentException("Invalid Movie List Type"),
+            };
         }
 
         protected override void OnItemClick(object sender, int position)
         {
-            var movie = (sender as MovieGridAdapter).mPhotoAlbum[position];
-            Intent intent = new Intent(this.Context, typeof(MovieInfoActivity));
-            Bundle b = new Bundle();
-            b.PutInt("movieId", (int)movie.Id);
-            b.PutString("movieName", movie.Title);
-            var backdrop = movie.BackdropPath;
-            b.PutString("imageUrl", !string.IsNullOrWhiteSpace(backdrop) ? backdrop : movie.PosterPath);
-            intent.PutExtras(b);
-            StartActivity(intent);
+            try
+            {
+                var movie = (sender as MovieGridAdapter).mPhotoAlbum[position];
+                Intent intent = new Intent(this.Context, typeof(MovieInfoActivity));
+                Bundle b = new Bundle();
+                b.PutInt("movieId", movie.Id);
+                b.PutString("movieName", movie.Title);
+                var backdrop = movie.BackdropPath;
+                b.PutString("imageUrl", !string.IsNullOrWhiteSpace(backdrop) ? backdrop : movie.PosterPath);
+                intent.PutExtras(b);
+                StartActivity(intent);
+            }
+            catch (Exception ex)
+            {
+                Toast.MakeText(Context, ex.ToString(), ToastLength.Long).Show();
+            }            
+        }
+
+        public override void OnDestroy()
+        {
+            if(adapter != null)
+                adapter.ItemClick -= OnItemClick;
+            base.OnDestroy();
         }
     }
 }

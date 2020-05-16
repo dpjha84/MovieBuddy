@@ -39,6 +39,6 @@ namespace MovieBuddy
 
         protected virtual void OnItemClick(object sender, int position)
         {
-        }
+        }        
     }
 }
