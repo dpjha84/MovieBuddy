@@ -6,7 +6,6 @@ using Android.Widget;
 using Android.Support.V7.App;
 using Android.Support.V4.View;
 using Android.Support.Design.Widget;
-using Com.Bumptech.Glide;
 using System;
 
 namespace MovieBuddy
@@ -15,7 +14,7 @@ namespace MovieBuddy
     public class MovieInfoActivity : AppCompatActivity
     {
         private Android.Support.V7.Widget.Toolbar toolbar;
-        private ImageView imageView, imageView1;
+        private ImageView imageView;
         private CollapsingToolbarLayout collapsingToolbar;
         private MoviePagerAdapter tabPagerAdapter;
         private ViewPager mViewPager;

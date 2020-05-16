@@ -1,12 +1,10 @@
 ﻿using Android.Content;
 using Android.Support.V7.Widget;
 using Android.Views;
-using Square.Picasso;
 using System;
 using System.Collections.Generic;
 using TMDbLib.Objects.Search;
 using Java.Lang;
-using Com.Bumptech.Glide;
 
 namespace MovieBuddy
 {

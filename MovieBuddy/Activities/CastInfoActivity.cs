@@ -6,8 +6,6 @@ using Android.Widget;
 using Android.Support.V7.App;
 using Android.Support.V4.View;
 using Android.Support.Design.Widget;
-using Square.Picasso;
-using Com.Bumptech.Glide;
 
 namespace MovieBuddy
 {
@@ -15,7 +13,7 @@ namespace MovieBuddy
     public class CastInfoActivity : AppCompatActivity
     {
         private Android.Support.V7.Widget.Toolbar toolbar;
-        private ImageView imageView, imageView1;
+        private ImageView imageView;
         private CollapsingToolbarLayout collapsingToolbar;
         private CastPagerAdapter tabPagerAdapter;
         private ViewPager mViewPager;

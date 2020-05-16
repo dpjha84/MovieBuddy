@@ -4,7 +4,6 @@ using Android.Support.V7.Widget;
 using Android.Text;
 using Android.Text.Style;
 using Android.Views;
-using Square.Picasso;
 using System;
 using System.Collections.Generic;
 using TMDbLib.Objects.Search;

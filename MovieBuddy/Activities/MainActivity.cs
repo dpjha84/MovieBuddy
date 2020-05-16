@@ -16,7 +16,6 @@ namespace MovieBuddy
         DrawerLayout drawerLayout;
         NavigationView navigationView;
         IMenuItem previousItem;
-        int oldPosition = -1;
 
         protected override void OnCreate (Bundle savedInstanceState)
         {

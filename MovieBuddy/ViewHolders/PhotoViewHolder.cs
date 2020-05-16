@@ -5,7 +5,6 @@ using Android.Views;
 using Android.Widget;
 using Android.OS;
 using Android.Support.V7.Widget;
-using Square.Picasso;
 using Android.Support.V4.App;
 using Android.Support.V4.View;
 
