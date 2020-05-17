@@ -27,7 +27,7 @@
                 android:layout_height="32sp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:fontFeatureSettings=""
-                android:textColor="@color/primaryTextColor"
+                android:textColor="@android:color/black"
                 android:layout_marginLeft="2sp"
                 android:layout_gravity="left"/>
             <TextView

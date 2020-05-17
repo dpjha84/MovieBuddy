@@ -45,17 +45,16 @@
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:layout_gravity="bottom"
-            android:background="?attr/colorPrimary"
+            android:layout_gravity="bottom"            
             app:layout_anchor="@+id/appbar"
             app:layout_anchorGravity="bottom"
             app:layout_collapseMode="none"
             app:tabGravity="fill"
-            app:tabIndicatorColor="#fff"
-            app:tabIndicatorHeight="2dp"
             app:tabMode="scrollable"
-            app:tabSelectedTextColor="#fff"
-            app:tabTextColor="#fff" />
+            android:background="@color/primaryColor"
+            app:tabIndicatorColor="@color/primaryTextColor"
+            app:tabSelectedTextColor="@color/primaryTextColor"
+            app:tabTextColor="@color/secondaryText"/>
         <!--<ImageButton
             android:layout_width="50sp"
             android:layout_height="50sp"

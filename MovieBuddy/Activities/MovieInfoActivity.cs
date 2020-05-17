@@ -38,7 +38,8 @@ namespace MovieBuddy
                 savedInstanceState.PutInt("castId", castId);
                 savedInstanceState.PutBoolean("isCast", isCast);
 
-
+                Window.AddFlags(WindowManagerFlags.Fullscreen);
+                Window.ClearFlags(WindowManagerFlags.ForceNotFullscreen);
                 SetContentView(Resource.Layout.MovieInfoView);
 
 
