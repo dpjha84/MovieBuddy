@@ -68,6 +68,7 @@ namespace MovieBuddy
         string movieName;
         int movieId;
         int imdbId;
+        string backdrop;
 
         public override int Count
         {
@@ -77,12 +78,13 @@ namespace MovieBuddy
             }
         }
 
-        public MoviePagerAdapter(Context context, Android.Support.V4.App.FragmentManager fm, string movieName, int movieId, int imdbId) : base(fm)
+        public MoviePagerAdapter(Context context, Android.Support.V4.App.FragmentManager fm, string movieName, int movieId, string backdrop, int imdbId) : base(fm)
         {
             tabTitles = context.Resources.GetTextArray(Resource.Array.movieDetails);
             this.movieName = movieName;
             this.movieId = movieId;
             this.imdbId = imdbId;
+            this.backdrop = backdrop;
         }
 
         public override Java.Lang.ICharSequence GetPageTitleFormatted(int position)
@@ -106,8 +108,10 @@ namespace MovieBuddy
                 case 1:
                     return CastFragment.NewInstance(movieName, movieId);
                 case 2:
-                    return ReviewFragment.NewInstance(movieName, movieId);
+                    return TrailerFragment.NewInstance(movieName, movieId, backdrop);
                 case 3:
+                    return ReviewFragment.NewInstance(movieName, movieId);
+                case 4:
                     return SimilarMoviesFragment.NewInstance(movieId);
                 
             }

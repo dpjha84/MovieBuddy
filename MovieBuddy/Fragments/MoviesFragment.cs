@@ -65,7 +65,7 @@ namespace MovieBuddy
                 var llm = new GridLayoutManager(this.Context, 3, GridLayoutManager.Vertical, false);
                 rv.SetLayoutManager(llm);
 
-                adapter = new MovieGridAdapter(GetMovies(), true);
+                adapter = new MovieGridAdapter(GetMovies());
                 adapter.ItemClick += OnItemClick;
                 rv.SetAdapter(adapter);
                 return rootView;

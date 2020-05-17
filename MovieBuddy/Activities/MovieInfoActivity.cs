@@ -53,7 +53,7 @@ namespace MovieBuddy
                 mViewPager = (ViewPager)FindViewById(Resource.Id.viewpager);
                 mViewPager.OffscreenPageLimit = 0;
                 mTabLayout = (TabLayout)FindViewById(Resource.Id.tabs);
-                tabPagerAdapter = new MoviePagerAdapter(this, SupportFragmentManager, movieName, movieId, 0);
+                tabPagerAdapter = new MoviePagerAdapter(this, SupportFragmentManager, movieName, movieId, Intent.GetStringExtra("imageUrl"), 0);
 
                 mViewPager.Adapter = tabPagerAdapter;
                 mTabLayout.SetupWithViewPager(mViewPager);
@@ -99,10 +99,23 @@ namespace MovieBuddy
             var backdrop = Intent.GetStringExtra("imageUrl");
             if (!backdrop.StartsWith("http"))
                 backdrop = $"https://image.tmdb.org/t/p/w500/{backdrop}";
-            //Glide.With(this).Load(backdrop).Into(imageView);
             Helper.SetImage(this, backdrop, imageView);
         }
 
-        
+        protected override void OnStop()
+        {
+            Helper.Clear(this, imageView);
+            //for (int i = 0; i < mTabLayout.TabCount; i++)
+            //{
+            //    Helper.Clear(this, mTabLayout.GetTabAt(i).CustomView);
+            //}
+            base.OnStop();
+        }
+
+        protected override void OnRestart()
+        {
+            SetImage();
+            base.OnRestart();
+        }
     }
 }

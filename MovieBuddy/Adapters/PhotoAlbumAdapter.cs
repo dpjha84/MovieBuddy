@@ -11,21 +11,15 @@ namespace MovieBuddy
     {
         public event EventHandler<int> ItemClick;
         public List<TMDbLib.Objects.Search.SearchMovie> mPhotoAlbum;
-        private bool mainPage = false;
-        private bool trailerView = false;
 
-        public MovieGridAdapter(List<TMDbLib.Objects.Search.SearchMovie> movies, bool mainPage = false, bool trailerView = false)
+        public MovieGridAdapter(List<TMDbLib.Objects.Search.SearchMovie> movies)
         {
             mPhotoAlbum = movies;
-            this.mainPage = mainPage;
-            this.trailerView = trailerView;
         }
 
         public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
         {
-            View itemView = trailerView ?
-                    LayoutInflater.From(parent.Context).Inflate(Resource.Layout.TrailerGridView, parent, false):
-                    LayoutInflater.From(parent.Context).Inflate(Resource.Layout.PhotoCardView, parent, false);
+            View itemView = LayoutInflater.From(parent.Context).Inflate(Resource.Layout.PhotoCardView, parent, false);
             return new PhotoViewHolder(itemView, OnClick);
         }
 

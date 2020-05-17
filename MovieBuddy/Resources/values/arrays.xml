@@ -10,6 +10,7 @@
 <string-array name="movieDetails">
     <item>SUMMARY</item>
     <item>CAST</item>
+    <item>TRAILER</item>
     <item>REVIEWS</item>
     <item>SIMILAR</item>
   </string-array>

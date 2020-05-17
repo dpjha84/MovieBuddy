@@ -23,13 +23,13 @@ namespace MovieBuddy
         public PhotoViewHolder(View itemView, Action<int> listener) : base(itemView)
         {
             Image = itemView.FindViewById<ImageView>(Resource.Id.imageView);
-            Caption = itemView.FindViewById<TextView>(Resource.Id.textView);
-            Date = itemView.FindViewById<TextView>(Resource.Id.movieDetail);
+            //Caption = itemView.FindViewById<TextView>(Resource.Id.textView);
+            //Date = itemView.FindViewById<TextView>(Resource.Id.movieDetail);
             //ImdbRating = itemView.FindViewById<TextView>(Resource.Id.movieReview);
-            Genre = itemView.FindViewById<TextView>(Resource.Id.movieGenre);
-            ImdbImage = itemView.FindViewById<ImageView>(Resource.Id.imdbView);
+            //Genre = itemView.FindViewById<TextView>(Resource.Id.movieGenre);
+            //ImdbImage = itemView.FindViewById<ImageView>(Resource.Id.imdbView);
 
-            PlayImage = itemView.FindViewById<ImageButton>(Resource.Id.play_button);
+            //PlayImage = itemView.FindViewById<ImageButton>(Resource.Id.play_button);
 
             itemView.Click += (sender, e) => listener(base.LayoutPosition);
             if (PlayImage != null)

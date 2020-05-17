@@ -19,14 +19,20 @@ namespace MovieBuddy
 
         protected override void OnCreate (Bundle savedInstanceState)
         {
-            MovieManager.Init(new LocalDataProvider(), false);
-            base.OnCreate(savedInstanceState);
-            SetContentView(Resource.Layout.Main);
-            var toolbar = SetupToolbar();
+            try
+            {
+                MovieManager.Init(new LocalDataProvider(), false);
+                base.OnCreate(savedInstanceState);
+                SetContentView(Resource.Layout.Main);
+                var toolbar = SetupToolbar();
 
-            SetupTabbedView(toolbar);
+                SetupTabbedView(toolbar);
 
-            SetupNavigationDrawer(savedInstanceState);            
+                SetupNavigationDrawer(savedInstanceState);
+            }
+            catch (System.Exception ex)
+            {
+            }
         }
 
         private Android.Support.V7.Widget.Toolbar SetupToolbar()

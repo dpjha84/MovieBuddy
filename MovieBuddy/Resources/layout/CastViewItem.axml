@@ -23,11 +23,21 @@
                 android:adjustViewBounds="true" />
             <TextView
                 android:id="@+id/CastName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="32sp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
+                android:fontFeatureSettings=""
+                android:textColor="@color/primaryTextColor"
                 android:layout_marginLeft="2sp"
-                android:layout_gravity="center_horizontal"/>
+                android:layout_gravity="left"/>
+            <TextView
+                android:id="@+id/Character"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textSize="12sp"
+                android:textColor="@color/secondaryText"
+                android:layout_marginLeft="2sp"
+                android:layout_gravity="left"/>
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </FrameLayout>

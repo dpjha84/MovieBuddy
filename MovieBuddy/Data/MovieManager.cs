@@ -79,7 +79,12 @@ namespace MovieBuddy
 
         public List<TMDbLib.Objects.Search.SearchMovie> TopRated { get; private set; }
 
-        public string GetTrailer(int movieId, string name) => "";
+        public string GetTrailer(int movieId, string name)
+        {
+            var videos = tmdbClient.GetMovieVideosAsync(movieId).Result.Results;
+            if (videos == null || videos.Count == 0) return null;
+            return videos.FirstOrDefault(x => !string.IsNullOrWhiteSpace(x.Key)).Key;
+        }
 
         public List<TmdbMovie> GetReleased()
         {

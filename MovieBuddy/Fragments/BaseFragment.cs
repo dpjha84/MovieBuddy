@@ -19,7 +19,6 @@ namespace MovieBuddy
         
         protected string movieName;
         protected int movieId;
-
         public BaseFragment(string movieName, int movieId)
         {
             this.movieName = movieName;

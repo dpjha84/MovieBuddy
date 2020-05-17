@@ -30,6 +30,7 @@ namespace MovieBuddy
             var vh = holder as CastViewHolder;
             //vh.CastImage. = movie.Overview;// $"{mPhotoAlbum[position].Title}\n{mPhotoAlbum[position].Date.ToString("m")}";
             vh.CastName.Text = Cast[position].Name;
+            vh.Character.Text = Cast[position].Character;
             //vh.Character.Text = Cast[position].Character;
             Context context = vh.CastImage.Context;
             if (string.IsNullOrWhiteSpace(Cast[position].ProfilePath))
