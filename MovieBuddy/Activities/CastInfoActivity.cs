@@ -6,6 +6,7 @@ using Android.Widget;
 using Android.Support.V7.App;
 using Android.Support.V4.View;
 using Android.Support.Design.Widget;
+using Android.Gms.Ads;
 
 namespace MovieBuddy
 {
@@ -18,20 +19,30 @@ namespace MovieBuddy
         private CastPagerAdapter tabPagerAdapter;
         private ViewPager mViewPager;
         private TabLayout mTabLayout;
+        protected AdView mAdView;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
             Window.AddFlags(WindowManagerFlags.Fullscreen);
             Window.ClearFlags(WindowManagerFlags.ForceNotFullscreen);
-            SetContentView(Resource.Layout.MovieInfoView);
+
             string castName = Intent.GetStringExtra("castName");
             int castId = Intent.GetIntExtra("castId", 0);
+
+            this.Title = castName;
+            SetContentView(Resource.Layout.MovieInfoView);
+
+            //mAdView = FindViewById<AdView>(Resource.Id.adView);
+            //var adRequest = new AdRequest.Builder().Build();
+            //mAdView.LoadAd(adRequest);
+
+            
              
             imageView = (ImageView)FindViewById(Resource.Id.backdrop);
 
             collapsingToolbar = (CollapsingToolbarLayout)FindViewById(Resource.Id.collapsing_toolbar);
-            collapsingToolbar.SetTitle(castName);
+            //collapsingToolbar.SetTitle(castName);
 
             SetToolbar();
             SetImage();
@@ -75,9 +86,8 @@ namespace MovieBuddy
 
         private void SetImage()
         {
-            string backdrop = $"https://image.tmdb.org/t/p/w500/{Intent.GetStringExtra("imageUrl")}";
-            Helper.SetImage(this, backdrop, imageView);
-            //Glide.With(this).Load(backdrop).Into(imageView);
+            string backdrop = Intent.GetStringExtra("imageUrl");
+            Helper.SetImage(this, backdrop, imageView, Resource.Drawable.NoCast);
         }
     }
 }

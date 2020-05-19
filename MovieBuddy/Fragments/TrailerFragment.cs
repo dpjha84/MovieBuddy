@@ -43,7 +43,7 @@ namespace MovieBuddy
                 var rootView = inflater.Inflate(Resource.Layout.trailer, container, false);
                 var backdropImage = (ImageView)rootView.FindViewById(Resource.Id.mediaPreview);
                 var playImage = (ImageView)rootView.FindViewById(Resource.Id.playButton);
-                Helper.SetImage(Context, $"https://image.tmdb.org/t/p/w500/{backdrop}", backdropImage);
+                Helper.SetImage(Context, backdrop, backdropImage, Resource.Drawable.noimage);
                 playImage.Click += Iv_Click;
                 //simpleVideoView.SetVideoURI(Android.Net.Uri.Parse("https://www.youtube.com/embed/hlWiI4xVXKY"));// $"https://www.youtube.com/embed/{trailerId}"));
                 //simpleVideoView.SetMediaController(new MediaController(Context));

@@ -26,28 +26,10 @@ namespace MovieBuddy
         public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
         {
             PhotoViewHolder vh = holder as PhotoViewHolder;
-            Context context = vh.Image.Context;
-            SetPoster(vh.Image, context, mPhotoAlbum[position].PosterPath);
-        }
-
-        private void SetPoster(ImageView img, Context context, string poster)
-        {
-            try
-            {
-                if (!string.IsNullOrEmpty(poster))
-                {
-                    if (poster.StartsWith("http"))
-                        Helper.SetImage(context, poster, img);
-                    else
-                        Helper.SetImage(context, $"https://image.tmdb.org/t/p/w500/{poster}", img);
-                }
-                else
-                    Helper.SetImage(context, Resource.Drawable.noimage, img);
-            }
-            catch (Exception)
-            {
-                Helper.SetImage(context, Resource.Drawable.noimage, img);
-            }
+            var movie = mPhotoAlbum[position];
+            Helper.SetImage(vh.Image.Context, movie.PosterPath, vh.Image, Resource.Drawable.noimage);
+            vh.Name.Text = movie.Title;
+            vh.Genre.Text = movie.GenreIds?.Count > 0 ? MovieManager.Instance.GetGenreText(movie.GenreIds[0]) : "";
         }
 
         public override int ItemCount

@@ -7,12 +7,14 @@ using Android.Support.V4.Widget;
 using Android.Views;
 using System.Diagnostics;
 using Android.Widget;
+using Android.Gms.Ads;
 
 namespace MovieBuddy
 {
     [Activity (Label = "Movie Buddy", MainLauncher = false, Icon = "@drawable/icon")]
 	public class MainActivity : AppCompatActivity
     {
+        protected AdView mAdView;
         DrawerLayout drawerLayout;
         NavigationView navigationView;
         IMenuItem previousItem;
@@ -24,6 +26,11 @@ namespace MovieBuddy
                 MovieManager.Init(new LocalDataProvider(), false);
                 base.OnCreate(savedInstanceState);
                 SetContentView(Resource.Layout.Main);
+
+                mAdView = FindViewById<AdView>(Resource.Id.adView);
+                var adRequest = new AdRequest.Builder().Build();
+                mAdView.LoadAd(adRequest);
+
                 var toolbar = SetupToolbar();
 
                 SetupTabbedView(toolbar);

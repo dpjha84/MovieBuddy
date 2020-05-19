@@ -20,32 +20,24 @@
                 android:id="@+id/imageView"
                 android:scaleType="fitCenter"
                 android:adjustViewBounds="true"/>
-            <!--<LinearLayout
+            <TextView
+                android:id="@+id/MovieName"
+                android:layout_width="wrap_content"
+                android:layout_height="32sp"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:fontFeatureSettings=""
+                android:textColor="@android:color/black"
+                android:layout_marginLeft="2sp"
+                android:layout_gravity="left"/>
+            <TextView
+                android:id="@+id/Genre"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/primaryTextColor"
-                    android:text="Caption"
-                    android:id="@+id/textView"
-                    android:layout_marginLeft="4sp"
-                    android:layout_weight="1"
-                    android:layout_gravity="fill" />
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="11sp"
-                    android:textColor="@color/secondaryText"
-                    android:text=""
-                    android:id="@+id/movieDetail"
-                    android:gravity="right"
-                    android:layout_marginRight="4sp"
-                    android:layout_weight="1" />
-            </LinearLayout>
-            <LinearLayout
+                android:layout_height="match_parent"
+                android:textSize="12sp"
+                android:textColor="@color/secondaryText"
+                android:layout_marginLeft="2sp"
+                android:layout_gravity="left"/>
+            <!--<LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"

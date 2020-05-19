@@ -7,6 +7,7 @@ using Android.Support.V7.App;
 using Android.Support.V4.View;
 using Android.Support.Design.Widget;
 using System;
+using Android.Gms.Ads;
 
 namespace MovieBuddy
 {
@@ -19,6 +20,7 @@ namespace MovieBuddy
         private MoviePagerAdapter tabPagerAdapter;
         private ViewPager mViewPager;
         private TabLayout mTabLayout;
+        protected AdView mAdView;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -27,7 +29,6 @@ namespace MovieBuddy
                 base.OnCreate(savedInstanceState);
                 string movieName = Intent.GetStringExtra("movieName");
                 int movieId = Intent.GetIntExtra("movieId", 0);
-                //var imdbId = Intent.GetIntExtra("imdbId", 0);
                 string castName = Intent.GetStringExtra("castName");
                 int castId = Intent.GetIntExtra("castId", 0);
                 bool isCast = Intent.GetBooleanExtra("isCast", false);
@@ -38,15 +39,18 @@ namespace MovieBuddy
                 savedInstanceState.PutInt("castId", castId);
                 savedInstanceState.PutBoolean("isCast", isCast);
 
-                Window.AddFlags(WindowManagerFlags.Fullscreen);
-                Window.ClearFlags(WindowManagerFlags.ForceNotFullscreen);
+                this.Title = movieName;
                 SetContentView(Resource.Layout.MovieInfoView);
+
+                //mAdView = FindViewById<AdView>(Resource.Id.adView);
+                //var adRequest = new AdRequest.Builder().Build();
+                //mAdView.LoadAd(adRequest);
 
 
                 imageView = (ImageView)FindViewById(Resource.Id.backdrop);
 
                 collapsingToolbar = (CollapsingToolbarLayout)FindViewById(Resource.Id.collapsing_toolbar);
-                collapsingToolbar.SetTitle(movieName);
+                //collapsingToolbar.SetTitle(movieName);
 
                 SetToolbar();
                 SetImage();
@@ -97,10 +101,7 @@ namespace MovieBuddy
 
         private void SetImage()
         {
-            var backdrop = Intent.GetStringExtra("imageUrl");
-            if (!backdrop.StartsWith("http"))
-                backdrop = $"https://image.tmdb.org/t/p/w500/{backdrop}";
-            Helper.SetImage(this, backdrop, imageView);
+            Helper.SetImage(this, Intent.GetStringExtra("imageUrl"), imageView, Resource.Drawable.noimage);
         }
 
         protected override void OnStop()

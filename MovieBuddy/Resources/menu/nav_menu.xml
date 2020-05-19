@@ -4,8 +4,8 @@
   <group android:checkableBehavior="single">
     <item
         android:id="@+id/nav_home_1"
-        android:icon="@drawable/ic_home_1"
-        android:title="Feedback" />
+        android:icon="@drawable/ic_star"
+        android:title="Rate us" />
     <!--<item
         android:id="@+id/nav_home_2"
         android:icon="@drawable/ic_home_2"

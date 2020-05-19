@@ -9,7 +9,7 @@ namespace MovieBuddy
 {
     public class Helper
     {
-        internal static void SetImage(Context castInfoActivity, int resourceId, ImageView imageView)
+        private static void SetImage(Context castInfoActivity, int resourceId, ImageView imageView)
         {
             try
             {
@@ -26,11 +26,16 @@ namespace MovieBuddy
             Glide.With(context).Clear(view);
         }
 
-        internal static void SetImage(Context castInfoActivity, string backdrop, ImageView imageView)
+        internal static void SetImage(Context castInfoActivity, string backdrop, ImageView imageView, int placeholder)
         {
+            if (string.IsNullOrWhiteSpace(backdrop))
+            {
+                SetImage(castInfoActivity, placeholder, imageView);
+                return;
+            }
             try
             {
-                Glide.With(castInfoActivity).Load(backdrop).Thumbnail(0.2f).Into(imageView);
+                Glide.With(castInfoActivity).Load($"https://image.tmdb.org/t/p/w500/{backdrop}").Thumbnail(0.2f).Into(imageView);
             }
             catch (Exception)
             {

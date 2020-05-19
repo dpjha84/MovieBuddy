@@ -13,7 +13,7 @@ namespace MovieBuddy
     public class PhotoViewHolder : RecyclerView.ViewHolder
     {
         public ImageView Image { get; private set; }
-        public TextView Caption { get; private set; }
+        public TextView Name { get; private set; }
         public TextView Date { get; private set; }
         public ImageView ImdbImage { get; private set; }
         public ImageButton PlayImage { get; private set; }
@@ -23,10 +23,10 @@ namespace MovieBuddy
         public PhotoViewHolder(View itemView, Action<int> listener) : base(itemView)
         {
             Image = itemView.FindViewById<ImageView>(Resource.Id.imageView);
-            //Caption = itemView.FindViewById<TextView>(Resource.Id.textView);
+            Name = itemView.FindViewById<TextView>(Resource.Id.MovieName);
             //Date = itemView.FindViewById<TextView>(Resource.Id.movieDetail);
             //ImdbRating = itemView.FindViewById<TextView>(Resource.Id.movieReview);
-            //Genre = itemView.FindViewById<TextView>(Resource.Id.movieGenre);
+            Genre = itemView.FindViewById<TextView>(Resource.Id.Genre);
             //ImdbImage = itemView.FindViewById<ImageView>(Resource.Id.imdbView);
 
             //PlayImage = itemView.FindViewById<ImageButton>(Resource.Id.play_button);
