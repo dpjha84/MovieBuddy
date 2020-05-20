@@ -4,6 +4,7 @@ using Android.Support.V7.Widget;
 using Android.Text;
 using Android.Text.Style;
 using Android.Views;
+using Android.Widget;
 using System;
 using System.Collections.Generic;
 using TMDbLib.Objects.Search;
@@ -53,28 +54,18 @@ namespace MovieBuddy
 
         void OnClick(int position)
         {
-            if (ItemClick != null)
-                ItemClick(this, position);
+            ItemClick?.Invoke(this, position);
+        }
+
+        class MovieSummaryViewHolder : RecyclerView.ViewHolder
+        {
+            public TextView MovieSummary { get; private set; }
+
+            public MovieSummaryViewHolder(View itemView, Action<int> listener) : base(itemView)
+            {
+                MovieSummary = itemView.FindViewById<TextView>(Resource.Id.movieSummary);
+                itemView.Click += (sender, e) => listener(base.LayoutPosition);
+            }
         }
     }
-
-    public class CustomTypefaceSpan : MetricAffectingSpan
-{
-    readonly Typeface typeFace;
-
-    public CustomTypefaceSpan(Typeface typeFace)
-    {
-        this.typeFace = typeFace;
-    }
-
-    public override void UpdateDrawState(TextPaint tp)
-    {
-        tp.SetTypeface(typeFace);
-    }
-
-    public override void UpdateMeasureState(TextPaint p)
-    {
-        p.SetTypeface(typeFace);
-    }
-}
 }

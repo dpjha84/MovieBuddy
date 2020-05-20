@@ -160,7 +160,7 @@ namespace MovieBuddy
                     result.Add(string.Join(", ", movie1.Genres.Select(x => genreMap[x.Id])));
                 }
                 result.Add("\nLanguage:");
-                result.Add(languageMap[movie.OriginalLanguage]);
+                result.Add(languageMap[movie1.OriginalLanguage]);
             }
             return result;
 

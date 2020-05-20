@@ -58,7 +58,7 @@ namespace MovieBuddy
         private void SetupTabbedView(Android.Support.V7.Widget.Toolbar toolbar)
         {
             ViewPager viewPager = FindViewById<ViewPager>(Resource.Id.viewpager);
-            PagerAdapter pagerAdapter = new PagerAdapter(this, SupportFragmentManager);
+            HomePagerAdapter pagerAdapter = new HomePagerAdapter(this, SupportFragmentManager);
             viewPager.Adapter = pagerAdapter;
             
 

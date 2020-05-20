@@ -2406,16 +2406,13 @@ namespace MovieBuddy
 			public const int splash = 2131230837;
 			
 			// aapt resource value: 0x7F080076
-			public const int splash2 = 2131230838;
+			public const int tooltip_frame_dark = 2131230838;
 			
 			// aapt resource value: 0x7F080077
-			public const int tooltip_frame_dark = 2131230839;
+			public const int tooltip_frame_light = 2131230839;
 			
 			// aapt resource value: 0x7F080078
-			public const int tooltip_frame_light = 2131230840;
-			
-			// aapt resource value: 0x7F080079
-			public const int video_play = 2131230841;
+			public const int video_play = 2131230840;
 			
 			static Drawable()
 			{
@@ -2535,12 +2532,6 @@ namespace MovieBuddy
 			// aapt resource value: 0x7F09002C
 			public const int cancel_action = 2131296300;
 			
-			// aapt resource value: 0x7F090002
-			public const int CastImage = 2131296258;
-			
-			// aapt resource value: 0x7F090003
-			public const int CastName = 2131296259;
-			
 			// aapt resource value: 0x7F09002D
 			public const int center = 2131296301;
 			
@@ -2549,9 +2540,6 @@ namespace MovieBuddy
 			
 			// aapt resource value: 0x7F09002F
 			public const int center_vertical = 2131296303;
-			
-			// aapt resource value: 0x7F090004
-			public const int Character = 2131296260;
 			
 			// aapt resource value: 0x7F090030
 			public const int checkbox = 2131296304;
@@ -2597,6 +2585,9 @@ namespace MovieBuddy
 			
 			// aapt resource value: 0x7F09003D
 			public const int default_activity_button = 2131296317;
+			
+			// aapt resource value: 0x7F090002
+			public const int Description = 2131296258;
 			
 			// aapt resource value: 0x7F09003E
 			public const int design_bottom_sheet = 2131296318;
@@ -2658,11 +2649,11 @@ namespace MovieBuddy
 			// aapt resource value: 0x7F090051
 			public const int forever = 2131296337;
 			
-			// aapt resource value: 0x7F090005
-			public const int FUNCTION = 2131296261;
+			// aapt resource value: 0x7F090003
+			public const int FUNCTION = 2131296259;
 			
-			// aapt resource value: 0x7F090006
-			public const int Genre = 2131296262;
+			// aapt resource value: 0x7F090004
+			public const int Genre = 2131296260;
 			
 			// aapt resource value: 0x7F090052
 			public const int ghost_view = 2131296338;
@@ -2684,6 +2675,9 @@ namespace MovieBuddy
 			
 			// aapt resource value: 0x7F090058
 			public const int image = 2131296344;
+			
+			// aapt resource value: 0x7F090005
+			public const int Image = 2131296261;
 			
 			// aapt resource value: 0x7F090059
 			public const int imageView = 2131296345;
@@ -2733,8 +2727,8 @@ namespace MovieBuddy
 			// aapt resource value: 0x7F090068
 			public const int message = 2131296360;
 			
-			// aapt resource value: 0x7F090007
-			public const int META = 2131296263;
+			// aapt resource value: 0x7F090006
+			public const int META = 2131296262;
 			
 			// aapt resource value: 0x7F090069
 			public const int middle = 2131296361;
@@ -2742,14 +2736,17 @@ namespace MovieBuddy
 			// aapt resource value: 0x7F09006A
 			public const int mini = 2131296362;
 			
-			// aapt resource value: 0x7F090008
-			public const int MovieName = 2131296264;
+			// aapt resource value: 0x7F090007
+			public const int MovieName = 2131296263;
 			
 			// aapt resource value: 0x7F09006B
 			public const int movieSummary = 2131296363;
 			
 			// aapt resource value: 0x7F09006C
 			public const int multiply = 2131296364;
+			
+			// aapt resource value: 0x7F090008
+			public const int Name = 2131296264;
 			
 			// aapt resource value: 0x7F09006F
 			public const int navigation_header_container = 2131296367;
@@ -3168,7 +3165,7 @@ namespace MovieBuddy
 			public const int abc_select_dialog_material = 2131427354;
 			
 			// aapt resource value: 0x7F0B001B
-			public const int CastViewItem = 2131427355;
+			public const int CardViewItem = 2131427355;
 			
 			// aapt resource value: 0x7F0B001C
 			public const int custom_tab = 2131427356;

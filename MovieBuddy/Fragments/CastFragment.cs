@@ -7,28 +7,51 @@ using System.Collections.Generic;
 
 namespace MovieBuddy
 {
+    public class CastMoviesFragment : MoviesFragment
+    {
+        public static CastMoviesFragment NewInstance(int castId)
+        {
+            var frag1 = new CastMoviesFragment();
+            Bundle bundle = new Bundle();
+            bundle.PutInt("castId", castId);
+            frag1.Arguments = bundle;
+            return frag1;
+        }
+
+        protected override List<TMDbLib.Objects.Search.SearchMovie> GetMovies()
+        {
+            var castId = Arguments.GetInt("castId");
+            var movieList = new List<TMDbLib.Objects.Search.SearchMovie>();
+            foreach (var item in MovieManager.Instance.GetMovieCredits(castId).Cast)
+                movieList.Add(new TMDbLib.Objects.Search.SearchMovie
+                {
+                    Id = item.Id,
+                    Title = item.Title,
+                    OriginalTitle = item.OriginalTitle,
+                    BackdropPath = item.PosterPath,
+                    PosterPath = item.PosterPath,
+                    ReleaseDate = item.ReleaseDate,
+                    Overview = item.Title
+                });
+            return movieList;
+        }
+    }
+
     public class CastFragment : BaseFragment
     {
-        MovieGridAdapter movieAdapter;
         CastAdapter castAdapter;
-        public static CastFragment NewInstance(string name, int Id, int castId = 0, bool isMovie = false)
+        public static CastFragment NewInstance(int movieId)
         {
             var frag1 = new CastFragment();
             Bundle bundle = new Bundle();
-            bundle.PutInt("Id", Id);
-            bundle.PutString("name", name);
-            bundle.PutInt("castId", castId);
-            bundle.PutBoolean("isMovie", isMovie);
+            bundle.PutInt("movieId", movieId);
             frag1.Arguments = bundle;            
             return frag1;
         }
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
-            movieName = Arguments.GetString("name");
-            movieId = Arguments.GetInt("Id");
-            int castId = Arguments.GetInt("castId");
-            bool isCast = Arguments.GetBoolean("isMovie");
+            movieId = Arguments.GetInt("movieId");
             View rootView = inflater.Inflate(Resource.Layout.fragment_blank, container, false);
 
             var rv = (RecyclerView)rootView.FindViewById(Resource.Id.rv_recycler_view);
@@ -37,69 +60,27 @@ namespace MovieBuddy
 
             var llm = new GridLayoutManager(this.Context, 3, GridLayoutManager.Vertical, false);
             rv.SetLayoutManager(llm);
-            //rv.AddItemDecoration(new DividerItemDecoration(rv.Context, llm.Orientation));
-
-            if (Arguments.GetBoolean("isMovie"))
-            {
-                var movieList = new List<TMDbLib.Objects.Search.SearchMovie>();
-                //int castId = Arguments.GetInt("castId");
-                foreach (var item in MovieManager.Instance.GetMovieCredits(castId).Cast)
-                    movieList.Add(new TMDbLib.Objects.Search.SearchMovie
-                    {
-                        Id = item.Id,
-                        Title = item.Title,
-                        OriginalTitle = item.OriginalTitle,
-                        BackdropPath = item.PosterPath,
-                        PosterPath = item.PosterPath,
-                        ReleaseDate = item.ReleaseDate,//string.IsNullOrWhiteSpace(item.ReleaseDate) ? DateTime.MinValue : DateTime.Parse(item.ReleaseDate),
-                        Overview = item.Title,
-                        //OriginalLanguage = item.OriginalLanguage
-                    });
-                movieAdapter = new MovieGridAdapter(movieList);
-                movieAdapter.ItemClick += OnItemClick;
-                rv.SetAdapter(movieAdapter);
-            }
-            else
-            {
-                castAdapter = new CastAdapter(MovieManager.Instance.GetCastAndCrew(movieId).Cast);
-                castAdapter.ItemClick += OnItemClick;
-                rv.SetAdapter(castAdapter);
-            }
+            castAdapter = new CastAdapter(MovieManager.Instance.GetCastAndCrew(movieId).Cast);
+            castAdapter.ItemClick += OnItemClick;
+            rv.SetAdapter(castAdapter);
             return rootView;
         }
 
         protected override void OnItemClick(object sender, int position)
         {
-            if (Arguments.GetBoolean("isMovie"))
-            {
-                Intent intent = new Intent(this.Context, typeof(MovieInfoActivity));
-                Bundle b = new Bundle();
-                b.PutInt("movieId", (int)(sender as MovieGridAdapter).mPhotoAlbum[position].Id);
-                b.PutString("movieName", (sender as MovieGridAdapter).mPhotoAlbum[position].OriginalTitle);
-                var movie = (sender as MovieGridAdapter).mPhotoAlbum[position];
-                var backdrop = movie.BackdropPath;
-                b.PutString("imageUrl", !string.IsNullOrWhiteSpace(backdrop) ? backdrop : movie.PosterPath);
-                intent.PutExtras(b);
-                StartActivity(intent);
-            }
-            else
-            {
-                Intent intent = new Intent(this.Context, typeof(CastInfoActivity));
-                Bundle b = new Bundle();
-                b.PutInt("castId", (sender as CastAdapter).Cast[position].Id);
-                b.PutString("castName", (sender as CastAdapter).Cast[position].Name);
-                var cast = (sender as CastAdapter).Cast[position];
-                var backdrop = cast.ProfilePath;
-                b.PutString("imageUrl", !string.IsNullOrWhiteSpace(backdrop) ? backdrop : cast.ProfilePath);
-                intent.PutExtras(b);
-                StartActivity(intent);
-            }            
+            Intent intent = new Intent(this.Context, typeof(CastInfoActivity));
+            Bundle b = new Bundle();
+            b.PutInt("castId", (sender as CastAdapter).Cast[position].Id);
+            b.PutString("castName", (sender as CastAdapter).Cast[position].Name);
+            var cast = (sender as CastAdapter).Cast[position];
+            var backdrop = cast.ProfilePath;
+            b.PutString("imageUrl", !string.IsNullOrWhiteSpace(backdrop) ? backdrop : cast.ProfilePath);
+            intent.PutExtras(b);
+            StartActivity(intent);
         }
 
         public override void OnDestroy()
         {
-            if(movieAdapter != null)
-                movieAdapter.ItemClick -= OnItemClick;
             if(castAdapter != null)
                 castAdapter.ItemClick -= OnItemClick;
             base.OnDestroy();

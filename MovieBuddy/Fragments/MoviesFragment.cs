@@ -40,7 +40,7 @@ namespace MovieBuddy
 
     public class MoviesFragment : BaseFragment
     {
-        MovieGridAdapter adapter;
+        MoviesAdapter adapter;
         private MovieListType movieListType;
 
         public static MoviesFragment NewInstance(MovieListType type)
@@ -65,7 +65,7 @@ namespace MovieBuddy
                 var llm = new GridLayoutManager(this.Context, 3, GridLayoutManager.Vertical, false);
                 rv.SetLayoutManager(llm);
 
-                adapter = new MovieGridAdapter(GetMovies());
+                adapter = new MoviesAdapter(GetMovies());
                 adapter.ItemClick += OnItemClick;
                 rv.SetAdapter(adapter);
                 return rootView;
@@ -94,7 +94,7 @@ namespace MovieBuddy
         {
             try
             {
-                var movie = (sender as MovieGridAdapter).mPhotoAlbum[position];
+                var movie = (sender as MoviesAdapter).movies[position];
                 Intent intent = new Intent(this.Context, typeof(MovieInfoActivity));
                 Bundle b = new Bundle();
                 b.PutInt("movieId", movie.Id);

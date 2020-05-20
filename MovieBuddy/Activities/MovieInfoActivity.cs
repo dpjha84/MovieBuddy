@@ -58,7 +58,7 @@ namespace MovieBuddy
                 mViewPager = (ViewPager)FindViewById(Resource.Id.viewpager);
                 mViewPager.OffscreenPageLimit = 0;
                 mTabLayout = (TabLayout)FindViewById(Resource.Id.tabs);
-                tabPagerAdapter = new MoviePagerAdapter(this, SupportFragmentManager, movieName, movieId, Intent.GetStringExtra("imageUrl"), 0);
+                tabPagerAdapter = new MoviePagerAdapter(this, SupportFragmentManager, movieName, movieId, Intent.GetStringExtra("imageUrl"));
 
                 mViewPager.Adapter = tabPagerAdapter;
                 mTabLayout.SetupWithViewPager(mViewPager);

@@ -9,11 +9,11 @@ namespace MovieBuddy
 {
     public class Helper
     {
-        private static void SetImage(Context castInfoActivity, int resourceId, ImageView imageView)
+        public static void SetImage(Context castInfoActivity, int resourceId, ImageView imageView)
         {
             try
             {
-                Glide.With(castInfoActivity).Load(resourceId).Thumbnail(0.2f).Into(imageView);
+                Glide.With(castInfoActivity).Load(resourceId).Into(imageView);
             }
             catch (Exception)
             {

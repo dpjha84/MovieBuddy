@@ -5,24 +5,17 @@ using System;
 using System.Collections.Generic;
 using TMDbLib.Objects.Search;
 using Java.Lang;
+using Android.Widget;
 
 namespace MovieBuddy
 {
-    public class CastAdapter : RecyclerView.Adapter
+    public class CastAdapter : AdapterBase
     {
-        public event EventHandler<int> ItemClick;
         public List<TMDbLib.Objects.Movies.Cast> Cast;
 
         public CastAdapter(List<TMDbLib.Objects.Movies.Cast> cast)
         {
             this.Cast = cast;
-        }
-
-        public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
-        {
-            View itemView = LayoutInflater.From(parent.Context).Inflate(Resource.Layout.CastViewItem, parent, false);
-            var vh = new CastViewHolder(itemView, OnClick);
-            return vh;
         }
 
         public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
@@ -34,15 +27,30 @@ namespace MovieBuddy
             Helper.SetImage(context, Cast[position].ProfilePath, vh.CastImage, Resource.Drawable.NoCast);
         }
 
+        protected override RecyclerView.ViewHolder GetViewHolder(View view, Action<int> listener)
+        {
+            return new CastViewHolder(view, listener);
+        }
+
         public override int ItemCount
         {
             get { return Cast.Count; }
         }
 
-        void OnClick(int position)
+        class CastViewHolder : RecyclerView.ViewHolder
         {
-            if (ItemClick != null)
-                ItemClick(this, position);
+            public TextView CastName { get; private set; }
+
+            public TextView Character { get; private set; }
+            public ImageView CastImage { get; private set; }
+
+            public CastViewHolder(View itemView, Action<int> listener) : base(itemView)
+            {
+                Character = itemView.FindViewById<TextView>(Resource.Id.Description);
+                CastName = itemView.FindViewById<TextView>(Resource.Id.Name);
+                CastImage = itemView.FindViewById<ImageView>(Resource.Id.Image);
+                itemView.Click += (sender, e) => listener(base.LayoutPosition);
+            }
         }
     }
 }

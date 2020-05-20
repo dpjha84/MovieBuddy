@@ -83,13 +83,11 @@
     <Compile Include="Activities\MainActivity.cs" />
     <Compile Include="Activities\MovieInfoActivity.cs" />
     <Compile Include="Adapters\PagerAdapter.cs" />
-    <Compile Include="Adapters\PhotoAlbumAdapter.cs" />
+    <Compile Include="Adapters\MoviesAdapter.cs" />
     <Compile Include="Fragments\TrailerFragment.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="ILocalDataProvider.cs" />
     <Compile Include="LocalDataProvider.cs" />
-    <Compile Include="ViewHolders\MovieSummaryViewHolder.cs" />
-    <Compile Include="ViewHolders\PhotoViewHolder.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -105,7 +103,7 @@
     <AndroidResource Include="Resources\layout\Summary.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\CastViewItem.axml">
+    <AndroidResource Include="Resources\layout\CardViewItem.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\nav_header.axml">
@@ -162,9 +160,6 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\video_play.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\splash2.gif" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\mipmap-anydpi-v26\ic_launcher.xml" />

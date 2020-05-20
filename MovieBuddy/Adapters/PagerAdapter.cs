@@ -6,26 +6,25 @@ using static Android.Widget.TextView;
 
 namespace MovieBuddy
 {
-    class PagerAdapter : FragmentStatePagerAdapter
+    public abstract class PagerAdapter : FragmentStatePagerAdapter
     {
-        string[] tabTitles;
+        protected string[] tabTitles;
 
-        public override int Count
-        {
-            get
-            {
-                return tabTitles.Length;
-            }
-        }
+        public override int Count => tabTitles.Length;
 
-        public PagerAdapter(Context context, Android.Support.V4.App.FragmentManager fm) : base(fm)
+        public PagerAdapter(Context context, int arrayId, FragmentManager fm) : base(fm)
         {
-            tabTitles = context.Resources.GetTextArray(Resource.Array.sections);
+            tabTitles = context.Resources.GetTextArray(arrayId);
         }
 
         public override Java.Lang.ICharSequence GetPageTitleFormatted(int position)
         {
             return new Java.Lang.String(tabTitles[position]);
+        }
+
+        public override int GetItemPosition(Java.Lang.Object frag)
+        {
+            return PositionNone;
         }
 
         public View GetTabView(ViewGroup parent, int position)
@@ -35,127 +34,63 @@ namespace MovieBuddy
             tv.SetText(tabTitles[position], BufferType.Normal);
             return tab;
         }
+    }
+    class HomePagerAdapter : PagerAdapter
+    {
+        public HomePagerAdapter(Context context, FragmentManager fm) : base(context, Resource.Array.sections, fm) { }        
 
         public override Android.Support.V4.App.Fragment GetItem(int position)
         {
-            switch (position)
+            return position switch
             {
-                //case 0:
-                //    return DashboardFragment.NewInstance();
-                case 0:
-                    return MoviesFragment.NewInstance(MovieListType.NowPlaying);
-                case 1:
-                    return MoviesFragment.NewInstance(MovieListType.Upcoming);
-                case 2:
-                    return MoviesFragment.NewInstance(MovieListType.Trending);
-                case 3:
-                    return MoviesFragment.NewInstance(MovieListType.Popular);
-                case 4:
-                    return MoviesFragment.NewInstance(MovieListType.TopRated);
-            }
-            return null;
-        }
-
-        public override int GetItemPosition(Java.Lang.Object frag)
-        {
-            return PositionNone;
+                0 => MoviesFragment.NewInstance(MovieListType.NowPlaying),
+                1 => MoviesFragment.NewInstance(MovieListType.Upcoming),
+                2 => MoviesFragment.NewInstance(MovieListType.Trending),
+                3 => MoviesFragment.NewInstance(MovieListType.Popular),
+                4 => MoviesFragment.NewInstance(MovieListType.TopRated),
+                _ => null,
+            };
         }
     }
 
-    class MoviePagerAdapter : FragmentStatePagerAdapter
+    class MoviePagerAdapter : PagerAdapter
     {
-        string[] tabTitles;
         string movieName;
         int movieId;
-        int imdbId;
         string backdrop;
 
-        public override int Count
+        public MoviePagerAdapter(Context context, FragmentManager fm, string movieName, int movieId, string backdrop)
+            : base(context, Resource.Array.movieDetails, fm)
         {
-            get
-            {
-                return tabTitles.Length;
-            }
-        }
-
-        public MoviePagerAdapter(Context context, Android.Support.V4.App.FragmentManager fm, string movieName, int movieId, string backdrop, int imdbId) : base(fm)
-        {
-            tabTitles = context.Resources.GetTextArray(Resource.Array.movieDetails);
             this.movieName = movieName;
             this.movieId = movieId;
-            this.imdbId = imdbId;
             this.backdrop = backdrop;
         }
 
-        public override Java.Lang.ICharSequence GetPageTitleFormatted(int position)
-        {
-            return new Java.Lang.String(tabTitles[position]);
-        }
-
-        public View GetTabView(ViewGroup parent, int position)
-        {
-            View tab = LayoutInflater.From(parent.Context).Inflate(Resource.Layout.custom_tab, null);
-            TextView tv = (TextView)tab.FindViewById(Resource.Id.custom_text);
-            tv.SetText(tabTitles[position], BufferType.Normal);
-            return tab;
-        }
         public override Fragment GetItem(int position)
         {
-            switch (position)
+            return position switch
             {
-                case 0:
-                    return SummaryFragment.NewInstance(movieName, movieId);
-                case 1:
-                    return CastFragment.NewInstance(movieName, movieId);
-                case 2:
-                    return TrailerFragment.NewInstance(movieName, movieId, backdrop);
-                case 3:
-                    return ReviewFragment.NewInstance(movieName, movieId);
-                case 4:
-                    return SimilarMoviesFragment.NewInstance(movieId);
-                
-            }
-            return null;
-        }
-
-        public override int GetItemPosition(Java.Lang.Object frag)
-        {
-            return PositionNone;
+                0 => SummaryFragment.NewInstance(movieName, movieId),
+                1 => CastFragment.NewInstance(movieId),
+                2 => TrailerFragment.NewInstance(movieName, movieId, backdrop),
+                3 => ReviewFragment.NewInstance(movieName, movieId),
+                4 => SimilarMoviesFragment.NewInstance(movieId),
+                _ => null,
+            };
         }
     }
 
-    class CastPagerAdapter : FragmentStatePagerAdapter
+    class CastPagerAdapter : PagerAdapter
     {
-        string[] tabTitles;
         string castName;
         int castId;
 
-        public override int Count
+        public CastPagerAdapter(Context context, FragmentManager fm, string castName, int castId)
+            : base(context, Resource.Array.castDetails, fm)
         {
-            get
-            {
-                return tabTitles.Length;
-            }
-        }
-
-        public CastPagerAdapter(Context context, Android.Support.V4.App.FragmentManager fm, string castName, int castId) : base(fm)
-        {
-            tabTitles = context.Resources.GetTextArray(Resource.Array.castDetails);
             this.castName = castName;
             this.castId = castId;
-        }
-
-        public override Java.Lang.ICharSequence GetPageTitleFormatted(int position)
-        {
-            return new Java.Lang.String(tabTitles[position]);
-        }
-
-        public View GetTabView(ViewGroup parent, int position)
-        {
-            View tab = LayoutInflater.From(parent.Context).Inflate(Resource.Layout.custom_tab, null);
-            TextView tv = (TextView)tab.FindViewById(Resource.Id.custom_text);
-            tv.SetText(tabTitles[position], BufferType.Normal);
-            return tab;
         }
 
         public override Fragment GetItem(int position)
@@ -165,14 +100,9 @@ namespace MovieBuddy
                 //case 0:
                 //    return new SummaryFragment(castName, 0, castId, true);
                 case 0:
-                    return CastFragment.NewInstance(castName, 0, castId, true);
+                    return CastMoviesFragment.NewInstance(castId);
             }
             return null;
-        }
-
-        public override int GetItemPosition(Java.Lang.Object frag)
-        {
-            return PositionNone;
         }
     }
 }

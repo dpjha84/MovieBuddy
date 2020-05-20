@@ -8,5 +8,5 @@
         android:layout_height="match_parent"
         android:id="@+id/splashView"
         android:scaleType="centerCrop"
-        android:src="@drawable/splash2" />
+        android:src="@drawable/splash" />
 </LinearLayout>
