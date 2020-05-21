@@ -21,6 +21,7 @@ namespace MovieBuddy
         public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
         {
             var vh = holder as CastViewHolder;
+            ImageViewsToClean.Add(vh.CastImage);
             vh.CastName.Text = Cast[position].Name;
             vh.Character.Text = Cast[position].Character;
             Context context = vh.CastImage.Context;

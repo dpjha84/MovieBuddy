@@ -2,7 +2,6 @@
 using Android.Views;
 using Android.Widget;
 using Com.Bumptech.Glide;
-//using Square.Picasso;
 using System;
 
 namespace MovieBuddy

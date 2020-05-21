@@ -45,9 +45,9 @@ namespace MovieBuddy
             {
                 0 => MoviesFragment.NewInstance(MovieListType.NowPlaying),
                 1 => MoviesFragment.NewInstance(MovieListType.Upcoming),
-                2 => MoviesFragment.NewInstance(MovieListType.Trending),
-                3 => MoviesFragment.NewInstance(MovieListType.Popular),
-                4 => MoviesFragment.NewInstance(MovieListType.TopRated),
+                //2 => MoviesFragment.NewInstance(MovieListType.Trending),
+                2 => MoviesFragment.NewInstance(MovieListType.Popular),
+                3 => MoviesFragment.NewInstance(MovieListType.TopRated),
                 _ => null,
             };
         }
@@ -97,9 +97,9 @@ namespace MovieBuddy
         {
             switch (position)
             {
-                //case 0:
-                //    return new SummaryFragment(castName, 0, castId, true);
                 case 0:
+                    return CastBioFragment.NewInstance(castId);
+                case 1:
                     return CastMoviesFragment.NewInstance(castId);
             }
             return null;

@@ -10,6 +10,7 @@ namespace MovieBuddy
     public abstract class AdapterBase : RecyclerView.Adapter
     {
         public event EventHandler<int> ItemClick;
+        public List<ImageView> ImageViewsToClean = new List<ImageView>();
 
         public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
         {
@@ -27,6 +28,7 @@ namespace MovieBuddy
     public class MoviesAdapter : AdapterBase
     {
         public List<TMDbLib.Objects.Search.SearchMovie> movies;
+        
 
         public MoviesAdapter(List<TMDbLib.Objects.Search.SearchMovie> movies)
         {
@@ -36,6 +38,7 @@ namespace MovieBuddy
         public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
         {
             MovieViewHolder vh = holder as MovieViewHolder;
+            ImageViewsToClean.Add(vh.Image);
             var movie = movies[position];
             Helper.SetImage(vh.Image.Context, movie.PosterPath, vh.Image, Resource.Drawable.noimage);
             vh.Name.Text = movie.Title;

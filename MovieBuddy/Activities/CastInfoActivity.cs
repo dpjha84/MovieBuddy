@@ -24,8 +24,8 @@ namespace MovieBuddy
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
-            Window.AddFlags(WindowManagerFlags.Fullscreen);
-            Window.ClearFlags(WindowManagerFlags.ForceNotFullscreen);
+            //Window.AddFlags(WindowManagerFlags.Fullscreen);
+            //Window.ClearFlags(WindowManagerFlags.ForceNotFullscreen);
 
             string castName = Intent.GetStringExtra("castName");
             int castId = Intent.GetIntExtra("castId", 0);

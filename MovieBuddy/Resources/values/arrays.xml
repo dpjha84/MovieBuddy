@@ -3,7 +3,7 @@
   <string-array name="sections">
     <item>NOW PLAYING</item>
     <item>UPCOMING</item>
-    <item>TRENDING</item>
+    <!--<item>TRENDING</item>-->
     <item>POPULAR</item>
     <item>TOP RATED</item>
   </string-array>
@@ -15,7 +15,7 @@
     <item>SIMILAR</item>
   </string-array>
   <string-array name="castDetails">
-    <!--<item>SUMMARY</item>-->
+    <item>BIO</item>
     <item>MOVIES</item>
   </string-array>
 </resources>

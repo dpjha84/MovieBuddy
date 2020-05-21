@@ -11,50 +11,57 @@ using TMDbLib.Objects.Search;
 
 namespace MovieBuddy
 {
-    public class MovieSummaryAdapter : RecyclerView.Adapter
+    public class MovieSummaryAdapter : AdapterBase
     {
-        public event EventHandler<int> ItemClick;
-        public List<string> content;
+        public Dictionary<string, string> content;
 
-        public MovieSummaryAdapter(List<string> content)
+        public MovieSummaryAdapter(Dictionary<string, string> content)
         {
             this.content = content;
-        }
-
-        public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
-        {
-            View itemView = LayoutInflater.From(parent.Context).Inflate(Resource.Layout.Summary, parent, false);
-            MovieSummaryViewHolder vh = new MovieSummaryViewHolder(itemView, OnClick);
-            return vh;
         }
 
         public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
         {
             MovieSummaryViewHolder vh = holder as MovieSummaryViewHolder;
-            var data = string.Join('\n', content);
-            SpannableString str = new SpannableString(data);
-            int prev = 0;
-            for (int i = 0; i < content.Count; i++)
+            //var data = string.Join('\n', content);
+            SpannableStringBuilder str = new SpannableStringBuilder();
+            //int prev = 0;
+            foreach (var item in content)
             {
-                if (i % 2 == 0)
-                {
-                    str.SetSpan(new StyleSpan(TypefaceStyle.Bold), prev, prev + content[i].Length,
-                        SpanTypes.ExclusiveExclusive);
-                }
-                prev += content[i].Length;
-                prev++;
+                var ss = new SpannableString(item.Key);
+                ss.SetSpan(new StyleSpan(TypefaceStyle.Bold), 0, item.Key.Length - 1, SpanTypes.ExclusiveExclusive);
+                str.Append(ss);
+                str.Append(new SpannableString("\n"));
+                str.Append(item.Value);
+                str.Append(new SpannableString("\n\n"));
             }
+            //for (int i = 0; i < content.Count; i++)
+            //{
+            //    if (i % 2 == 0)
+            //    {
+            //        str.SetSpan(new StyleSpan(TypefaceStyle.Bold), prev, prev + content[i].Length,
+            //            SpanTypes.ExclusiveExclusive);
+            //    }
+            //    prev += content[i].Length;
+            //    prev++;
+            //}
             vh.MovieSummary.TextFormatted = str;
+        }
+
+        public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
+        {
+            View itemView = LayoutInflater.From(parent.Context).Inflate(Resource.Layout.Summary, parent, false);
+            return GetViewHolder(itemView, OnClick);
+        }
+
+        protected override RecyclerView.ViewHolder GetViewHolder(View view, Action<int> listener)
+        {
+            return new MovieSummaryViewHolder(view, OnClick);
         }
 
         public override int ItemCount
         {
             get { return 1; }
-        }
-
-        void OnClick(int position)
-        {
-            ItemClick?.Invoke(this, position);
         }
 
         class MovieSummaryViewHolder : RecyclerView.ViewHolder

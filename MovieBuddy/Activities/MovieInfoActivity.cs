@@ -34,7 +34,7 @@ namespace MovieBuddy
                 bool isCast = Intent.GetBooleanExtra("isCast", false);
 
                 savedInstanceState = new Bundle();
-                savedInstanceState.PutInt("Id", movieId);
+                savedInstanceState.PutInt("movieId", movieId);
                 savedInstanceState.PutString("name", movieName);
                 savedInstanceState.PutInt("castId", castId);
                 savedInstanceState.PutBoolean("isCast", isCast);
@@ -50,7 +50,6 @@ namespace MovieBuddy
                 imageView = (ImageView)FindViewById(Resource.Id.backdrop);
 
                 collapsingToolbar = (CollapsingToolbarLayout)FindViewById(Resource.Id.collapsing_toolbar);
-                //collapsingToolbar.SetTitle(movieName);
 
                 SetToolbar();
                 SetImage();

@@ -1,8 +1,6 @@
 using Android.Content;
 using Android.OS;
 using Android.Support.V4.App;
-using Android.Support.V7.Widget;
-using Android.Views;
 using Android.Widget;
 using System;
 using System.Linq;
@@ -10,38 +8,10 @@ using System.Collections.Generic;
 using System.Threading;
 
 namespace MovieBuddy
-{    
-    public enum MovieListType
+{
+    public class MoviesFragment : RecyclerViewFragment
     {
-        NowPlaying,
-        Upcoming,
-        Trending,
-        Popular,
-        TopRated
-    }
-
-    public class SimilarMoviesFragment : MoviesFragment
-    {
-        public static SimilarMoviesFragment NewInstance(int movieId)
-        {
-            var frag1 = new SimilarMoviesFragment();
-            Bundle bundle = new Bundle();
-            bundle.PutInt("movieId", movieId);
-            frag1.Arguments = bundle;
-            return frag1;
-        }
-
-        protected override List<TMDbLib.Objects.Search.SearchMovie> GetMovies()
-        {
-            movieId = Arguments.GetInt("movieId");
-            return MovieManager.Instance.GetSimilar(movieId);
-        }
-    }
-
-    public class MoviesFragment : BaseFragment
-    {
-        MoviesAdapter adapter;
-        private MovieListType movieListType;
+        protected MovieListType MovieListType { get { return (MovieListType)Arguments.GetInt("movieListType"); } }
 
         public static MoviesFragment NewInstance(MovieListType type)
         {
@@ -52,38 +22,19 @@ namespace MovieBuddy
             return frag1;
         }
 
-        public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+        protected override void SetAdapter()
         {
-            try
-            {
-                View rootView = inflater.Inflate(Resource.Layout.fragment_blank, container, false);
-
-                RecyclerView rv = (RecyclerView)rootView.FindViewById(Resource.Id.rv_recycler_view);
-                rv.NestedScrollingEnabled = false;
-                rv.HasFixedSize = true;
-
-                var llm = new GridLayoutManager(this.Context, 3, GridLayoutManager.Vertical, false);
-                rv.SetLayoutManager(llm);
-
-                adapter = new MoviesAdapter(GetMovies());
-                adapter.ItemClick += OnItemClick;
-                rv.SetAdapter(adapter);
-                return rootView;
-            }
-            catch (Exception)
-            {
-            }
-            return null;
+            adapter = new MoviesAdapter(GetMovies());
+            adapter.ItemClick += OnItemClick;
         }
 
         protected virtual List<TMDbLib.Objects.Search.SearchMovie> GetMovies()
         {
-            movieListType = (MovieListType)Arguments.GetInt("movieListType");
-            return movieListType switch
+            return MovieListType switch
             {
                 MovieListType.NowPlaying => MovieManager.Instance.NowPlaying,
                 MovieListType.Upcoming => MovieManager.Instance.Upcoming,
-                MovieListType.Trending => MovieManager.Instance.Trending,
+                //MovieListType.Trending => MovieManager.Instance.Trending,
                 MovieListType.Popular => MovieManager.Instance.Popular,
                 MovieListType.TopRated => MovieManager.Instance.TopRated,
                 _ => throw new ArgumentException("Invalid Movie List Type"),
@@ -110,11 +61,32 @@ namespace MovieBuddy
             }            
         }
 
-        public override void OnDestroy()
-        {
-            if(adapter != null)
-                adapter.ItemClick -= OnItemClick;
-            base.OnDestroy();
-        }
+        //public override void OnStop()
+        //{
+        //    foreach (var imageView in adapter.ImageViewsToClean)
+        //    {
+        //        Helper.Clear(Context, imageView);
+        //    }
+        //    base.OnStop();
+        //}
+
+        //public override void OnResume()
+        //{
+        //    adapter = new MoviesAdapter(GetMovies());
+        //    //foreach (var imageView in adapter.moviesImageViews)
+        //    //{
+        //    //    Helper.SetImage(Context, imageView);
+        //    //}
+        //    base.OnResume();
+        //}
+    }
+
+    public enum MovieListType
+    {
+        NowPlaying,
+        Upcoming,
+        //Trending,
+        Popular,
+        TopRated
     }
 }

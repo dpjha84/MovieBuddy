@@ -18,6 +18,7 @@ namespace MovieBuddy
     {
         string backdrop;
         string trailerId;
+        ImageView playImage;
         public static TrailerFragment NewInstance(string movieName, int movieId, string backdrop)
         {
             var frag1 = new TrailerFragment();
@@ -32,26 +33,18 @@ namespace MovieBuddy
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             movieName = Arguments.GetString("movieName");
-            movieId = Arguments.GetInt("movieId");
             backdrop = Arguments.GetString("backdrop");
             
             try
             {
-                trailerId = MovieManager.Instance.GetTrailer(movieId, movieName);
+                trailerId = MovieManager.Instance.GetTrailer(MovieId, movieName);
                 if (trailerId == null) return base.OnCreateView(inflater, container, savedInstanceState);
 
                 var rootView = inflater.Inflate(Resource.Layout.trailer, container, false);
                 var backdropImage = (ImageView)rootView.FindViewById(Resource.Id.mediaPreview);
-                var playImage = (ImageView)rootView.FindViewById(Resource.Id.playButton);
+                playImage = (ImageView)rootView.FindViewById(Resource.Id.playButton);
                 Helper.SetImage(Context, backdrop, backdropImage, Resource.Drawable.noimage);
                 playImage.Click += Iv_Click;
-                //simpleVideoView.SetVideoURI(Android.Net.Uri.Parse("https://www.youtube.com/embed/hlWiI4xVXKY"));// $"https://www.youtube.com/embed/{trailerId}"));
-                //simpleVideoView.SetMediaController(new MediaController(Context));
-                //simpleVideoView.RequestFocus();
-                //simpleVideoView.Start();
-                //rv.Settings.JavaScriptEnabled = true;
-                //rv.SetWebChromeClient(new WebChromeClient());
-                //rv.LoadUrl($"https://www.youtube.com/embed/{trailerId}");
                 return rootView;
             }
             catch (Exception ex)
@@ -72,6 +65,13 @@ namespace MovieBuddy
             {
                 Toast.MakeText(Application.Context, ex.ToString(), ToastLength.Long).Show();
             }
+        }
+
+        public override void OnDestroy()
+        {
+            if (playImage != null)
+                playImage.Click -= Iv_Click;
+            base.OnDestroy();
         }
     }
 }

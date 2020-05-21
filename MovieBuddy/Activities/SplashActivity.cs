@@ -1,18 +1,26 @@
 ﻿using Android.App;
+using Android.Content;
 using Android.OS;
+using Android.Support.V7.App;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MovieBuddy.Activities
 {
-    [Activity(//Theme = "@style/Theme.Splash", //Indicates the theme to use for this activity
-             MainLauncher = true, //Set it as boot activity
-             NoHistory = true)] //Doesn't place it in back stack
-    public class SplashActivity : Activity
+    [Activity(Theme = "@style/Theme.Splash", MainLauncher = true, NoHistory = true)]
+    public class SplashActivity : AppCompatActivity
     {
-        protected override void OnCreate(Bundle bundle)
+        public override void OnCreate(Bundle savedInstanceState, PersistableBundle persistentState)
         {
-            base.OnCreate(bundle);
-            //SetContentView(Resource.Layout.splash);
-            this.StartActivity(typeof(MainActivity));
+            base.OnCreate(savedInstanceState, persistentState);
+        }
+
+        // Launches the startup task
+        protected override void OnResume()
+        {
+            base.OnResume();
+            MovieManager.Init(new LocalDataProvider(), false);
+            StartActivity(new Intent(Application.Context, typeof(MainActivity)));
         }
     }
 }
