@@ -14,9 +14,10 @@ namespace MovieBuddy
             return frag1;
         }
 
+        int page = 1;
         protected override List<TMDbLib.Objects.Search.SearchMovie> GetMovies()
         {
-            return MovieManager.Instance.GetSimilar(MovieId);
+            return MovieManager.Instance.GetSimilar(MovieId, page++);
         }
     }
 }

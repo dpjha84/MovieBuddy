@@ -19,7 +19,7 @@ namespace MovieBuddy.Activities
         protected override void OnResume()
         {
             base.OnResume();
-            MovieManager.Init(new LocalDataProvider(), false);
+            MovieManager.Init();
             StartActivity(new Intent(Application.Context, typeof(MainActivity)));
         }
     }

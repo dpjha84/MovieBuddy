@@ -9,13 +9,13 @@ using Android.Widget;
 
 namespace MovieBuddy
 {
-    public class CastAdapter : AdapterBase
+    public class CastAdapter : ClickableWithPagingAdapter<TMDbLib.Objects.Movies.Cast>
     {
         public List<TMDbLib.Objects.Movies.Cast> Cast;
 
-        public CastAdapter(List<TMDbLib.Objects.Movies.Cast> cast)
+        public CastAdapter()
         {
-            this.Cast = cast;
+            this.Cast = new List<TMDbLib.Objects.Movies.Cast>();
         }
 
         public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
@@ -28,9 +28,14 @@ namespace MovieBuddy
             Helper.SetImage(context, Cast[position].ProfilePath, vh.CastImage, Resource.Drawable.NoCast);
         }
 
-        protected override RecyclerView.ViewHolder GetViewHolder(View view, Action<int> listener)
+        protected override RecyclerView.ViewHolder GetViewHolder(View view)
         {
-            return new CastViewHolder(view, listener);
+            return new CastViewHolder(view, OnClick);
+        }
+
+        protected override void AddToCollection(List<TMDbLib.Objects.Movies.Cast> data)
+        {
+            Cast.AddRange(data);
         }
 
         public override int ItemCount

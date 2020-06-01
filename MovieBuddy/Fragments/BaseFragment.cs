@@ -19,12 +19,7 @@ namespace MovieBuddy
         {
         }
 
-        public override void OnDestroy()
-        {
-            if (adapter != null)
-                adapter.ItemClick -= OnItemClick;
-            base.OnDestroy();
-        }
+        
 
         
     }

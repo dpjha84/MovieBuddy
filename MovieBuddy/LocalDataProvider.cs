@@ -6,8 +6,9 @@ using Android.Content;
 
 namespace MovieBuddy
 {
-    public class LocalDataProvider : ILocalDataProvider
+    public class LocalDataProvider
     {
+        public static LocalDataProvider Instance { get; } = new LocalDataProvider();
         public void Reset()
         {
             var prefs = Application.Context.GetSharedPreferences("MySharedPrefs", FileCreationMode.Private);

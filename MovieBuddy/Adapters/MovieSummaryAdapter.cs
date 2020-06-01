@@ -11,7 +11,7 @@ using TMDbLib.Objects.Search;
 
 namespace MovieBuddy
 {
-    public class MovieSummaryAdapter : AdapterBase
+    public class MovieSummaryAdapter : ClickableAdapter
     {
         public Dictionary<string, string> content;
 
@@ -29,7 +29,7 @@ namespace MovieBuddy
             foreach (var item in content)
             {
                 var ss = new SpannableString(item.Key);
-                ss.SetSpan(new StyleSpan(TypefaceStyle.Bold), 0, item.Key.Length - 1, SpanTypes.ExclusiveExclusive);
+                ss.SetSpan(new StyleSpan(TypefaceStyle.Bold), 0, item.Key.Length, SpanTypes.ExclusiveExclusive);
                 str.Append(ss);
                 str.Append(new SpannableString("\n"));
                 str.Append(item.Value);
@@ -51,10 +51,10 @@ namespace MovieBuddy
         public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
         {
             View itemView = LayoutInflater.From(parent.Context).Inflate(Resource.Layout.Summary, parent, false);
-            return GetViewHolder(itemView, OnClick);
+            return GetViewHolder(itemView);
         }
 
-        protected override RecyclerView.ViewHolder GetViewHolder(View view, Action<int> listener)
+        protected override RecyclerView.ViewHolder GetViewHolder(View view)
         {
             return new MovieSummaryViewHolder(view, OnClick);
         }

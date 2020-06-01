@@ -2,6 +2,9 @@
 using Android.Views;
 using Android.Widget;
 using Com.Bumptech.Glide;
+using Com.Bumptech.Glide.Load.Engine;
+using Com.Bumptech.Glide.Request;
+using Com.Bumptech.Glide.Signature;
 using System;
 
 namespace MovieBuddy
@@ -34,7 +37,12 @@ namespace MovieBuddy
             }
             try
             {
-                Glide.With(castInfoActivity).Load($"https://image.tmdb.org/t/p/w500/{backdrop}").Thumbnail(0.2f).Into(imageView);
+                var requestOptions = new RequestOptions()
+                    .Apply(RequestOptions.DiskCacheStrategyOf(DiskCacheStrategy.All))
+                    .Apply(RequestOptions.PlaceholderOf(Resource.Drawable.noimage));
+                    //.Apply(RequestOptions.SignatureOf(new ObjectKey(DateTime.Now.Millisecond)));
+                //var requestOptions = req .diskCacheStrategy(DiskCacheStrategy.All)
+                Glide.With(castInfoActivity).Load($"https://image.tmdb.org/t/p/w500/{backdrop}").Apply(requestOptions).Into(imageView);
             }
             catch (Exception)
             {

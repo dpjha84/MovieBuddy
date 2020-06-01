@@ -41,15 +41,19 @@ namespace MovieBuddy
 
         public override Android.Support.V4.App.Fragment GetItem(int position)
         {
-            return position switch
+            switch (position)
             {
-                0 => MoviesFragment.NewInstance(MovieListType.NowPlaying),
-                1 => MoviesFragment.NewInstance(MovieListType.Upcoming),
-                //2 => MoviesFragment.NewInstance(MovieListType.Trending),
-                2 => MoviesFragment.NewInstance(MovieListType.Popular),
-                3 => MoviesFragment.NewInstance(MovieListType.TopRated),
-                _ => null,
-            };
+                case 0:
+                    return MoviesFragment.NewInstance(MovieListType.NowPlaying);
+                case 1:
+                    return MoviesFragment.NewInstance(MovieListType.Upcoming);
+                case 2:
+                    return MoviesFragment.NewInstance(MovieListType.Popular);
+                case 3:
+                    return MoviesFragment.NewInstance(MovieListType.TopRated);
+                default:
+                    return null;
+            }
         }
     }
 

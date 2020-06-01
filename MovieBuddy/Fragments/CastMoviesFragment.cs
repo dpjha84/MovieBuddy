@@ -21,7 +21,7 @@ namespace MovieBuddy
             var person = MovieManager.Instance.GetPerson(CastId);
             if (person.Birthday.HasValue)
             {
-                result.Add("Birthday", person.Birthday.Value.ToString("MMMM dd"));
+                result.Add("Birthday", person.Birthday.Value.ToString("dd MMMM yyyy"));
                 //result.Add(person.Birthday.Value.ToString("MMMM dd"));
                 //result.Add("");
             }
@@ -46,11 +46,13 @@ namespace MovieBuddy
             frag1.Arguments = bundle;
             return frag1;
         }
-
+        int page = 1;
         protected override List<TMDbLib.Objects.Search.SearchMovie> GetMovies()
         {
+            var data = MovieManager.Instance.GetMovieCredits(CastId, page++);
+            if (data == null) return null;
             var movieList = new List<TMDbLib.Objects.Search.SearchMovie>();
-            foreach (var item in MovieManager.Instance.GetMovieCredits(CastId).Cast.Take(10))
+            foreach (var item in data)
                 movieList.Add(new TMDbLib.Objects.Search.SearchMovie
                 {
                     Id = item.Id,

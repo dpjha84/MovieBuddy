@@ -28,9 +28,10 @@ namespace MovieBuddy
             return MovieManager.Instance.GetFullOverview(MovieId);
         }
 
-        protected override void SetAdapter()
+        protected override RecyclerView.Adapter SetAdapter()
         {
             adapter = new MovieSummaryAdapter(GetContent());
+            return adapter;
         }
     }
 }

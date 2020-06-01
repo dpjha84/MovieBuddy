@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+  <item
+    android:id="@+id/menu_info"
+    android:icon="@drawable/baseline_filter_alt_white_18"
+    app:showAsAction="ifRoom"
+    android:title="Info"/>
+  <!--<item
+    android:id="@+id/menu_overflow"
+    app:showAsAction="never"
+    android:title="Overflow"/>-->
+</menu>

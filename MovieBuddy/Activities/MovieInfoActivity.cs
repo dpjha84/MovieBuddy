@@ -8,6 +8,7 @@ using Android.Support.V4.View;
 using Android.Support.Design.Widget;
 using System;
 using Android.Gms.Ads;
+using Jaeger;
 
 namespace MovieBuddy
 {
@@ -40,6 +41,7 @@ namespace MovieBuddy
                 savedInstanceState.PutBoolean("isCast", isCast);
 
                 this.Title = movieName;
+                StatusBarUtil.SetTransparent(this);
                 SetContentView(Resource.Layout.MovieInfoView);
 
                 //mAdView = FindViewById<AdView>(Resource.Id.adView);

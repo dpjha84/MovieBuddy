@@ -9,6 +9,7 @@ namespace MovieBuddy
 {
     public class CastFragment : RecyclerViewFragment
     {
+        CastAdapter castAdapter;
         public static CastFragment NewInstance(int movieId)
         {
             var frag1 = new CastFragment();
@@ -31,10 +32,29 @@ namespace MovieBuddy
             StartActivity(intent);
         }
 
-        protected override void SetAdapter()
+        protected override void SetupOnScroll()
         {
-            adapter = new CastAdapter(MovieManager.Instance.GetCastAndCrew(MovieId).Cast.Take(10).ToList());
-            adapter.ItemClick += OnItemClick;
+            var onScrollListener = new XamarinRecyclerViewOnScrollListener();
+            onScrollListener.LoadMoreEvent += (object sender, EventArgs e) => {
+                GetData();
+            };
+            nsv.SetOnScrollChangeListener(onScrollListener);
+        }
+        int page = 1;
+        protected override void GetData()
+        {
+            var data = MovieManager.Instance.GetCastAndCrew(MovieId, page++);
+            if (data == null) return;
+            var recyclerViewState = rv.GetLayoutManager().OnSaveInstanceState();
+            castAdapter.LoadData(data);
+            rv.GetLayoutManager().OnRestoreInstanceState(recyclerViewState);
+        }
+
+        protected override RecyclerView.Adapter SetAdapter()
+        {
+            castAdapter = new CastAdapter();
+            castAdapter.ItemClick += OnItemClick;
+            return castAdapter;
         }
     }
 }
