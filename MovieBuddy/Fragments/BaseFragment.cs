@@ -1,4 +1,8 @@
-﻿using Android.OS;
+﻿using Android.App;
+using Android.Content;
+using Android.OS;
+using Android.Views;
+using Xamarin.Essentials;
 
 namespace MovieBuddy
 {
@@ -9,11 +13,73 @@ namespace MovieBuddy
 
         protected int MovieId { get { return Arguments.GetInt("movieId"); } }
         protected int CastId { get { return Arguments.GetInt("castId"); } }
+        protected string Query { get { return Arguments.GetString("query"); } }
 
         public BaseFragment()
         {
             
         }
+
+        protected bool IsConnected()
+        {
+            switch (Connectivity.NetworkAccess)
+            {
+                case NetworkAccess.None:
+                case NetworkAccess.Unknown:
+                    new AlertDialog.Builder(Context)
+                    .SetTitle("No Internet")
+                    .SetMessage("Please check your internet connection")
+                    .SetPositiveButton("Retry", (sender, args) =>
+                    {
+                        StartActivity(new Intent(Context, typeof(MainActivity)));
+                    })
+                    .Show();
+                    return false;
+            }
+            return true;
+        }
+        public override void OnCreate(Bundle savedInstanceState)
+        {
+            MovieManager.EnsureLoaded();
+            base.OnCreate(savedInstanceState);
+        }
+
+        //public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+        //{
+        //    switch (Connectivity.NetworkAccess)
+        //    {
+        //        case NetworkAccess.None:
+        //        case NetworkAccess.Unknown:
+        //            new AlertDialog.Builder(Context)
+        //            .SetTitle("No Internet")
+        //            .SetMessage("Please check your internet connection")
+        //            .SetPositiveButton("Retry", (sender, args) =>
+        //            {
+        //                StartActivity(new Intent(Context, typeof(MainActivity)));
+        //            })
+        //            .Show();
+        //            return null;
+        //    }
+        //    return base.OnCreateView(inflater, container, savedInstanceState);
+        //}
+
+        //public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+        //{
+        //    switch (Connectivity.NetworkAccess)
+        //    {
+        //        case NetworkAccess.None:
+        //        case NetworkAccess.Unknown:
+        //            new AlertDialog.Builder(Context)
+        //            .SetTitle("No Internet")
+        //            .SetMessage("Please check your internet connection")
+        //            .SetPositiveButton("Retry", (sender, args) => {
+        //                StartActivity(new Intent(Context, typeof(MainActivity)));
+        //            })
+        //            .Show();
+        //            return null;
+        //    }
+        //    return base.OnCreateView();
+        //}
 
         protected virtual void OnItemClick(object sender, int position)
         {

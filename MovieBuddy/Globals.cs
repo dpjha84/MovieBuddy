@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Android.App;
+using Android.Content;
+using System.Collections.Generic;
+using Xamarin.Essentials;
 
 namespace MovieBuddy
 {
@@ -32,11 +35,11 @@ namespace MovieBuddy
             {
                 if (selectedLanguage == null)
                 {
-                    var languageInDisk = LocalDataProvider.Instance.Get("MovieLanguage");
+                    var languageInDisk = LocalCache.Instance.Get("MovieLanguage");
                     if (languageInDisk == null)
                     {
                         languageInDisk = "All";
-                        LocalDataProvider.Instance.Set("MovieLanguage", languageInDisk);
+                        LocalCache.Instance.Set("MovieLanguage", languageInDisk);
                     }
                     selectedLanguage = languageInDisk;
                 }
@@ -45,7 +48,26 @@ namespace MovieBuddy
             set
             {
                 selectedLanguage = value;
-                LocalDataProvider.Instance.Set("MovieLanguage", selectedLanguage);
+                LocalCache.Instance.Set("MovieLanguage", selectedLanguage);
+            }
+        }
+
+        public static void CheckInternet(Context context)
+        {
+            var current = Connectivity.NetworkAccess;
+
+            switch (current)
+            {
+                case NetworkAccess.None:
+                case NetworkAccess.Unknown:
+                    new AlertDialog.Builder(context)
+                    .SetTitle("Delete entry")
+                    .SetMessage("No Internet")
+                    .SetPositiveButton("RETRY", (sender, args) => { 
+                    
+                    })
+                    .Show();
+            return;
             }
         }
     }

@@ -13,9 +13,14 @@ using Android.Support.V7.Widget;
 using System.Collections.Generic;
 using Android.Widget;
 using System.Linq;
+using Android.Net;
+using Android.Runtime;
+using Xamarin.Essentials;
 
 namespace MovieBuddy
 {
+    
+
     [Activity(Label = "Movie Buddy", MainLauncher = false, Icon = "@drawable/icon")]
     public class MainActivity : AppCompatActivity
     {
@@ -34,6 +39,23 @@ namespace MovieBuddy
             base.OnCreate(bundle);
 
             SetContentView(Resource.Layout.Main);
+            Xamarin.Essentials.Platform.Init(this, bundle);
+
+            //var current = Connectivity.NetworkAccess;
+
+            //switch (current)
+            //{
+            //    case NetworkAccess.None:
+            //    case NetworkAccess.Unknown:
+            //        new Android.App.AlertDialog.Builder(this)
+            //        .SetTitle("Delete entry")
+            //        .SetMessage("No Internet")
+            //        .SetPositiveButton("RETRY", (sender, args) => {
+            //            StartActivity(new Intent(Application.Context, typeof(MainActivity)));
+            //        })
+            //        .Show();
+            //        return;
+            //}
 
             toolbar = FindViewById<Android.Support.V7.Widget.Toolbar>(Resource.Id.toolbar);
             SetSupportActionBar(toolbar);
@@ -45,7 +67,13 @@ namespace MovieBuddy
 
             SetupNavigationDrawer(bundle);
         }
-        
+
+        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
+        {
+            Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+            base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+
         private void SetupTabbedView(Android.Support.V7.Widget.Toolbar toolbar)
         {
             viewPager = FindViewById<ViewPager>(Resource.Id.viewpager);            
@@ -85,11 +113,17 @@ namespace MovieBuddy
                 switch (e.MenuItem.ItemId)
                 {
                     case Resource.Id.nav_home_1:
-                        ListItemClicked(0);
+                        Intent intent = new Intent(Intent.ActionView, Android.Net.Uri.Parse("https://play.google.com/store/apps/details?id=com.dpjha.moviebuddy"));
+                        StartActivity(intent);
                         break;
-                        //case Resource.Id.nav_home_2:
-                        //    ListItemClicked(1);
-                        //    break;
+                    case Resource.Id.share:
+                        Intent sendIntent = new Intent();
+                        sendIntent.SetAction(Intent.ActionSend);
+                        sendIntent.PutExtra(Intent.ExtraText,
+                            "Hey check out this app at: https://play.google.com/store/apps/details?id=com.dpjha.moviebuddy");
+                        sendIntent.SetType("text/plain");
+                        StartActivity(sendIntent);
+                        break;
                 }
                 drawerLayout.CloseDrawers();
             };
@@ -115,8 +149,15 @@ namespace MovieBuddy
                 case Android.Resource.Id.Home:
                     drawerLayout.OpenDrawer(GravityCompat.Start);
                     break;
-                case Resource.Id.menu_info:
+                case Resource.Id.filter:
                     ShowRadioButtonDialog();
+                    break;
+                case Resource.Id.search:
+                    Intent intent = new Intent(this, typeof(SearchActivity));
+                    Bundle b = new Bundle();
+                    b.PutString("query", "john");
+                    intent.PutExtras(b);
+                    StartActivity(intent);
                     break;
                 default:
                     Toast.MakeText(this, item.TitleFormatted + ": " + "Overflow", ToastLength.Long).Show();
@@ -135,6 +176,7 @@ namespace MovieBuddy
             foreach (var lang in Globals.LanguageMap)
             {
                 RadioButton rb = new RadioButton(this);
+                rb.SetPadding(0, 20, 0, 20);
                 if (lang.Key == Globals.SelectedLanguage)
                     rb.Checked = true;
                 rb.Click += Rb_Click;

@@ -2,6 +2,7 @@
 using Android.Content;
 using Android.OS;
 using Android.Support.V7.App;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -19,7 +20,14 @@ namespace MovieBuddy.Activities
         protected override void OnResume()
         {
             base.OnResume();
-            MovieManager.Init();
+            try
+            {
+                MovieManager.Init();
+            }
+            catch (Exception)
+            {
+            }
+            
             StartActivity(new Intent(Application.Context, typeof(MainActivity)));
         }
     }

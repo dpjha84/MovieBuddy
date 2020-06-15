@@ -1,9 +1,12 @@
-﻿using Android.OS;
+﻿using Android.App;
+using Android.Content;
+using Android.OS;
 using Android.Support.V4.Widget;
 using Android.Support.V7.Widget;
 using Android.Views;
 using System;
 using System.Collections.Generic;
+using Xamarin.Essentials;
 using static MovieBuddy.MoviesFragment;
 
 namespace MovieBuddy
@@ -33,7 +36,8 @@ namespace MovieBuddy
         {
             try
             {
-                
+                if (!IsConnected()) return null;
+
                 View rootView = inflater.Inflate(Resource.Layout.fragment_blank, container, false);
 
                 rv = rootView.FindViewById<RecyclerView>(Resource.Id.rv_recycler_view);
@@ -52,43 +56,15 @@ namespace MovieBuddy
                 rv.SetAdapter(adapter1);
                 return rootView;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
             }
             return null;
         }
 
-        List<SearchMovie> movies = new List<SearchMovie>();
-        //private void GetData(RecyclerView rv)
-        //{
-        //    var recyclerViewState = rv.GetLayoutManager().OnSaveInstanceState();
-        //    adapter.AddMovies();
-        //    rv.GetLayoutManager().OnRestoreInstanceState(recyclerViewState);
-        //}
-
         protected virtual void SetupOnScroll() { }
 
         protected virtual void GetData() { }
-
-        public override void OnStop()
-        {
-            //foreach (var imageView in adapter.ImageViewsToClean)
-            //{
-            //    Helper.Clear(Context, imageView);
-            //}
-            //adapter = null;
-            base.OnStop();
-        }
-
-        public override void OnResume()
-        {
-            base.OnResume();
-            //if (adapter == null)
-            //{
-            //    SetAdapter();
-            //    rv.SetAdapter(adapter);
-            //}
-        }
 
         protected virtual int SpanCount
         {

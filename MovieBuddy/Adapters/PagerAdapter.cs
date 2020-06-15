@@ -85,6 +85,27 @@ namespace MovieBuddy
         }
     }
 
+    class SearchPagerAdapter : PagerAdapter
+    {
+        string query;
+
+        public SearchPagerAdapter(Context context, FragmentManager fm, string query)
+            : base(context, Resource.Array.searchDetails, fm)
+        {
+            this.query = query;
+        }
+
+        public override Fragment GetItem(int position)
+        {
+            return position switch
+            {
+                0 => SearchMoviesFragment.NewInstance(query),
+                1 => SearchPersonFragment.NewInstance(query),
+                _ => null,
+            };
+        }
+    }
+
     class CastPagerAdapter : PagerAdapter
     {
         string castName;

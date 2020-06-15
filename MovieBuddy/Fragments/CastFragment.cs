@@ -3,13 +3,14 @@ using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace MovieBuddy
 {
     public class CastFragment : RecyclerViewFragment
     {
-        CastAdapter castAdapter;
+        protected CastAdapter castAdapter;
         public static CastFragment NewInstance(int movieId)
         {
             var frag1 = new CastFragment();

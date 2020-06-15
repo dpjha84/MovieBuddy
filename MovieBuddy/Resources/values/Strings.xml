@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="hello">Hello World, Click Me!</string>
-	<string name="app_name">Flix Buddy</string>
+	<string name="app_name">Movie Buddy</string>
   <string name="test_banner_ad_unit_id">ca-app-pub-9351754143985661/3624151405</string>
   <string name="language_dialog_header">"Choose Movie Language:"</string>
 </resources>
