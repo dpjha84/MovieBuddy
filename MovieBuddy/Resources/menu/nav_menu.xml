@@ -3,6 +3,21 @@
 
   <group android:checkableBehavior="single">
     <item
+        android:id="@+id/celebs"
+        android:icon="@drawable/people"
+        android:title="Popular People" />
+    <item
+        android:id="@+id/explore"
+        android:icon="@drawable/explore"
+        android:title="Explore Movies" />
+    <!--<item
+        android:id="@+id/nav_home_2"
+        android:icon="@drawable/ic_home_2"
+        android:title="Feedback" />-->
+  </group>
+	
+	<group android:checkableBehavior="single">
+    <item
         android:id="@+id/nav_home_1"
         android:icon="@drawable/ic_star"
         android:title="Rate us" />

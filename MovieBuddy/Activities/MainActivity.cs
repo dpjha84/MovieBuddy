@@ -124,6 +124,10 @@ namespace MovieBuddy
                         sendIntent.SetType("text/plain");
                         StartActivity(sendIntent);
                         break;
+                    case Resource.Id.celebs:
+                        Intent intent1 = new Intent(this, typeof(PopularPersonActivity));
+                        StartActivity(intent1);
+                        break;
                 }
                 drawerLayout.CloseDrawers();
             };

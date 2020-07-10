@@ -92,6 +92,11 @@ namespace MovieBuddy
             return tmdbClient.SearchPersonAsync(query, page).Result.Results;
         }
 
+        public List<PersonResult> GetPopularPersons(int page)
+        {
+            return tmdbClient.GetPersonListAsync(PersonListType.Popular, page).Result.Results;
+        }
+
         public List<TSMovie> GetUpcoming(int page)
         {
             if (page == 1) upcomingTotalPage = int.MaxValue;

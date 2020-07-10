@@ -10,15 +10,14 @@ using System;
 using Android.Gms.Ads;
 using Jaeger;
 using static Android.Support.V7.Widget.SearchView;
+using Android.Support.V4.App;
 
 namespace MovieBuddy
 {
     [Activity(Label = "SearchActivity")]
-    public class SearchActivity : AppCompatActivity, SearchView.IOnQueryTextListener
+    public class SearchActivity : AppCompatActivity
     {
         private Android.Support.V7.Widget.Toolbar toolbar;
-        private ImageView imageView;
-        private CollapsingToolbarLayout collapsingToolbar;
         private SearchPagerAdapter tabPagerAdapter;
         private ViewPager mViewPager;
         private TabLayout mTabLayout;
@@ -125,26 +124,6 @@ namespace MovieBuddy
                 default:
                     return base.OnOptionsItemSelected(item);
             }
-        }
-
-        public bool OnQueryTextChange(string newText)
-        {
-            var tabPagerAdapter = new SearchPagerAdapter(this, SupportFragmentManager, newText);
-
-            mViewPager.Adapter = tabPagerAdapter;
-            mTabLayout.SetupWithViewPager(mViewPager);
-
-            for (int i = 0; i < mTabLayout.TabCount; i++)
-            {
-                TabLayout.Tab tab = mTabLayout.GetTabAt(i);
-                tab.SetCustomView(tabPagerAdapter.GetTabView(toolbar, i));
-            }
-            return true;
-        }
-
-        public bool OnQueryTextSubmit(string query)
-        {
-            return false;
         }
     }
 }

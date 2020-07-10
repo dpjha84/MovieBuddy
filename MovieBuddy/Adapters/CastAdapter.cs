@@ -6,25 +6,39 @@ using System.Collections.Generic;
 using TMDbLib.Objects.Search;
 using Java.Lang;
 using Android.Widget;
+using TMDbLib.Objects.General;
 
 namespace MovieBuddy
 {
-    public class SearchPersonAdapter : ClickableWithPagingAdapter<SearchPerson>
+    public class PopularPersonAdapter<T> : SearchPersonAdapter<T>
     {
-        public List<SearchPerson> Cast;
+        public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
+        {
+            var vh = holder as CastViewHolder;
+            ImageViewsToClean.Add(vh.CastImage);
+            var searchPerson = Cast[position] as PersonResult;
+            vh.CastName.Text = searchPerson.Name;
+            Context context = vh.CastImage.Context;
+            Helper.SetImage(context, searchPerson.ProfilePath, vh.CastImage, Resource.Drawable.NoCast);
+        }
+    }
+    public class SearchPersonAdapter<T> : ClickableWithPagingAdapter<T>
+    {
+        public List<T> Cast;
 
         public SearchPersonAdapter()
         {
-            this.Cast = new List<SearchPerson>();
+            this.Cast = new List<T>();
         }
 
         public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
         {
             var vh = holder as CastViewHolder;
             ImageViewsToClean.Add(vh.CastImage);
-            vh.CastName.Text = Cast[position].Name;
+            var searchPerson = Cast[position] as SearchPerson;
+            vh.CastName.Text = searchPerson.Name;
             Context context = vh.CastImage.Context;
-            Helper.SetImage(context, Cast[position].ProfilePath, vh.CastImage, Resource.Drawable.NoCast);
+            Helper.SetImage(context, searchPerson.ProfilePath, vh.CastImage, Resource.Drawable.NoCast);
         }
 
         protected override RecyclerView.ViewHolder GetViewHolder(View view)
@@ -32,7 +46,7 @@ namespace MovieBuddy
             return new CastViewHolder(view, OnClick);
         }
 
-        protected override void AddToCollection(List<SearchPerson> data)
+        protected override void AddToCollection(List<T> data)
         {
             Cast.AddRange(data);
         }

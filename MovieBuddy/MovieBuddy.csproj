@@ -62,7 +62,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DefineConstants>
     </DefineConstants>
-    <AndroidPackageFormat>aab</AndroidPackageFormat>
+    <AndroidPackageFormat>apk</AndroidPackageFormat>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -72,9 +72,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Activities\CastInfoActivity.cs" />
+    <Compile Include="Activities\PopularPersonActivity.cs" />
     <Compile Include="Activities\SearchActivity.cs" />
     <Compile Include="Data\PagedMovie.cs" />
     <Compile Include="Data\TmdbExtensions.cs" />
+    <Compile Include="Fragments\SearchMoviesFragment.cs" />
+    <Compile Include="Fragments\SearchPersonFragment.cs" />
     <Compile Include="Globals.cs" />
     <Compile Include="Activities\SplashActivity.cs" />
     <Compile Include="Adapters\CastAdapter.cs" />
@@ -573,6 +576,33 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\mipmap-xxxhdpi\baseline_star_rate_white_48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\people.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\mipmap-hdpi\people.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\mipmap-mdpi\people.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\mipmap-xhdpi\people.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\mipmap-xxhdpi\people.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\mipmap-xxxhdpi\people.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\explore.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\PopularPeople.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
 </Project>
