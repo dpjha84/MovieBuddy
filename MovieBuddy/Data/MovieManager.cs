@@ -206,7 +206,7 @@ namespace MovieBuddy
 
         public string GetGenreText(int genreId)
         {
-            return genreMap[genreId];
+            return genreMap.ContainsKey(genreId) ? genreMap[genreId] : "";
         }
     }
 }

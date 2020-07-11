@@ -20,12 +20,14 @@ namespace MovieBuddy
             { "Kannada", "kn" },
             { "Korean", "ko" },
             { "Malayalam", "ml" },
+            { "Nepali", "ne" },
             { "Portuguese", "pt" },
             { "Russian", "ru" },
             { "Spanish", "es" },
             { "Tamil", "ta" },
             { "Telugu", "te" },
-            { "Turkish", "tr" }
+            { "Turkish", "tr" },
+            { "Urdu", "ur" },
         };
 
         static string selectedLanguage = null;

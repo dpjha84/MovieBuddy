@@ -6,10 +6,10 @@
         android:id="@+id/celebs"
         android:icon="@drawable/people"
         android:title="Popular People" />
-    <item
+    <!--<item
         android:id="@+id/explore"
         android:icon="@drawable/explore"
-        android:title="Explore Movies" />
+        android:title="Explore Movies" />-->
     <!--<item
         android:id="@+id/nav_home_2"
         android:icon="@drawable/ic_home_2"
@@ -17,14 +17,15 @@
   </group>
 	
 	<group android:checkableBehavior="single">
+		<item
+        android:id="@+id/share"
+        android:icon="@drawable/share"
+        android:title="Share this app" />
     <item
         android:id="@+id/nav_home_1"
         android:icon="@drawable/ic_star"
         android:title="Rate us" />
-    <item
-        android:id="@+id/share"
-        android:icon="@drawable/share"
-        android:title="Share this app" />
+    
     <!--<item
         android:id="@+id/nav_home_2"
         android:icon="@drawable/ic_home_2"
