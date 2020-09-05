@@ -3,8 +3,6 @@ using Android.Content;
 using Android.OS;
 using Android.Support.V7.App;
 using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace MovieBuddy.Activities
 {
@@ -27,7 +25,7 @@ namespace MovieBuddy.Activities
             catch (Exception)
             {
             }
-            
+
             StartActivity(new Intent(Application.Context, typeof(MainActivity)));
         }
     }

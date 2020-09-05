@@ -1,63 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/main_layout"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ExploreActivity">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ExploreActivity">
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:background="?attr/colorPrimary"
-            android:elevation="6dp"
-            android:minHeight="?attr/actionBarSize"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" >
-        </android.support.v7.widget.Toolbar>
-    <!--<TextView
-        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dip"
-        android:text="@string/planet_prompt"
-        android:layout_below="@id/toolbar"
-    />-->
+        android:layout_alignParentTop="true"
+        android:background="?attr/colorPrimary"
+        android:elevation="6dp"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" >
+    </android.support.v7.widget.Toolbar>
     <LinearLayout
         android:id="@+id/filters"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="50dp"
         android:orientation="horizontal"
         android:layout_below="@id/toolbar">
-    <Spinner
-        android:id="@+id/spinner"
-        android:layout_width="0dp"
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="0dp"
             android:layout_weight="1"
-        android:layout_height="wrap_content"
-        android:prompt="@string/planet_prompt"
-    />
-    <Spinner
-        android:id="@+id/spinner2"
-        android:layout_width="0dp"
-            android:layout_weight="1"
-        android:layout_height="wrap_content"
-        android:prompt="@string/planet_prompt"
-    />
-        </LinearLayout>
-        <FrameLayout
-        android:id="@+id/frameLayout1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/filters"/>
-
-        <com.google.android.gms.ads.AdView
-            android:id="@+id/adView"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true"
-            ads:adSize="BANNER"
-            ads:adUnitId="@string/test_banner_ad_unit_id" />
-    </RelativeLayout>
+    />
+        <Spinner
+            android:id="@+id/spinner2"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+    />
+        <Spinner
+            android:id="@+id/spinner3"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+    />
+    </LinearLayout>
+    <FrameLayout
+        android:id="@+id/frameLayout1"
+        android:layout_marginBottom="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/filters"/>
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/test_banner_ad_unit_id" />
+</RelativeLayout>

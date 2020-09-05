@@ -1,9 +1,5 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
 using TMDbLib.Client;
 using TMDbLib.Objects.General;
 using TMovie = TMDbLib.Objects.Search.SearchMovie;

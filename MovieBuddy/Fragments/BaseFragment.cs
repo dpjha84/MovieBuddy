@@ -1,7 +1,6 @@
 ﻿using Android.App;
 using Android.Content;
 using Android.OS;
-using Android.Views;
 using Xamarin.Essentials;
 
 namespace MovieBuddy
@@ -17,7 +16,7 @@ namespace MovieBuddy
 
         public BaseFragment()
         {
-            
+
         }
 
         protected bool IsConnected()
@@ -44,49 +43,8 @@ namespace MovieBuddy
             base.OnCreate(savedInstanceState);
         }
 
-        //public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-        //{
-        //    switch (Connectivity.NetworkAccess)
-        //    {
-        //        case NetworkAccess.None:
-        //        case NetworkAccess.Unknown:
-        //            new AlertDialog.Builder(Context)
-        //            .SetTitle("No Internet")
-        //            .SetMessage("Please check your internet connection")
-        //            .SetPositiveButton("Retry", (sender, args) =>
-        //            {
-        //                StartActivity(new Intent(Context, typeof(MainActivity)));
-        //            })
-        //            .Show();
-        //            return null;
-        //    }
-        //    return base.OnCreateView(inflater, container, savedInstanceState);
-        //}
-
-        //public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-        //{
-        //    switch (Connectivity.NetworkAccess)
-        //    {
-        //        case NetworkAccess.None:
-        //        case NetworkAccess.Unknown:
-        //            new AlertDialog.Builder(Context)
-        //            .SetTitle("No Internet")
-        //            .SetMessage("Please check your internet connection")
-        //            .SetPositiveButton("Retry", (sender, args) => {
-        //                StartActivity(new Intent(Context, typeof(MainActivity)));
-        //            })
-        //            .Show();
-        //            return null;
-        //    }
-        //    return base.OnCreateView();
-        //}
-
         protected virtual void OnItemClick(object sender, int position)
         {
         }
-
-        
-
-        
     }
 }

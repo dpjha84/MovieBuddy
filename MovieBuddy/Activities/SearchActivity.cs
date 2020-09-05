@@ -1,16 +1,14 @@
 ﻿using Android.App;
 using Android.Content;
+using Android.Gms.Ads;
 using Android.OS;
+using Android.Support.Design.Widget;
+using Android.Support.V4.View;
+using Android.Support.V7.App;
 using Android.Views;
 using Android.Widget;
-using Android.Support.V7.App;
-using Android.Support.V4.View;
-using Android.Support.Design.Widget;
 using System;
-using Android.Gms.Ads;
-using Jaeger;
 using static Android.Support.V7.Widget.SearchView;
-using Android.Support.V4.App;
 
 namespace MovieBuddy
 {
@@ -37,9 +35,9 @@ namespace MovieBuddy
                 //StatusBarUtil.SetTransparent(this);
                 SetContentView(Resource.Layout.Search);
 
-                //mAdView = FindViewById<AdView>(Resource.Id.adView);
-                //var adRequest = new AdRequest.Builder().Build();
-                //mAdView.LoadAd(adRequest);
+                mAdView = FindViewById<AdView>(Resource.Id.adView);
+                var adRequest = new AdRequest.Builder().Build();
+                mAdView.LoadAd(adRequest);
 
                 toolbar = (Android.Support.V7.Widget.Toolbar)FindViewById<Android.Support.V7.Widget.Toolbar>(Resource.Id.toolbar);
 

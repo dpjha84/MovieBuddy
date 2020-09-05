@@ -1,10 +1,7 @@
 using Android.Content;
 using Android.OS;
 using Android.Support.V7.Widget;
-using Android.Views;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace MovieBuddy
 {
@@ -16,7 +13,7 @@ namespace MovieBuddy
             var frag1 = new CastFragment();
             Bundle bundle = new Bundle();
             bundle.PutInt("movieId", movieId);
-            frag1.Arguments = bundle;            
+            frag1.Arguments = bundle;
             return frag1;
         }
 
@@ -36,7 +33,8 @@ namespace MovieBuddy
         protected override void SetupOnScroll()
         {
             var onScrollListener = new XamarinRecyclerViewOnScrollListener();
-            onScrollListener.LoadMoreEvent += (object sender, EventArgs e) => {
+            onScrollListener.LoadMoreEvent += (object sender, EventArgs e) =>
+            {
                 GetData();
             };
             nsv.SetOnScrollChangeListener(onScrollListener);

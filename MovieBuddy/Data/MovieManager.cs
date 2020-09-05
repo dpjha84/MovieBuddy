@@ -1,24 +1,23 @@
-﻿using Newtonsoft.Json;
+﻿using MovieBuddy.Data;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Text;
-using System.Threading.Tasks;
 using TMDbLib.Client;
+using TMDbLib.Objects.Discover;
 using TMDbLib.Objects.General;
-using TMDbLib.Objects.Movies;
 using TMDbLib.Objects.People;
-using TSMovie = TMDbLib.Objects.Search.SearchMovie;
 using TCast = TMDbLib.Objects.Movies.Cast;
 using TReview = TMDbLib.Objects.Reviews.ReviewBase;
-using MovieBuddy.Data;
+using TSMovie = TMDbLib.Objects.Search.SearchMovie;
 
 namespace MovieBuddy
 {
     public class MovieManager
     {
-        readonly Dictionary<int, string> genreMap = new Dictionary<int, string>();
+        public static readonly Dictionary<int, string> GenreMap = new Dictionary<int, string>();
+        public static readonly Dictionary<string, int> GenreTextToIdMap = new Dictionary<string, int>();
         readonly Dictionary<string, string> languageMap = new Dictionary<string, string>();
         readonly TMDbClient tmdbClient;
         const string tmdbApiKey = "c6b31d1cdad6a56a23f0c913e2482a31";
@@ -68,7 +67,10 @@ namespace MovieBuddy
         void Load()
         {
             foreach (var g in GetCachedOrWebData(LocalCache.GenresKey, () => tmdbClient.GetMovieGenresAsync().Result))
-                genreMap.Add(g.Id, g.Name);
+            {
+                GenreMap.Add(g.Id, g.Name);
+                GenreTextToIdMap.Add(g.Name, g.Id);
+            }
 
             foreach (var l in GetCachedOrWebData(LocalCache.LanguagesKey, () => tmdbClient.GetLanguagesAsync().Result))
                 languageMap.Add(l.Iso_639_1, l.EnglishName);
@@ -97,16 +99,35 @@ namespace MovieBuddy
             return tmdbClient.GetPersonListAsync(PersonListType.Popular, page).Result.Results;
         }
 
+        public List<TSMovie> ExploreMovies(IList<int> exploreInfo, int page)
+        {
+            var startYear = exploreInfo[0];
+            var endYear = exploreInfo[1];
+            if (startYear > endYear) return null;
+
+            var genreId = exploreInfo[2];
+
+            var movies = new DiscoverMovie(tmdbClient);
+            if(genreId != -1)
+                movies = movies.IncludeWithAllOfGenre(new List<int> { genreId });
+
+            for (int i = startYear; i <= endYear; i++)
+            {
+                movies = movies.WherePrimaryReleaseIsInYear(i);
+            }
+            return movies.Query(page).Result.Results;
+        }
+
         public List<TSMovie> GetUpcoming(int page)
         {
             if (page == 1) upcomingTotalPage = int.MaxValue;
             if (page > upcomingTotalPage) return null;
-            if(Globals.SelectedLanguage == "All") return tmdbClient.GetMovieUpcomingListAsync(null, page).Result.Results;
+            if (Globals.SelectedLanguage == "All") return tmdbClient.GetMovieUpcomingListAsync(null, page).Result.Results;
 
             var result = tmdbClient.GetMoviesByUrl(upcomingBaseUrl, page);
             upcomingTotalPage = result.TotalPages;
             return result.Results.Where(filterUpcoming).ToList();
-        }        
+        }
 
         string BuildUrl(string startDate, string sortBy, string endDate = null)
         {
@@ -116,10 +137,10 @@ namespace MovieBuddy
             sb.Append($"release_date.gte={startDate}&");
             sb.Append($"sort_by={sortBy}&");
             if (endDate != null)
-                sb.Append($"release_date.lte={endDate}&");            
+                sb.Append($"release_date.lte={endDate}&");
             return sb.ToString();
         }
-        
+
         public List<TSMovie> GetNowPlaying(int page)
         {
             if (page == 1) nowPlayingTotalPage = int.MaxValue;
@@ -159,7 +180,7 @@ namespace MovieBuddy
             var data = tmdbClient.GetPersonAsync(castId).Result;
             return data;
         }
-        
+
         public List<TCast> GetCastAndCrew(int movieId, int page = 1)
         {
             if (page == 1)
@@ -177,7 +198,7 @@ namespace MovieBuddy
         }
 
         public List<TReview> GetReviews(int movieId) => tmdbClient.GetMovieReviewsAsync(movieId).Result.Results;
-        
+
         public List<MovieRole> GetMovieCredits(int personId, int page)
         {
             if (page == 1)
@@ -197,7 +218,7 @@ namespace MovieBuddy
             if (movie.ReleaseDate.HasValue)
                 summaryMap.Add("Year", movie.ReleaseDate.Value.Year.ToString());
             if (movie.Genres != null)
-                summaryMap.Add("Genres", string.Join(", ", movie.Genres.Select(x => genreMap[x.Id])));
+                summaryMap.Add("Genres", string.Join(", ", movie.Genres.Select(x => GenreMap[x.Id])));
             if (movie.ReleaseDate.HasValue)
                 summaryMap.Add("Release date", movie.ReleaseDate.Value.ToString("dd MMMM yyyy"));
             summaryMap.Add("Language", languageMap[movie.OriginalLanguage]);
@@ -206,7 +227,7 @@ namespace MovieBuddy
 
         public string GetGenreText(int genreId)
         {
-            return genreMap.ContainsKey(genreId) ? genreMap[genreId] : "";
+            return GenreMap.ContainsKey(genreId) ? GenreMap[genreId] : "";
         }
     }
 }

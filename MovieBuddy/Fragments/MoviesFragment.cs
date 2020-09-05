@@ -1,14 +1,11 @@
 using Android.Content;
 using Android.OS;
-using Android.Support.V4.App;
-using Android.Widget;
-using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Threading;
 using Android.Support.V7.Widget;
 using Android.Views;
+using Android.Widget;
 using MovieBuddy.Data;
+using System;
+using System.Collections.Generic;
 
 namespace MovieBuddy
 {
@@ -43,7 +40,8 @@ namespace MovieBuddy
         protected override void SetupOnScroll()
         {
             var onScrollListener = new XamarinRecyclerViewOnScrollListener();
-            onScrollListener.LoadMoreEvent += (object sender, EventArgs e) => {
+            onScrollListener.LoadMoreEvent += (object sender, EventArgs e) =>
+            {
                 GetData();
             };
             nsv.SetOnScrollChangeListener(onScrollListener);
@@ -69,7 +67,7 @@ namespace MovieBuddy
             HasOptionsMenu = true;
         }
 
-        
+
 
         protected override void OnItemClick(object sender, int position)
         {
@@ -88,7 +86,7 @@ namespace MovieBuddy
             catch (Exception ex)
             {
                 Toast.MakeText(Context, ex.ToString(), ToastLength.Long).Show();
-            }            
+            }
         }
 
         public override void OnPrepareOptionsMenu(IMenu menu)

@@ -1,14 +1,14 @@
 ﻿using Android.App;
 using Android.Content;
+using Android.Gms.Ads;
 using Android.OS;
+using Android.Support.Design.Widget;
+using Android.Support.V4.View;
+using Android.Support.V7.App;
 using Android.Views;
 using Android.Widget;
-using Android.Support.V7.App;
-using Android.Support.V4.View;
-using Android.Support.Design.Widget;
-using System;
-using Android.Gms.Ads;
 using Jaeger;
+using System;
 
 namespace MovieBuddy
 {
@@ -73,7 +73,7 @@ namespace MovieBuddy
             catch (Exception ex)
             {
                 Toast.MakeText(Application.Context, ex.ToString(), ToastLength.Long).Show();
-            }            
+            }
         }
 
         public override bool OnOptionsItemSelected(IMenuItem item)

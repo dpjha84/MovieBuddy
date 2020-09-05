@@ -1,7 +1,7 @@
 ﻿using Android.Content;
+using Android.Support.V4.App;
 using Android.Views;
 using Android.Widget;
-using Android.Support.V4.App;
 using static Android.Widget.TextView;
 
 namespace MovieBuddy
@@ -37,7 +37,7 @@ namespace MovieBuddy
     }
     class HomePagerAdapter : PagerAdapter
     {
-        public HomePagerAdapter(Context context, FragmentManager fm) : base(context, Resource.Array.sections, fm) { }        
+        public HomePagerAdapter(Context context, FragmentManager fm) : base(context, Resource.Array.sections, fm) { }
 
         public override Android.Support.V4.App.Fragment GetItem(int position)
         {

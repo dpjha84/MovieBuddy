@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace MovieBuddy.Data
 {
@@ -30,7 +28,7 @@ namespace MovieBuddy.Data
                     throw new ArgumentException("Invalid Movie List Type");
             }
         }
-        
+
         public List<TMDbLib.Objects.Search.SearchMovie> GetMovies(MovieListType type)
         {
             return type switch

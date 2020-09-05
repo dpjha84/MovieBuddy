@@ -1,6 +1,5 @@
 ﻿using Android.OS;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace MovieBuddy
 {

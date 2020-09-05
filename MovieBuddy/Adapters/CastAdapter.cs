@@ -1,12 +1,11 @@
 ﻿using Android.Content;
 using Android.Support.V7.Widget;
 using Android.Views;
+using Android.Widget;
 using System;
 using System.Collections.Generic;
-using TMDbLib.Objects.Search;
-using Java.Lang;
-using Android.Widget;
 using TMDbLib.Objects.General;
+using TMDbLib.Objects.Search;
 
 namespace MovieBuddy
 {
@@ -89,7 +88,7 @@ namespace MovieBuddy
         public override int ItemCount
         {
             get { return Cast.Count; }
-        }        
+        }
     }
 
     class CastViewHolder : RecyclerView.ViewHolder

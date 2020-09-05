@@ -1,5 +1,4 @@
-﻿using Android.Content;
-using Android.Graphics;
+﻿using Android.Graphics;
 using Android.Support.V7.Widget;
 using Android.Text;
 using Android.Text.Style;
@@ -7,7 +6,6 @@ using Android.Views;
 using Android.Widget;
 using System;
 using System.Collections.Generic;
-using TMDbLib.Objects.Search;
 
 namespace MovieBuddy
 {

@@ -1,6 +1,7 @@
 ﻿using Android.App;
 using Android.Content;
 using System.Collections.Generic;
+using System.Linq;
 using Xamarin.Essentials;
 
 namespace MovieBuddy
@@ -65,12 +66,15 @@ namespace MovieBuddy
                     new AlertDialog.Builder(context)
                     .SetTitle("Delete entry")
                     .SetMessage("No Internet")
-                    .SetPositiveButton("RETRY", (sender, args) => { 
-                    
+                    .SetPositiveButton("RETRY", (sender, args) =>
+                    {
+
                     })
                     .Show();
-            return;
+                    return;
             }
         }
+
+        public static List<int> Years = Enumerable.Range(1951, 75).ToList();
     }
 }

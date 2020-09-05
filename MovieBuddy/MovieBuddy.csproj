@@ -38,8 +38,9 @@
     <AndroidUseAapt2>true</AndroidUseAapt2>
     <AndroidEnableSGenConcurrent>true</AndroidEnableSGenConcurrent>
     <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
-    <AndroidPackageFormat>aab</AndroidPackageFormat>
+    <AndroidPackageFormat>apk</AndroidPackageFormat>
     <AndroidCreatePackagePerAbi>false</AndroidCreatePackagePerAbi>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -59,12 +60,13 @@
     <AndroidUseAapt2>true</AndroidUseAapt2>
     <AndroidCreatePackagePerAbi>false</AndroidCreatePackagePerAbi>
     <AndroidLinkMode>SdkOnly</AndroidLinkMode>
-    <AndroidDexTool>dx</AndroidDexTool>
+    <AndroidDexTool>d8</AndroidDexTool>
     <AndroidEnableSGenConcurrent>true</AndroidEnableSGenConcurrent>
     <DebugSymbols>true</DebugSymbols>
     <DefineConstants>
     </DefineConstants>
     <AndroidPackageFormat>aab</AndroidPackageFormat>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

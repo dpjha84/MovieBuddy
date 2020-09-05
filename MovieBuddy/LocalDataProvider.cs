@@ -1,13 +1,8 @@
-﻿using System;
+﻿using Android.App;
+using Android.Content;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using Android.App;
-using Android.Content;
-using Newtonsoft.Json;
-using TMDbLib.Client;
-using TMDbLib.Objects.General;
 
 namespace MovieBuddy
 {

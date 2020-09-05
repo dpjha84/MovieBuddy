@@ -1,25 +1,19 @@
 using Android.App;
-using Android.OS;
-using Android.Support.V7.App;
-using Android.Support.V4.View;
-using Android.Support.Design.Widget;
-using Android.Support.V4.Widget;
-using Android.Views;
-using System.Diagnostics;
-using Android.Gms.Ads;
-using System;
 using Android.Content;
-using Android.Support.V7.Widget;
-using System.Collections.Generic;
-using Android.Widget;
-using System.Linq;
-using Android.Net;
+using Android.Gms.Ads;
+using Android.OS;
 using Android.Runtime;
-using Xamarin.Essentials;
+using Android.Support.Design.Widget;
+using Android.Support.V4.View;
+using Android.Support.V4.Widget;
+using Android.Support.V7.App;
+using Android.Views;
+using Android.Widget;
+using System;
 
 namespace MovieBuddy
 {
-    
+
 
     [Activity(Label = "Movie Buddy", MainLauncher = false, Icon = "@drawable/icon")]
     public class MainActivity : AppCompatActivity
@@ -41,21 +35,9 @@ namespace MovieBuddy
             SetContentView(Resource.Layout.Main);
             Xamarin.Essentials.Platform.Init(this, bundle);
 
-            //var current = Connectivity.NetworkAccess;
-
-            //switch (current)
-            //{
-            //    case NetworkAccess.None:
-            //    case NetworkAccess.Unknown:
-            //        new Android.App.AlertDialog.Builder(this)
-            //        .SetTitle("Delete entry")
-            //        .SetMessage("No Internet")
-            //        .SetPositiveButton("RETRY", (sender, args) => {
-            //            StartActivity(new Intent(Application.Context, typeof(MainActivity)));
-            //        })
-            //        .Show();
-            //        return;
-            //}
+            mAdView = FindViewById<AdView>(Resource.Id.adView);
+            var adRequest = new AdRequest.Builder().Build();
+            mAdView.LoadAd(adRequest);
 
             toolbar = FindViewById<Android.Support.V7.Widget.Toolbar>(Resource.Id.toolbar);
             SetSupportActionBar(toolbar);
@@ -76,7 +58,7 @@ namespace MovieBuddy
 
         private void SetupTabbedView(Android.Support.V7.Widget.Toolbar toolbar)
         {
-            viewPager = FindViewById<ViewPager>(Resource.Id.viewpager);            
+            viewPager = FindViewById<ViewPager>(Resource.Id.viewpager);
             pagerAdapter = new HomePagerAdapter(this, SupportFragmentManager);
             viewPager.Adapter = pagerAdapter;
 
@@ -128,19 +110,12 @@ namespace MovieBuddy
                         Intent intent1 = new Intent(this, typeof(PopularPersonActivity));
                         StartActivity(intent1);
                         break;
-                    //case Resource.Id.explore:
-                    //    StartActivity(new Intent(this, typeof(ExploreActivity)));
-                    //    break;
+                    case Resource.Id.explore:
+                        StartActivity(new Intent(this, typeof(ExploreActivity)));
+                        break;
                 }
                 drawerLayout.CloseDrawers();
             };
-
-            //if first time you will want to go ahead and click first item.
-            //if (savedInstanceState == null)
-            //{
-            //    navigationView.SetCheckedItem(Resource.Id.nav_home_1);
-            //    ListItemClicked(0);
-            //}
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
@@ -172,7 +147,7 @@ namespace MovieBuddy
             }
             return base.OnOptionsItemSelected(item);
         }
-        
+
         private void ShowRadioButtonDialog()
         {
             dialog = new Dialog(this);
@@ -200,10 +175,6 @@ namespace MovieBuddy
             var prevSelectedTab = tabs.SelectedTabPosition;
             SetupTabbedView(toolbar);
             tabs.GetTabAt(prevSelectedTab).Select();
-            //tabs.GetTabAt(0).SetCustomView(pagerAdapter.GetTabView(toolbar, 0));
-            //tabs.GetTabAt(1).SetCustomView(pagerAdapter.GetTabView(toolbar, 1));
-            //SupportFragmentManager.BeginTransaction().Detach(pagerAdapter.NowPlayingFrag).Attach(pagerAdapter.NowPlayingFrag).Commit();
-            //SupportFragmentManager.BeginTransaction().Detach(pagerAdapter.UpcomingFrag).Attach(pagerAdapter.UpcomingFrag).Commit();
             dialog.Dismiss();
         }
 
