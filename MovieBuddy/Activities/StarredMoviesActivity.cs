@@ -6,10 +6,10 @@ using Android.Views;
 
 namespace MovieBuddy
 {
-    [Activity(Label = "Popular People")]
-    public class PopularPersonActivity : ActivityBase
+    [Activity(Label = "Starred Movies")]
+    public class StarredMoviesActivity : ActivityBase
     {
-        public PopularPersonActivity()
+        public StarredMoviesActivity()
         {
             adRenderer = new AdRenderer();
         }
@@ -19,9 +19,9 @@ namespace MovieBuddy
             InitView(Resource.Layout.PopularPeople, bundle);
             adRenderer.RenderAd(FindViewById<AdView>(Resource.Id.adView));
 
-            Title = "Popular People";
+            Title = "Starred Movies";
             var fragmentTransaction = SupportFragmentManager.BeginTransaction();
-            fragmentTransaction.Add(Resource.Id.frameLayout1, PopularPersonFragment.NewInstance());
+            fragmentTransaction.Add(Resource.Id.frameLayout1, StarredMoviesFragment.NewInstance());
             fragmentTransaction.Commit();
         }
     }

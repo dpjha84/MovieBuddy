@@ -10,10 +10,10 @@
         android:id="@+id/explore"
         android:icon="@drawable/explore"
         android:title="Explore Movies" />
-    <!--<item
-        android:id="@+id/nav_home_2"
-        android:icon="@drawable/ic_home_2"
-        android:title="Feedback" />-->
+    <item
+        android:id="@+id/starredMovies"
+        android:icon="@drawable/ic_star"
+        android:title="Starred Movies" />
   </group>
 	
 	<group android:checkableBehavior="single">

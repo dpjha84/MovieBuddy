@@ -75,9 +75,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Activities\ActivityBase.cs" />
     <Compile Include="Activities\CastInfoActivity.cs" />
+    <Compile Include="Activities\ExploreActivity.cs" />
     <Compile Include="Activities\PopularPersonActivity.cs" />
     <Compile Include="Activities\SearchActivity.cs" />
+    <Compile Include="Activities\StarredMoviesActivity.cs" />
     <Compile Include="Data\PagedMovie.cs" />
     <Compile Include="Data\TmdbExtensions.cs" />
     <Compile Include="Fragments\SearchMoviesFragment.cs" />
@@ -103,6 +106,8 @@
     <Compile Include="Fragments\TrailerFragment.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="ILocalDataProvider.cs" />
+    <Compile Include="Listeners\QueryTextListener.cs" />
+    <Compile Include="Listeners\RecyclerViewOnScrollListener.cs" />
     <Compile Include="LocalDataProvider.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -225,6 +230,9 @@
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
       <Version>12.0.3</Version>
+    </PackageReference>
+    <PackageReference Include="Refractored.FloatingActionButton">
+      <Version>2.1.0</Version>
     </PackageReference>
     <PackageReference Include="TMDbLib.Core2">
       <Version>1.0.0</Version>
@@ -610,6 +618,30 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\Explore.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\mipmap-hdpi\ic_add_white_24dp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\mipmap-mdpi\ic_add_white_24dp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\mipmap-xhdpi\ic_add_white_24dp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\mipmap-xxhdpi\ic_add_white_24dp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\mipmap-xxxhdpi\ic_add_white_24dp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\ic_add_white_24dp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\movie_options.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>

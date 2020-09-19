@@ -197,6 +197,21 @@ namespace MovieBuddy
             return tmdbClient.GetMovieSimilarAsync(movieId, page).Result.Results;
         }
 
+        public List<TSMovie> GetMovies(List<int> movieIds)
+        {
+            var result = new List<TMDbLib.Objects.Movies.Movie>();
+            foreach (var movieId in movieIds)
+            {
+                result.Add(tmdbClient.GetMovieAsync(movieId).Result);
+            }
+            return result.Select(x => new TSMovie
+            {
+                Title = x.Title,
+                PosterPath = x.PosterPath,
+                GenreIds = x.Genres.Select(z => z.Id).ToList()
+            }).ToList();
+        }
+
         public List<TReview> GetReviews(int movieId) => tmdbClient.GetMovieReviewsAsync(movieId).Result.Results;
 
         public List<MovieRole> GetMovieCredits(int personId, int page)

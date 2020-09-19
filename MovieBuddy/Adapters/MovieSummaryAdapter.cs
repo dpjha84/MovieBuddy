@@ -1,4 +1,5 @@
-﻿using Android.Graphics;
+﻿using Android.Content;
+using Android.Graphics;
 using Android.Support.V7.Widget;
 using Android.Text;
 using Android.Text.Style;
@@ -46,6 +47,7 @@ namespace MovieBuddy
             vh.MovieSummary.TextFormatted = str;
         }
 
+
         public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
         {
             View itemView = LayoutInflater.From(parent.Context).Inflate(Resource.Layout.Summary, parent, false);
@@ -72,5 +74,5 @@ namespace MovieBuddy
                 itemView.Click += (sender, e) => listener(base.LayoutPosition);
             }
         }
-    }
+    }    
 }

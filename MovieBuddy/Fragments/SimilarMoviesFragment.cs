@@ -1,8 +1,30 @@
 ﻿using Android.OS;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MovieBuddy
 {
+    public class StarredMoviesFragment : MoviesFragment
+    {
+        public static StarredMoviesFragment NewInstance()
+        {
+            var frag1 = new StarredMoviesFragment();
+            Bundle bundle = new Bundle();
+            //bundle.PutIntArray("movieIds", Globals.StarredMovies.ToArray());
+            frag1.Arguments = bundle;
+            return frag1;
+        }
+
+        int page = 0;
+        protected override List<TMDbLib.Objects.Search.SearchMovie> GetMovies()
+        {
+            //var movieIds = Arguments.GetIntArray("movieIds");
+            return MovieManager.Instance.GetMovies(Globals.StarredMovies.Skip((page++) * 9).Take(9).ToList());
+        }
+
+        protected override void ResetPages() { }
+    }
+
     public class SimilarMoviesFragment : MoviesFragment
     {
         public static SimilarMoviesFragment NewInstance(int movieId)

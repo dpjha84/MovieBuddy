@@ -1,28 +1,16 @@
 ﻿using Android.OS;
+using Android.Runtime;
 using Android.Support.V4.Widget;
 using Android.Support.V7.Widget;
 using Android.Views;
+using Android.Widget;
+using Refractored.Fab;
 using System;
+using static Android.Widget.AbsListView;
 
 namespace MovieBuddy
 {
-    public class XamarinRecyclerViewOnScrollListener : Java.Lang.Object, NestedScrollView.IOnScrollChangeListener
-    {
-        public delegate void LoadMoreEventHandler(object sender, EventArgs e);
-        public event LoadMoreEventHandler LoadMoreEvent;
-        private int currentPage = 0;
-
-        public void OnScrollChange(NestedScrollView scrollView, int scrollX, int scrollY, int oldScrollX, int oldScrollY)
-        {
-            View view = (View)scrollView.GetChildAt(scrollView.ChildCount - 1);
-            int diff = (view.Bottom - (scrollView.Height + scrollView.ScrollY));
-            if (diff == 0)
-            {
-                LoadMoreEvent(currentPage, null);
-            }
-        }
-    }
-    public abstract class RecyclerViewFragment : BaseFragment
+    public abstract class RecyclerViewFragment : BaseFragment, IScrollDirectorListener, IOnScrollListener
     {
 
         protected RecyclerView rv;
@@ -46,6 +34,7 @@ namespace MovieBuddy
                 SetupOnScroll();
 
                 var adapter1 = SetAdapter();
+
                 adapter1.HasStableIds = true;
                 GetData();
                 rv.SetAdapter(adapter1);
@@ -56,6 +45,8 @@ namespace MovieBuddy
             }
             return null;
         }
+
+        protected virtual void SetFab() { }
 
         protected virtual void SetupOnScroll() { }
 
@@ -70,5 +61,21 @@ namespace MovieBuddy
         }
 
         protected abstract RecyclerView.Adapter SetAdapter();
+
+        public void OnScrollDown()
+        {
+        }
+
+        public void OnScrollUp()
+        {
+        }
+
+        public void OnScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount)
+        {
+        }
+
+        public void OnScrollStateChanged(AbsListView view, [GeneratedEnum] ScrollState scrollState)
+        {
+        }
     }
 }

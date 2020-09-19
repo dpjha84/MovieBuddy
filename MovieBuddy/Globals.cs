@@ -1,5 +1,6 @@
 ﻿using Android.App;
 using Android.Content;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using Xamarin.Essentials;
@@ -30,6 +31,36 @@ namespace MovieBuddy
             { "Turkish", "tr" },
             { "Urdu", "ur" },
         };
+
+        static List<int> starredMovies = null;
+
+        public static void AddToStarredMovies(int movieId)
+        {
+            StarredMovies.Add(movieId);
+            StarredMovies = starredMovies;
+        }
+        public static List<int> StarredMovies
+        {
+            get
+            {
+                if (starredMovies == null)
+                {
+                    var starredMoviesInDisk = LocalCache.Instance.Get("StarredMovies");
+                    if (starredMoviesInDisk == null)
+                    {
+                        starredMoviesInDisk = JsonConvert.SerializeObject(new List<int>());
+                        LocalCache.Instance.Set("StarredMovies", starredMoviesInDisk);
+                    }
+                    starredMovies = JsonConvert.DeserializeObject<List<int>>(starredMoviesInDisk);
+                }
+                return starredMovies;
+            }
+            set
+            {
+                starredMovies = value;
+                LocalCache.Instance.Set("StarredMovies", JsonConvert.SerializeObject(starredMovies));
+            }
+        }
 
         static string selectedLanguage = null;
         public static string SelectedLanguage

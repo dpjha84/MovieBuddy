@@ -1,57 +1,35 @@
 ﻿using Android.App;
 using Android.Content;
-using Android.Gms.Ads;
 using Android.OS;
 using Android.Support.Design.Widget;
 using Android.Support.V4.View;
-using Android.Support.V7.App;
-using Android.Views;
 using Android.Widget;
-using Jaeger;
 
 namespace MovieBuddy
 {
-    [Activity(Label = "CastInfoActivity")]
-    public class CastInfoActivity : AppCompatActivity
-    {
-        private Android.Support.V7.Widget.Toolbar toolbar;
-        private ImageView imageView;
-        private CollapsingToolbarLayout collapsingToolbar;
-        private CastPagerAdapter tabPagerAdapter;
-        private ViewPager mViewPager;
-        private TabLayout mTabLayout;
-        protected AdView mAdView;
 
-        protected override void OnCreate(Bundle savedInstanceState)
+    [Activity(Label = "CastInfoActivity")]
+    public class CastInfoActivity : ActivityBase
+    {
+        public CastInfoActivity()
         {
-            base.OnCreate(savedInstanceState);
-            //Window.AddFlags(WindowManagerFlags.Fullscreen);
-            //Window.ClearFlags(WindowManagerFlags.ForceNotFullscreen);
+            statusBar = new TransparentStatusBarSetter();
+        }
+
+        protected override void OnCreate(Bundle bundle)
+        {
+            InitView(Resource.Layout.MovieInfoView, bundle);
+            statusBar.SetTransparent(this);
 
             string castName = Intent.GetStringExtra("castName");
             int castId = Intent.GetIntExtra("castId", 0);
+            Title = castName;
 
-            this.Title = castName;
-            StatusBarUtil.SetTransparent(this);
-            SetContentView(Resource.Layout.MovieInfoView);
+            Helper.SetImage(this, Intent.GetStringExtra("imageUrl"), FindViewById<ImageView>(Resource.Id.backdrop), Resource.Drawable.NoCast);
 
-            //mAdView = FindViewById<AdView>(Resource.Id.adView);
-            //var adRequest = new AdRequest.Builder().Build();
-            //mAdView.LoadAd(adRequest);
-
-
-
-            imageView = (ImageView)FindViewById(Resource.Id.backdrop);
-
-            collapsingToolbar = (CollapsingToolbarLayout)FindViewById(Resource.Id.collapsing_toolbar);
-            //collapsingToolbar.SetTitle(castName);
-
-            SetToolbar();
-            SetImage();
-
-            mViewPager = (ViewPager)FindViewById(Resource.Id.viewpager);
-            mTabLayout = (TabLayout)FindViewById(Resource.Id.tabs);
-            tabPagerAdapter = new CastPagerAdapter(this, SupportFragmentManager, castName, castId);
+            var mViewPager = FindViewById<ViewPager>(Resource.Id.viewpager);
+            var mTabLayout = FindViewById<TabLayout>(Resource.Id.tabs);
+            var tabPagerAdapter = new CastPagerAdapter(this, SupportFragmentManager, castName, castId);
             mViewPager.Adapter = tabPagerAdapter;
             mTabLayout.SetupWithViewPager(mViewPager);
 
@@ -60,36 +38,6 @@ namespace MovieBuddy
                 TabLayout.Tab tab = mTabLayout.GetTabAt(i);
                 tab.SetCustomView(tabPagerAdapter.GetTabView(toolbar, i));
             }
-        }
-
-        public override bool OnOptionsItemSelected(IMenuItem item)
-        {
-            switch (item.ItemId)
-            {
-                case Android.Resource.Id.Home:
-                    Finish();
-                    return true;
-
-                default:
-                    return base.OnOptionsItemSelected(item);
-            }
-        }
-
-        private void SetToolbar()
-        {
-            toolbar = (Android.Support.V7.Widget.Toolbar)FindViewById<Android.Support.V7.Widget.Toolbar>(Resource.Id.toolbar);
-            if (toolbar != null)
-            {
-                SetSupportActionBar(toolbar);
-                SupportActionBar.SetDisplayHomeAsUpEnabled(true);
-                SupportActionBar.SetHomeButtonEnabled(true);
-            }
-        }
-
-        private void SetImage()
-        {
-            string backdrop = Intent.GetStringExtra("imageUrl");
-            Helper.SetImage(this, backdrop, imageView, Resource.Drawable.NoCast);
         }
     }
 }

@@ -32,7 +32,7 @@ namespace MovieBuddy
 
         protected override void SetupOnScroll()
         {
-            var onScrollListener = new XamarinRecyclerViewOnScrollListener();
+            var onScrollListener = new RecyclerViewOnScrollListener();
             onScrollListener.LoadMoreEvent += (object sender, EventArgs e) =>
             {
                 GetData();

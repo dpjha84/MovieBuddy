@@ -13,53 +13,49 @@ using System;
 namespace MovieBuddy
 {
     [Activity(Label = "MovieInfoActivity")]
-    public class MovieInfoActivity : AppCompatActivity
+    public class MovieInfoActivity : ActivityBase
     {
-        private Android.Support.V7.Widget.Toolbar toolbar;
-        private ImageView imageView;
-        private CollapsingToolbarLayout collapsingToolbar;
-        private MoviePagerAdapter tabPagerAdapter;
-        private ViewPager mViewPager;
-        private TabLayout mTabLayout;
-        protected AdView mAdView;
+        int movieId;
 
-        protected override void OnCreate(Bundle savedInstanceState)
+        public MovieInfoActivity()
+        {
+            statusBar = new TransparentStatusBarSetter();
+        }
+
+        protected override void OnCreate(Bundle bundle)
         {
             try
             {
-                base.OnCreate(savedInstanceState);
+                InitView(Resource.Layout.MovieInfoView, bundle);
+                statusBar.SetTransparent(this);
+
                 string movieName = Intent.GetStringExtra("movieName");
-                int movieId = Intent.GetIntExtra("movieId", 0);
+                movieId = Intent.GetIntExtra("movieId", 0);
                 string castName = Intent.GetStringExtra("castName");
                 int castId = Intent.GetIntExtra("castId", 0);
                 bool isCast = Intent.GetBooleanExtra("isCast", false);
 
-                savedInstanceState = new Bundle();
-                savedInstanceState.PutInt("movieId", movieId);
-                savedInstanceState.PutString("name", movieName);
-                savedInstanceState.PutInt("castId", castId);
-                savedInstanceState.PutBoolean("isCast", isCast);
+                bundle = new Bundle();
+                bundle.PutInt("movieId", movieId);
+                bundle.PutString("name", movieName);
+                bundle.PutInt("castId", castId);
+                bundle.PutBoolean("isCast", isCast);
 
-                this.Title = movieName;
-                StatusBarUtil.SetTransparent(this);
-                SetContentView(Resource.Layout.MovieInfoView);
+                Title = movieName;
 
-                //mAdView = FindViewById<AdView>(Resource.Id.adView);
-                //var adRequest = new AdRequest.Builder().Build();
-                //mAdView.LoadAd(adRequest);
+                var fab = FindViewById<Refractored.Fab.FloatingActionButton>(Resource.Id.fab);
+                fab.Click += (sender, args) =>
+                {
+                    //Toast.MakeText(this, "FAB Clicked!", ToastLength.Short).Show();
+                    ShowOptionsDialog();
+                };
 
+                Helper.SetImage(this, Intent.GetStringExtra("imageUrl"), FindViewById<ImageView>(Resource.Id.backdrop), Resource.Drawable.noimage);
 
-                imageView = (ImageView)FindViewById(Resource.Id.backdrop);
-
-                collapsingToolbar = (CollapsingToolbarLayout)FindViewById(Resource.Id.collapsing_toolbar);
-
-                SetToolbar();
-                SetImage();
-
-                mViewPager = (ViewPager)FindViewById(Resource.Id.viewpager);
+                var mViewPager = (ViewPager)FindViewById(Resource.Id.viewpager);
                 mViewPager.OffscreenPageLimit = 0;
-                mTabLayout = (TabLayout)FindViewById(Resource.Id.tabs);
-                tabPagerAdapter = new MoviePagerAdapter(this, SupportFragmentManager, movieName, movieId, Intent.GetStringExtra("imageUrl"));
+                var mTabLayout = (TabLayout)FindViewById(Resource.Id.tabs);
+                var tabPagerAdapter = new MoviePagerAdapter(this, SupportFragmentManager, movieName, movieId, Intent.GetStringExtra("imageUrl"));
 
                 mViewPager.Adapter = tabPagerAdapter;
                 mTabLayout.SetupWithViewPager(mViewPager);
@@ -76,49 +72,33 @@ namespace MovieBuddy
             }
         }
 
-        public override bool OnOptionsItemSelected(IMenuItem item)
+        private void ShowOptionsDialog()
         {
-            switch (item.ItemId)
+            var dialogView = LayoutInflater.Inflate(Resource.Layout.movie_options, null);
+            Android.App.AlertDialog alertDialog;
+            using (var dialog = new Android.App.AlertDialog.Builder(this))
             {
-                case Android.Resource.Id.Home:
-                    Finish();
-                    return true;
-
-                default:
-                    return base.OnOptionsItemSelected(item);
+                dialog.SetTitle("Choose Action on this movie");
+                dialog.SetView(dialogView);
+                dialog.SetNegativeButton("Cancel", (s, a) => { });
+                alertDialog = dialog.Create();
             }
-        }
-
-        private void SetToolbar()
-        {
-            toolbar = (Android.Support.V7.Widget.Toolbar)FindViewById<Android.Support.V7.Widget.Toolbar>(Resource.Id.toolbar);
-            if (toolbar != null)
+            var list = (ListView)dialogView.FindViewById(Resource.Id.listMovieOptions);
+            var adapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleListItem1, Resources.GetTextArray(Resource.Array.movie_options_array));
+            list.ItemClick += (object sender, Android.Widget.AdapterView.ItemClickEventArgs e) =>
             {
-                SetSupportActionBar(toolbar);
-                SupportActionBar.SetDisplayHomeAsUpEnabled(true);
-                SupportActionBar.SetHomeButtonEnabled(true);
-            }
-        }
-
-        private void SetImage()
-        {
-            Helper.SetImage(this, Intent.GetStringExtra("imageUrl"), imageView, Resource.Drawable.noimage);
-        }
-
-        protected override void OnStop()
-        {
-            Helper.Clear(this, imageView);
-            //for (int i = 0; i < mTabLayout.TabCount; i++)
-            //{
-            //    Helper.Clear(this, mTabLayout.GetTabAt(i).CustomView);
-            //}
-            base.OnStop();
-        }
-
-        protected override void OnRestart()
-        {
-            SetImage();
-            base.OnRestart();
+                if (e.Position == 0)
+                {
+                    Globals.AddToStarredMovies(movieId);
+                }
+                else
+                {
+                    string selectedFromList = list.GetItemAtPosition(e.Position).ToString();
+                    Toast.MakeText(this, selectedFromList, ToastLength.Long).Show();
+                }
+            };
+            list.Adapter = adapter;
+            alertDialog.Show();
         }
     }
 }

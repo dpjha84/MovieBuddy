@@ -40,4 +40,9 @@
     <string-array name="genre_array">
 	    <item>35</item>
     </string-array>
+	<string-array name="movie_options_array">
+	    <item>Star It</item>
+		<item>Add to Already Watched</item>
+		<item>Add to Watch List</item>
+    </string-array>
 </resources>

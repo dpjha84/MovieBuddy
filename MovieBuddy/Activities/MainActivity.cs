@@ -113,6 +113,9 @@ namespace MovieBuddy
                     case Resource.Id.explore:
                         StartActivity(new Intent(this, typeof(ExploreActivity)));
                         break;
+                    case Resource.Id.starredMovies:
+                        StartActivity(new Intent(this, typeof(StarredMoviesActivity)));
+                        break;
                 }
                 drawerLayout.CloseDrawers();
             };

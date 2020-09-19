@@ -2,6 +2,7 @@
 <android.support.design.widget.CoordinatorLayout
 xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:fab="http://schemas.android.com/apk/res-auto"
 android:id="@+id/main_content"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
@@ -67,5 +68,16 @@ android:fitsSystemWindows="true">
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+    <Refractored.Fab.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_add_white_24dp"
+        fab:fab_colorNormal="@color/accent"
+        fab:fab_colorPressed="@color/accent_pressed"
+        fab:fab_colorRipple="@color/ripple"/>
 
 </android.support.design.widget.CoordinatorLayout>
