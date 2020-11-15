@@ -12,7 +12,7 @@ namespace MovieBuddy
     public class MoviesFragment : RecyclerViewFragment
     {
 
-        ClickableWithPagingAdapter<TMDbLib.Objects.Search.SearchMovie> movieAdapter;
+        protected ClickableWithPagingAdapter<TMDbLib.Objects.Search.SearchMovie> movieAdapter;
         public MovieListType MovieListType { get { return (MovieListType)Arguments.GetInt("movieListType"); } }
 
         public static MoviesFragment NewInstance(MovieListType type)
@@ -78,6 +78,8 @@ namespace MovieBuddy
                 Bundle b = new Bundle();
                 b.PutInt("movieId", movie.Id);
                 b.PutString("movieName", movie.Title);
+                b.PutString("movieReleaseDate", movie.ReleaseDate.HasValue ? movie.ReleaseDate.ToString() : null);
+                b.PutString("movieLanguage", movie.OriginalLanguage);
                 var backdrop = movie.BackdropPath;
                 b.PutString("imageUrl", !string.IsNullOrWhiteSpace(backdrop) ? backdrop : movie.PosterPath);
                 intent.PutExtras(b);
@@ -133,6 +135,7 @@ namespace MovieBuddy
     {
         NowPlaying,
         Upcoming,
+        Trending,
         Popular,
         TopRated
     }

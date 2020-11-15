@@ -1,30 +1,40 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-  <group android:checkableBehavior="single">
-    <item
-        android:id="@+id/celebs"
-        android:icon="@drawable/people"
-        android:title="Popular People" />
-    <item
-        android:id="@+id/explore"
-        android:icon="@drawable/explore"
-        android:title="Explore Movies" />
-    <item
-        android:id="@+id/starredMovies"
-        android:icon="@drawable/ic_star"
-        android:title="Starred Movies" />
-  </group>
+	<group android:checkableBehavior="single" android:id="@+id/more">
+		<item
+			android:id="@+id/celebs"
+			android:icon="@drawable/people"
+			android:title="Popular People" />
+		<item
+			android:id="@+id/explore"
+			android:icon="@drawable/explore"
+			android:title="Explore Movies" />
+	</group>
+	<group android:checkableBehavior="single" android:id="@+id/list">
+		<item
+			android:id="@+id/starredMovies"
+			android:icon="@drawable/favorite"
+			android:title="Favourite Movies" />
+		<item
+			android:id="@+id/watchedMovies"
+			android:icon="@drawable/watched"
+			android:title="Already Watched Movies" />
+		<item
+			android:id="@+id/toWatchMovies"
+			android:icon="@drawable/towatch"
+			android:title="To Watch Movies" />
+	</group>
 	
-	<group android:checkableBehavior="single">
+	<group android:checkableBehavior="single" android:id="@+id/shareandFeedback">
 		<item
         android:id="@+id/share"
         android:icon="@drawable/share"
         android:title="Share this app" />
-    <item
+    <!--<item
         android:id="@+id/nav_home_1"
         android:icon="@drawable/ic_star"
-        android:title="Rate us" />
+        android:title="Rate us" />-->
     
     <!--<item
         android:id="@+id/nav_home_2"

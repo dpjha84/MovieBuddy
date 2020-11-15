@@ -2,6 +2,7 @@
 <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -31,10 +32,12 @@
             android:layout_height="wrap_content"
             android:elevation="6dp"
             android:background="@color/primaryColor"
-            app:tabIndicatorColor="@color/primaryTextColor"
-            app:tabSelectedTextColor="@color/primaryTextColor"
-            app:tabTextColor="@color/secondaryText"
+            app:tabIndicatorColor="@color/accent"
+            app:tabSelectedTextColor="@color/accent"
+            app:tabTextColor="@color/accent"
+            app:tabIndicatorHeight="3dp"
             android:minHeight="?attr/actionBarSize" />
+
         <android.support.v4.view.ViewPager
             android:id="@+id/viewpager"
             android:layout_marginBottom="50dp"
@@ -42,7 +45,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         </android.support.v4.view.ViewPager>
-
         <com.google.android.gms.ads.AdView
             android:id="@+id/adView"
             android:layout_width="wrap_content"
@@ -52,6 +54,24 @@
             ads:adSize="BANNER"
             ads:adUnitId="@string/test_banner_ad_unit_id" />
     </RelativeLayout>
+    <FrameLayout
+        android:id="@+id/frameLayout1"
+        android:layout_marginBottom="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/filters">
+        <Refractored.Fab.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_marginBottom="66dp"
+        android:layout_marginRight="16dp"
+        android:src="@drawable/search"
+        fab:fab_colorNormal="@color/accent"
+        fab:fab_colorPressed="@color/accent_pressed"
+        fab:fab_colorRipple="@color/ripple"/>
+    </FrameLayout>
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"
@@ -60,4 +80,5 @@
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/nav_menu"
         android:fitsSystemWindows="true" />
+    
 </android.support.v4.widget.DrawerLayout>

@@ -10,6 +10,7 @@ namespace MovieBuddy
         protected AdapterBase adapter;
         protected string movieName;
 
+        protected string MovieName { get { return Arguments.GetString("movieName"); } }
         protected int MovieId { get { return Arguments.GetInt("movieId"); } }
         protected int CastId { get { return Arguments.GetInt("castId"); } }
         protected string Query { get { return Arguments.GetString("query"); } }

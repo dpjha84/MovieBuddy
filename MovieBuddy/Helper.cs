@@ -27,7 +27,7 @@ namespace MovieBuddy
             Glide.With(context).Clear(view);
         }
 
-        internal static void SetImage(Context castInfoActivity, string backdrop, ImageView imageView, int placeholder)
+        internal static void SetImage(Context castInfoActivity, string backdrop, ImageView imageView, int placeholder, bool absoluteUrl = false)
         {
             if (string.IsNullOrWhiteSpace(backdrop))
             {
@@ -41,7 +41,10 @@ namespace MovieBuddy
                     .Apply(RequestOptions.PlaceholderOf(Resource.Drawable.noimage));
                 //.Apply(RequestOptions.SignatureOf(new ObjectKey(DateTime.Now.Millisecond)));
                 //var requestOptions = req .diskCacheStrategy(DiskCacheStrategy.All)
-                Glide.With(castInfoActivity).Load($"https://image.tmdb.org/t/p/w500/{backdrop}").Apply(requestOptions).Into(imageView);
+                if(absoluteUrl)
+                    Glide.With(castInfoActivity).Load(backdrop).Apply(requestOptions).Into(imageView);
+                else
+                    Glide.With(castInfoActivity).Load($"https://image.tmdb.org/t/p/w500/{backdrop}").Apply(requestOptions).Into(imageView);
             }
             catch (Exception)
             {

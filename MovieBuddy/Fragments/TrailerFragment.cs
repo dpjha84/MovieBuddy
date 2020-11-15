@@ -38,7 +38,7 @@ namespace MovieBuddy
                 var rootView = inflater.Inflate(Resource.Layout.trailer, container, false);
                 var backdropImage = (ImageView)rootView.FindViewById(Resource.Id.mediaPreview);
                 playImage = (ImageView)rootView.FindViewById(Resource.Id.playButton);
-                Helper.SetImage(Context, backdrop, backdropImage, Resource.Drawable.noimage);
+                Helper.SetImage(Context, $"https://img.youtube.com/vi/{trailerId}/0.jpg", backdropImage, Resource.Drawable.noimage, true);
                 playImage.Click += Iv_Click;
                 return rootView;
             }

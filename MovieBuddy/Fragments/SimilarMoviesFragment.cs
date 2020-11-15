@@ -10,6 +10,24 @@ namespace MovieBuddy
         {
             var frag1 = new StarredMoviesFragment();
             Bundle bundle = new Bundle();
+            frag1.Arguments = bundle;
+            return frag1;
+        }
+
+        int page = 0;
+        protected override List<TMDbLib.Objects.Search.SearchMovie> GetMovies()
+        {
+            return MovieManager.Instance.GetMovies(Globals.StarredMovies.Skip((page++) * 9).Take(9).ToList());
+        }
+
+        protected override void ResetPages() { }
+    }
+    public class AlreadyWatchedMoviesFragment : MoviesFragment
+    {
+        public static AlreadyWatchedMoviesFragment NewInstance()
+        {
+            var frag1 = new AlreadyWatchedMoviesFragment();
+            Bundle bundle = new Bundle();
             //bundle.PutIntArray("movieIds", Globals.StarredMovies.ToArray());
             frag1.Arguments = bundle;
             return frag1;
@@ -19,7 +37,27 @@ namespace MovieBuddy
         protected override List<TMDbLib.Objects.Search.SearchMovie> GetMovies()
         {
             //var movieIds = Arguments.GetIntArray("movieIds");
-            return MovieManager.Instance.GetMovies(Globals.StarredMovies.Skip((page++) * 9).Take(9).ToList());
+            return MovieManager.Instance.GetMovies(Globals.WatchedMovies.Skip((page++) * 9).Take(9).ToList());
+        }
+
+        protected override void ResetPages() { }
+    }
+    public class ToWatchMoviesFragment : MoviesFragment
+    {
+        public static ToWatchMoviesFragment NewInstance()
+        {
+            var frag1 = new ToWatchMoviesFragment();
+            Bundle bundle = new Bundle();
+            //bundle.PutIntArray("movieIds", Globals.StarredMovies.ToArray());
+            frag1.Arguments = bundle;
+            return frag1;
+        }
+
+        int page = 0;
+        protected override List<TMDbLib.Objects.Search.SearchMovie> GetMovies()
+        {
+            //var movieIds = Arguments.GetIntArray("movieIds");
+            return MovieManager.Instance.GetMovies(Globals.ToWatchMovies.Skip((page++) * 9).Take(9).ToList());
         }
 
         protected override void ResetPages() { }

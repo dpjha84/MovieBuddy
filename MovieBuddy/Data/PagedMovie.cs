@@ -6,7 +6,7 @@ namespace MovieBuddy.Data
     public class PagedMovie
     {
         public static PagedMovie Instance = new PagedMovie();
-        private int nowPlayingPage = 0, upcomingPage = 0, popularPage = 0, topRatedPage = 0;
+        private int nowPlayingPage = 0, upcomingPage = 0, popularPage = 0, topRatedPage = 0, trendingPage = 0;
 
         public void Reset(MovieListType type)
         {
@@ -17,6 +17,9 @@ namespace MovieBuddy.Data
                     break;
                 case MovieListType.Upcoming:
                     upcomingPage = 0;
+                    break;
+                case MovieListType.Trending:
+                    trendingPage = 0;
                     break;
                 case MovieListType.Popular:
                     popularPage = 0;
@@ -36,6 +39,8 @@ namespace MovieBuddy.Data
                 MovieListType.NowPlaying => MovieManager.Instance.GetNowPlaying(++nowPlayingPage),
 
                 MovieListType.Upcoming => MovieManager.Instance.GetUpcoming(++upcomingPage),
+
+                MovieListType.Trending => MovieManager.Instance.GetTrending(++trendingPage),
 
                 MovieListType.Popular => MovieManager.Instance.GetPopular(++popularPage),
 

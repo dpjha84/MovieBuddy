@@ -34,9 +34,10 @@
             android:layout_height="wrap_content"
             android:elevation="6dp"
             android:background="@color/primaryColor"
-            app:tabIndicatorColor="@color/primaryTextColor"
-            app:tabSelectedTextColor="@color/primaryTextColor"
-            app:tabTextColor="@color/secondaryText"
+            app:tabIndicatorColor="@color/accent"
+            app:tabSelectedTextColor="@color/accent"
+            app:tabTextColor="@color/accent"
+            app:tabIndicatorHeight="3dp"
             android:minHeight="?attr/actionBarSize" />
         <android.support.v4.view.ViewPager
             android:id="@+id/viewpager"

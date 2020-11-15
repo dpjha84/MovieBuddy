@@ -3,14 +3,14 @@
   <string-array name="sections">
     <item>NOW PLAYING</item>
     <item>UPCOMING</item>
-    <!--<item>TRENDING</item>-->
+    <item>TRENDING</item>
     <item>POPULAR</item>
     <item>TOP RATED</item>
   </string-array>
 <string-array name="movieDetails">
     <item>SUMMARY</item>
+	<item>VIDEOS</item>
     <item>CAST</item>
-    <item>TRAILER</item>
     <item>REVIEWS</item>
     <item>SIMILAR</item>
   </string-array>

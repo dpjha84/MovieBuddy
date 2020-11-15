@@ -55,9 +55,10 @@ android:fitsSystemWindows="true">
             android:layout_height="wrap_content"
             app:tabMode="scrollable"
             android:layout_gravity="bottom"
-            app:tabIndicatorColor="@android:color/white"
-            app:tabSelectedTextColor="@android:color/white"
-            app:tabTextColor="@color/material_grey_100"/>
+            app:tabIndicatorColor="@color/accent"
+            app:tabSelectedTextColor="@color/accent"
+            app:tabTextColor="@color/accent"
+            app:tabIndicatorHeight="3dp"/>
 
     </android.support.design.widget.CollapsingToolbarLayout>
 
@@ -78,6 +79,7 @@ android:fitsSystemWindows="true">
         android:src="@drawable/ic_add_white_24dp"
         fab:fab_colorNormal="@color/accent"
         fab:fab_colorPressed="@color/accent_pressed"
-        fab:fab_colorRipple="@color/ripple"/>
+        fab:fab_colorRipple="@color/ripple"
+        android:visibility="invisible"/>
 
 </android.support.design.widget.CoordinatorLayout>

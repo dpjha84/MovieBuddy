@@ -11,5 +11,6 @@
                 android:text="Movie Summary"
                 android:id="@+id/movieSummary"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginLeft="4dp" />
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"/>
 </LinearLayout>

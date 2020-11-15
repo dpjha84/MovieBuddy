@@ -25,7 +25,9 @@ namespace MovieBuddy
             int castId = Intent.GetIntExtra("castId", 0);
             Title = castName;
 
-            Helper.SetImage(this, Intent.GetStringExtra("imageUrl"), FindViewById<ImageView>(Resource.Id.backdrop), Resource.Drawable.NoCast);
+            var image = FindViewById<ImageView>(Resource.Id.backdrop);
+            Helper.SetImage(this, Intent.GetStringExtra("imageUrl"), image, Resource.Drawable.NoCast);
+            image.Click += Image_Click; ;
 
             var mViewPager = FindViewById<ViewPager>(Resource.Id.viewpager);
             var mTabLayout = FindViewById<TabLayout>(Resource.Id.tabs);
@@ -38,6 +40,15 @@ namespace MovieBuddy
                 TabLayout.Tab tab = mTabLayout.GetTabAt(i);
                 tab.SetCustomView(tabPagerAdapter.GetTabView(toolbar, i));
             }
+        }
+
+        private void Image_Click(object sender, System.EventArgs e)
+        {
+            Bundle b = new Bundle();
+            Intent intent = new Intent(this, typeof(ImageViewer));
+            b.PutString("url", Intent.GetStringExtra("imageUrl"));
+            intent.PutExtras(b);
+            StartActivity(intent);
         }
     }
 }

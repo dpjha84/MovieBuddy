@@ -39,6 +39,16 @@ namespace MovieBuddy
             var adRequest = new AdRequest.Builder().Build();
             mAdView.LoadAd(adRequest);
 
+            var fab = FindViewById<Refractored.Fab.FloatingActionButton>(Resource.Id.fab);
+            fab.Click += (sender, args) =>
+            {
+                Intent intent = new Intent(this, typeof(SearchActivity));
+                Bundle b = new Bundle();
+                b.PutString("query", "john");
+                intent.PutExtras(b);
+                StartActivity(intent);
+            };
+
             toolbar = FindViewById<Android.Support.V7.Widget.Toolbar>(Resource.Id.toolbar);
             SetSupportActionBar(toolbar);
             SupportActionBar.Title = "Movie Buddy";
@@ -94,10 +104,10 @@ namespace MovieBuddy
 
                 switch (e.MenuItem.ItemId)
                 {
-                    case Resource.Id.nav_home_1:
-                        Intent intent = new Intent(Intent.ActionView, Android.Net.Uri.Parse("https://play.google.com/store/apps/details?id=com.dpjha.moviebuddy"));
-                        StartActivity(intent);
-                        break;
+                    //case Resource.Id.nav_home_1:
+                    //    Intent intent = new Intent(Intent.ActionView, Android.Net.Uri.Parse("https://play.google.com/store/apps/details?id=com.dpjha.moviebuddy"));
+                    //    StartActivity(intent);
+                    //    break;
                     case Resource.Id.share:
                         Intent sendIntent = new Intent();
                         sendIntent.SetAction(Intent.ActionSend);
@@ -115,6 +125,12 @@ namespace MovieBuddy
                         break;
                     case Resource.Id.starredMovies:
                         StartActivity(new Intent(this, typeof(StarredMoviesActivity)));
+                        break;
+                    case Resource.Id.watchedMovies:
+                        StartActivity(new Intent(this, typeof(AlreadyWatchedMoviesActivity)));
+                        break;
+                    case Resource.Id.toWatchMovies:
+                        StartActivity(new Intent(this, typeof(ToWatchMoviesActivity)));
                         break;
                 }
                 drawerLayout.CloseDrawers();
@@ -137,13 +153,13 @@ namespace MovieBuddy
                 case Resource.Id.filter:
                     ShowRadioButtonDialog();
                     break;
-                case Resource.Id.search:
-                    Intent intent = new Intent(this, typeof(SearchActivity));
-                    Bundle b = new Bundle();
-                    b.PutString("query", "john");
-                    intent.PutExtras(b);
-                    StartActivity(intent);
-                    break;
+                //case Resource.Id.search:
+                //    Intent intent = new Intent(this, typeof(SearchActivity));
+                //    Bundle b = new Bundle();
+                //    b.PutString("query", "john");
+                //    intent.PutExtras(b);
+                //    StartActivity(intent);
+                //    break;
                 default:
                     Toast.MakeText(this, item.TitleFormatted + ": " + "Overflow", ToastLength.Long).Show();
                     break;

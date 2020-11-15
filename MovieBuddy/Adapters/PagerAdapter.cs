@@ -2,6 +2,7 @@
 using Android.Support.V4.App;
 using Android.Views;
 using Android.Widget;
+using System;
 using static Android.Widget.TextView;
 
 namespace MovieBuddy
@@ -48,8 +49,10 @@ namespace MovieBuddy
                 case 1:
                     return MoviesFragment.NewInstance(MovieListType.Upcoming);
                 case 2:
-                    return MoviesFragment.NewInstance(MovieListType.Popular);
+                    return MoviesFragment.NewInstance(MovieListType.Trending);
                 case 3:
+                    return MoviesFragment.NewInstance(MovieListType.Popular);
+                case 4:
                     return MoviesFragment.NewInstance(MovieListType.TopRated);
                 default:
                     return null;
@@ -62,13 +65,17 @@ namespace MovieBuddy
         string movieName;
         int movieId;
         string backdrop;
+        string releaseDate;
+        string lang;
 
-        public MoviePagerAdapter(Context context, FragmentManager fm, string movieName, int movieId, string backdrop)
+        public MoviePagerAdapter(Context context, FragmentManager fm, string movieName, int movieId, string backdrop, string releaseDate, string lang)
             : base(context, Resource.Array.movieDetails, fm)
         {
             this.movieName = movieName;
             this.movieId = movieId;
             this.backdrop = backdrop;
+            this.releaseDate = releaseDate;
+            this.lang = lang;
         }
 
         public override Fragment GetItem(int position)
@@ -76,8 +83,9 @@ namespace MovieBuddy
             return position switch
             {
                 0 => SummaryFragment.NewInstance(movieName, movieId),
-                1 => CastFragment.NewInstance(movieId),
-                2 => TrailerFragment.NewInstance(movieName, movieId, backdrop),
+                1 => VideosFragment.NewInstance(movieName, movieId, releaseDate, lang),
+                2 => CastFragment.NewInstance(movieId),
+                //3 => TrailerFragment.NewInstance(movieName, movieId, backdrop),
                 3 => ReviewFragment.NewInstance(movieName, movieId),
                 4 => SimilarMoviesFragment.NewInstance(movieId),
                 _ => null,

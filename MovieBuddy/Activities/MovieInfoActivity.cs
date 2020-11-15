@@ -30,6 +30,11 @@ namespace MovieBuddy
                 statusBar.SetTransparent(this);
 
                 string movieName = Intent.GetStringExtra("movieName");
+                string movieLang = Intent.GetStringExtra("movieLanguage");
+                var releaseDate = Intent.GetStringExtra("movieReleaseDate");
+                //int releaseYear = 0;
+                //if (!string.IsNullOrWhiteSpace(releaseDate))
+                //    releaseYear = DateTime.Parse(releaseDate).Year;
                 movieId = Intent.GetIntExtra("movieId", 0);
                 string castName = Intent.GetStringExtra("castName");
                 int castId = Intent.GetIntExtra("castId", 0);
@@ -44,18 +49,21 @@ namespace MovieBuddy
                 Title = movieName;
 
                 var fab = FindViewById<Refractored.Fab.FloatingActionButton>(Resource.Id.fab);
+                fab.Visibility = ViewStates.Visible;
                 fab.Click += (sender, args) =>
                 {
                     //Toast.MakeText(this, "FAB Clicked!", ToastLength.Short).Show();
                     ShowOptionsDialog();
                 };
 
-                Helper.SetImage(this, Intent.GetStringExtra("imageUrl"), FindViewById<ImageView>(Resource.Id.backdrop), Resource.Drawable.noimage);
+                var image = FindViewById<ImageView>(Resource.Id.backdrop);
+                Helper.SetImage(this, Intent.GetStringExtra("imageUrl"), image, Resource.Drawable.noimage);
+                image.Click += Image_Click;
 
                 var mViewPager = (ViewPager)FindViewById(Resource.Id.viewpager);
                 mViewPager.OffscreenPageLimit = 0;
                 var mTabLayout = (TabLayout)FindViewById(Resource.Id.tabs);
-                var tabPagerAdapter = new MoviePagerAdapter(this, SupportFragmentManager, movieName, movieId, Intent.GetStringExtra("imageUrl"));
+                var tabPagerAdapter = new MoviePagerAdapter(this, SupportFragmentManager, movieName, movieId, Intent.GetStringExtra("imageUrl"), releaseDate, movieLang);
 
                 mViewPager.Adapter = tabPagerAdapter;
                 mTabLayout.SetupWithViewPager(mViewPager);
@@ -71,11 +79,20 @@ namespace MovieBuddy
                 Toast.MakeText(Application.Context, ex.ToString(), ToastLength.Long).Show();
             }
         }
+        private void Image_Click(object sender, EventArgs e)
+        {
+            Bundle b = new Bundle();
+            Intent intent = new Intent(this, typeof(ImageViewer));
+            b.PutString("url", Intent.GetStringExtra("imageUrl"));
+            intent.PutExtras(b);
+            StartActivity(intent);
+        }
 
         private void ShowOptionsDialog()
         {
             var dialogView = LayoutInflater.Inflate(Resource.Layout.movie_options, null);
             Android.App.AlertDialog alertDialog;
+            //var adap = new ArrayAdapter<string>(this, Resource.Layout.select_dialog_singlechoice_material);
             using (var dialog = new Android.App.AlertDialog.Builder(this))
             {
                 dialog.SetTitle("Choose Action on this movie");
@@ -83,19 +100,45 @@ namespace MovieBuddy
                 dialog.SetNegativeButton("Cancel", (s, a) => { });
                 alertDialog = dialog.Create();
             }
-            var list = (ListView)dialogView.FindViewById(Resource.Id.listMovieOptions);
-            var adapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleListItem1, Resources.GetTextArray(Resource.Array.movie_options_array));
-            list.ItemClick += (object sender, Android.Widget.AdapterView.ItemClickEventArgs e) =>
+            var items = new string[] { "Add to Favourite", "Add to Already Watched", "Add to Watch List" };
+            if (Globals.StarredMovies.Contains(movieId))
             {
+                items[0] = "Remove from Favourite";
+            }
+            if (Globals.WatchedMovies.Contains(movieId))
+            {
+                items[1] = "Remove from Already Watched";
+            }
+            if (Globals.ToWatchMovies.Contains(movieId))
+            {
+                items[2] = "Remove from 'To Watch' List";
+            }
+            var list = (ListView)dialogView.FindViewById(Resource.Id.listMovieOptions);
+            var adapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleListItem1, items);
+            list.ItemClick += (object sender, Android.Widget.AdapterView.ItemClickEventArgs e) =>
+            {                
                 if (e.Position == 0)
                 {
-                    Globals.AddToStarredMovies(movieId);
+                    if(items[0] == "Add to Favourite")
+                        Globals.AddToStarredMovies(movieId);
+                    else
+                        Globals.RemoveFromStarredMovies(movieId);
+                }
+                else if (e.Position == 1)
+                {
+                    if (items[1] == "Add to Already Watched")
+                        Globals.AddToWatchedMovies(movieId);
+                    else
+                        Globals.RemoveFromWatchedMovies(movieId);
                 }
                 else
                 {
-                    string selectedFromList = list.GetItemAtPosition(e.Position).ToString();
-                    Toast.MakeText(this, selectedFromList, ToastLength.Long).Show();
+                    if (items[2] == "Add to Watch List")
+                        Globals.AddToWatchMovies(movieId);
+                    else
+                        Globals.RemoveFromToWatchMovies(movieId);
                 }
+                alertDialog.Dismiss();
             };
             list.Adapter = adapter;
             alertDialog.Show();
