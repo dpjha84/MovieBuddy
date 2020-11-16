@@ -3,7 +3,7 @@
   <string-array name="sections">
     <item>NOW PLAYING</item>
     <item>UPCOMING</item>
-    <item>TRENDING</item>
+    <!--<item>TRENDING</item>-->
     <item>POPULAR</item>
     <item>TOP RATED</item>
   </string-array>

@@ -10,7 +10,6 @@ using TMDbLib.Client;
 using TMDbLib.Objects.Discover;
 using TMDbLib.Objects.General;
 using TMDbLib.Objects.People;
-using TMDbLib.Objects.Trending;
 using TCast = TMDbLib.Objects.Movies.Cast;
 using TReview = TMDbLib.Objects.Reviews.ReviewBase;
 using TSMovie = TMDbLib.Objects.Search.SearchMovie;
@@ -128,7 +127,7 @@ namespace MovieBuddy
             return result.Results.Where(filterUpcoming).ToList();
         }
 
-        public List<TSMovie> GetTrending(int page = 1) => page == 1 ? tmdbClient.GetTrendingMoviesAsync(TimeWindow.Week).Result.Results : null;
+        //public List<TSMovie> GetTrending(int page = 1) => page == 1 ? tmdbClient.GetTrendingMoviesAsync(TimeWindow.Week).Result.Results : null;
 
         string BuildUrl(string startDate, string sortBy, string endDate = null)
         {
@@ -203,7 +202,10 @@ namespace MovieBuddy
 
         Dictionary<int, List<string>> videoCache = new Dictionary<int, List<string>>();
 
-        public Person GetPerson(int castId) => tmdbClient.GetPersonAsync(castId).Result;
+        public Person GetPerson(int castId)
+        {
+            return tmdbClient.GetPersonAsync(castId).Result;
+        }
 
         public List<TCast> GetCastAndCrew(int movieId, int page = 1)
         {

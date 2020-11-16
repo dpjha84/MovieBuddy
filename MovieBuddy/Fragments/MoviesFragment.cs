@@ -135,7 +135,7 @@ namespace MovieBuddy
     {
         NowPlaying,
         Upcoming,
-        Trending,
+        //Trending,
         Popular,
         TopRated
     }
