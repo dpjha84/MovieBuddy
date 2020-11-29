@@ -180,18 +180,21 @@ namespace MovieBuddy
             if (page > 1) return null;
             try
             {
-                if (videoCache.ContainsKey(movieId)) return videoCache[movieId];
-                var year = releaseDate.HasValue ? releaseDate.Value.Year : 0;
-                var searchListRequest = youTubeClient.Search.List("snippet");
-                searchListRequest.Q = year != 0 ? $"{movieName} {year} Full Movie" : $"{movieName} Full Movie";
-                searchListRequest.Type = new List<string> { "video" };
-                if (!string.IsNullOrWhiteSpace(lang))
-                    searchListRequest.RelevanceLanguage = lang;
-                searchListRequest.MaxResults = releaseDate.HasValue && releaseDate.Value > DateTime.Now ? 1 : 5;
-                var searchListResponse = searchListRequest.ExecuteAsync().Result;
-                var data = searchListResponse.Items.Select(x => x.Id.VideoId).ToList();
-                videoCache.Add(movieId, data);
-                return data;
+                return CacheRepo.Videos.GetOrCreate(movieId.ToString(), () =>
+                {
+                    if (videoCache.ContainsKey(movieId)) return videoCache[movieId];
+                    var year = releaseDate.HasValue ? releaseDate.Value.Year : 0;
+                    var searchListRequest = youTubeClient.Search.List("snippet");
+                    searchListRequest.Q = year != 0 ? $"{movieName} {year} Full Movie" : $"{movieName} Full Movie";
+                    searchListRequest.Type = new List<string> { "video" };
+                    if (!string.IsNullOrWhiteSpace(lang))
+                        searchListRequest.RelevanceLanguage = lang;
+                    searchListRequest.MaxResults = releaseDate.HasValue && releaseDate.Value > DateTime.Now ? 1 : 5;
+                    var searchListResponse = searchListRequest.ExecuteAsync().Result;
+                    return searchListResponse.Items.Select(x => x.Id.VideoId).ToList();
+                });
+                //videoCache.Add(movieId, data);
+                //return data;
             }
             catch (Exception)
             {
@@ -211,14 +214,14 @@ namespace MovieBuddy
         {
             if (page == 1)
             {
-                Credits = tmdbClient.GetMovieCreditsAsync(movieId).Result;
+                Credits = CacheRepo.Casts.GetOrCreate(movieId.ToString(), () => tmdbClient.GetMovieCreditsAsync(movieId).Result);
                 totalCast = Credits.Cast.Count;
             }
             if (page > totalCast / 15 + 1) return null;
             return Credits.Cast.Skip((page - 1) * 15).Take(15).ToList();
         }
 
-        public List<TSMovie> GetSimilar(int movieId, int page) => tmdbClient.GetMovieSimilarAsync(movieId, page).Result.Results;
+        public List<TSMovie> GetSimilar(int movieId, int page) => CacheRepo.Similar.GetOrCreate(movieId.ToString(), () => tmdbClient.GetMovieSimilarAsync(movieId, page).Result.Results);
 
         public List<TSMovie> GetMovies(List<int> movieIds)
         {
@@ -236,7 +239,7 @@ namespace MovieBuddy
             }).ToList();
         }
 
-        public List<TReview> GetReviews(int movieId) => tmdbClient.GetMovieReviewsAsync(movieId).Result.Results;
+        public List<TReview> GetReviews(int movieId) => CacheRepo.Reviews.GetOrCreate(movieId.ToString(), () => tmdbClient.GetMovieReviewsAsync(movieId).Result.Results);
 
         public List<MovieRole> GetMovieCredits(int personId, int page)
         {
@@ -251,17 +254,21 @@ namespace MovieBuddy
 
         public Dictionary<string, string> GetFullOverview(int movieId)
         {
-            Dictionary<string, string> summaryMap = new Dictionary<string, string>();
-            var movie = tmdbClient.GetMovieAsync(movieId).Result;
-            summaryMap.Add("Overview", movie.Overview);
-            if (movie.ReleaseDate.HasValue)
-                summaryMap.Add("Year", movie.ReleaseDate.Value.Year.ToString());
-            if (movie.Genres != null)
-                summaryMap.Add("Genres", string.Join(", ", movie.Genres.Select(x => GenreMap[x.Id])));
-            if (movie.ReleaseDate.HasValue)
-                summaryMap.Add("Release date", movie.ReleaseDate.Value.ToString("dd MMMM yyyy"));
-            summaryMap.Add("Language", languageMap[movie.OriginalLanguage]);
-            return summaryMap;
+            return CacheRepo.Summary.GetOrCreate(movieId.ToString(), () =>
+            //return new Cache3<Dictionary<string, string>>("MovieSummaryCache").GetOrCreate(movieId.ToString(), () =>
+            {
+                Dictionary<string, string> summaryMap = new Dictionary<string, string>();
+                var movie = tmdbClient.GetMovieAsync(movieId).Result;
+                summaryMap.Add("Overview", movie.Overview);
+                if (movie.ReleaseDate.HasValue)
+                    summaryMap.Add("Year", movie.ReleaseDate.Value.Year.ToString());
+                if (movie.Genres != null)
+                    summaryMap.Add("Genres", string.Join(", ", movie.Genres.Select(x => GenreMap[x.Id])));
+                if (movie.ReleaseDate.HasValue)
+                    summaryMap.Add("Release date", movie.ReleaseDate.Value.ToString("dd MMMM yyyy"));
+                summaryMap.Add("Language", languageMap[movie.OriginalLanguage]);
+                return summaryMap;
+            });
         }
 
         public string GetGenreText(int genreId) => GenreMap.ContainsKey(genreId) ? GenreMap[genreId] : "";

@@ -1,12 +1,27 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using TMDbLib.Objects.Reviews;
 
 //using TMDbLib.Objects.General;
 //using TMDbLib.Objects.Movies;
 
 namespace MovieBuddy
 {
+    public class Movie
+    {
+        public int Id { get; set; }
+
+        public Dictionary<string, string> Summary { get; set; }
+
+        public List<int> Casts { get; set; }
+
+        public List<string> Videos { get; set; }
+
+        public List<ReviewBase> Reviews { get; set; }
+
+        public List<int> Similar { get; set; }
+    }
     public class YouTubeApiListId
     {
         public string VideoId { get; set; }

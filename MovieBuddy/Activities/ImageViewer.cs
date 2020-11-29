@@ -5,6 +5,7 @@ using System.Text;
 
 using Android.App;
 using Android.Content;
+using Android.Gms.Ads;
 using Android.OS;
 using Android.Runtime;
 using Android.Views;
@@ -22,6 +23,9 @@ namespace MovieBuddy
             SetContentView(Resource.Layout.ImageViewer);
             var image = FindViewById<ImageView>(Resource.Id.imgViewer);
             Helper.SetImage(this, Intent.GetStringExtra("url"), image, Resource.Drawable.noimage);
+            var mAdView = FindViewById<AdView>(Resource.Id.adView);
+            var adRequest = new AdRequest.Builder().Build();
+            mAdView.LoadAd(adRequest);
         }
     }
 }

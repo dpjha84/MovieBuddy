@@ -19,7 +19,7 @@ namespace MovieBuddy
         protected override void OnCreate(Bundle bundle)
         {
             InitView(Resource.Layout.MovieInfoView, bundle);
-            statusBar.SetTransparent(this);
+            //statusBar.SetTransparent(this);
 
             string castName = Intent.GetStringExtra("castName");
             int castId = Intent.GetIntExtra("castId", 0);

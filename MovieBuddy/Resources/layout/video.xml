@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:scaleType="fitCenter"
             android:adjustViewBounds="true"
-            android:tint="#6F000000"/>
+            android:tint="#6F000000" />
 
         <ImageView
             android:id="@+id/playButton"

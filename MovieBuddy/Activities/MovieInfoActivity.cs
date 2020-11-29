@@ -27,7 +27,11 @@ namespace MovieBuddy
             try
             {
                 InitView(Resource.Layout.MovieInfoView, bundle);
-                statusBar.SetTransparent(this);
+                //statusBar.SetTransparent(this);
+
+                var mAdView = FindViewById<AdView>(Resource.Id.adView);
+                var adRequest = new AdRequest.Builder().Build();
+                mAdView.LoadAd(adRequest);
 
                 string movieName = Intent.GetStringExtra("movieName");
                 string movieLang = Intent.GetStringExtra("movieLanguage");
