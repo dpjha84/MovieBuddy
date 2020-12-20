@@ -1,5 +1,6 @@
 ﻿using Android.OS;
 using System.Collections.Generic;
+using TSearchMovie = TMDbLib.Objects.Search.SearchMovie;
 
 namespace MovieBuddy
 {
@@ -45,6 +46,9 @@ namespace MovieBuddy
             frag1.Arguments = bundle;
             return frag1;
         }
+
+        protected override ClickableWithPagingAdapter<TSearchMovie> GetAdapter() => new CastMoviesAdapter();
+        
         int page = 1;
         protected override List<TMDbLib.Objects.Search.SearchMovie> GetMovies()
         {

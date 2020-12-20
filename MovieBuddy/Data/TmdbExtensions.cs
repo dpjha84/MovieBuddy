@@ -8,8 +8,9 @@ namespace MovieBuddy.Data
 {
     public static class TmdbExtensions
     {
-        public static SearchContainer<TMovie> GetMoviesByUrl(this TMDbClient tmdbClient, string url, int page)
+        public static SearchContainer<TMovie> GetMoviesByUrl(this TClient tmdbClient, string url, int page)
         {
+            //TClientBase.calls++;
             url += $"page={page}&with_original_language={Globals.LanguageMap[Globals.SelectedLanguage]}";
             using (var client = new HttpClient())
             {

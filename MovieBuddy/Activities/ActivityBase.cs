@@ -4,6 +4,7 @@ using Android.OS;
 using Android.Runtime;
 using Android.Support.V7.App;
 using Android.Views;
+using Android.Widget;
 using Jaeger;
 
 namespace MovieBuddy
@@ -44,7 +45,7 @@ namespace MovieBuddy
             base.OnCreate(bundle);
             SetContentView(resourceId);
             Xamarin.Essentials.Platform.Init(this, bundle);
-
+            //Toast.MakeText(this, $"Calls: {TClientBase.calls}", ToastLength.Long).Show();
             toolbar = FindViewById<Android.Support.V7.Widget.Toolbar>(Resource.Id.toolbar);
             if (toolbar != null)
             {

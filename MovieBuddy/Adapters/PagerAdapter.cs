@@ -82,9 +82,9 @@ namespace MovieBuddy
         {
             return position switch
             {
-                0 => SummaryFragment.NewInstance(movieName, movieId),
-                1 => VideosFragment.NewInstance(movieName, movieId, releaseDate, lang),
-                2 => CastFragment.NewInstance(movieId),
+                0 => SummaryFragment.NewInstance(movieName, movieId),                
+                1 => CastFragment.NewInstance(movieId),
+                2 => VideosFragment.NewInstance(movieName, movieId, releaseDate, lang),
                 //3 => TrailerFragment.NewInstance(movieName, movieId, backdrop),
                 3 => ReviewFragment.NewInstance(movieName, movieId),
                 4 => SimilarMoviesFragment.NewInstance(movieId),

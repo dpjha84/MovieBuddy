@@ -3,6 +3,7 @@ using Android.Views;
 using Android.Widget;
 using System;
 using System.Collections.Generic;
+using TSearchMovie = TMDbLib.Objects.Search.SearchMovie;
 
 namespace MovieBuddy
 {
@@ -87,16 +88,16 @@ namespace MovieBuddy
         protected virtual void AddToCollection(List<T> data) { }
     }
 
-    public class MoviesAdapter : ClickableWithPagingAdapter<TMDbLib.Objects.Search.SearchMovie>
+    public class MoviesAdapter : ClickableWithPagingAdapter<TSearchMovie>
     {
-        public List<TMDbLib.Objects.Search.SearchMovie> movies;
+        public List<TSearchMovie> movies;
 
         public MoviesAdapter()
         {
             movies = new List<TMDbLib.Objects.Search.SearchMovie>();
         }
 
-        protected override void AddToCollection(List<TMDbLib.Objects.Search.SearchMovie> data)
+        protected override void AddToCollection(List<TSearchMovie> data)
         {
             movies.AddRange(data);
         }
@@ -113,8 +114,10 @@ namespace MovieBuddy
             var movie = movies[position];
             Helper.SetImage(vh.Image.Context, movie.PosterPath, vh.Image, Resource.Drawable.noimage);
             vh.Name.Text = movie.Title;
-            vh.Genre.Text = movie.GenreIds?.Count > 0 ? MovieManager.Instance.GetGenreText(movie.GenreIds[0]) : "";
+            vh.Genre.Text = GetExtraText(movie);
         }
+
+        protected virtual string GetExtraText(TSearchMovie movie) => movie.GenreIds?.Count > 0 ? MovieManager.Instance.GetGenreText(movie.GenreIds[0]) : "";
 
         protected override RecyclerView.ViewHolder GetViewHolder(View view)
         {
@@ -198,5 +201,10 @@ namespace MovieBuddy
                 itemView.Click += (sender, e) => listener(base.LayoutPosition);
             }
         }
+    }
+
+    public class CastMoviesAdapter : MoviesAdapter
+    {
+        protected override string GetExtraText(TSearchMovie movie) => movie.ReleaseDate.HasValue ? movie.ReleaseDate.Value.Year.ToString() : "";
     }
 }

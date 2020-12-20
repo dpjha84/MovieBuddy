@@ -404,6 +404,18 @@ namespace MovieBuddy
 			// aapt resource value: 0x7F010025
 			public const int mtrl_card_lowers_interpolator = 2130772005;
 			
+			// aapt resource value: 0x7F010026
+			public const int Side_in_left = 2130772006;
+			
+			// aapt resource value: 0x7F010027
+			public const int Side_in_right = 2130772007;
+			
+			// aapt resource value: 0x7F010028
+			public const int Side_out_left = 2130772008;
+			
+			// aapt resource value: 0x7F010029
+			public const int Side_out_right = 2130772009;
+			
 			static Animation()
 			{
 				global::Android.Runtime.ResourceIdManager.UpdateIdValues();

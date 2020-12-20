@@ -17,11 +17,6 @@ namespace MovieBuddy
     {
         int movieId;
 
-        public MovieInfoActivity()
-        {
-            statusBar = new TransparentStatusBarSetter();
-        }
-
         protected override void OnCreate(Bundle bundle)
         {
             try

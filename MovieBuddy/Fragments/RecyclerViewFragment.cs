@@ -1,4 +1,6 @@
-﻿using Android.OS;
+﻿using Android.App;
+using Android.Content;
+using Android.OS;
 using Android.Runtime;
 using Android.Support.V4.Widget;
 using Android.Support.V7.Widget;
@@ -37,12 +39,24 @@ namespace MovieBuddy
 
                 adapter1.HasStableIds = true;
                 GetData();
-                rv.SetAdapter(adapter1);
+                rv.SetAdapter(adapter1);                
                 return rootView;
             }
             catch (Exception ex)
             {
+                if(ex.InnerException is Java.Net.UnknownHostException)
+                {
+                    new AlertDialog.Builder(Context)
+                    .SetTitle("No Internet")
+                    .SetMessage("Please check your internet connection")
+                    .SetPositiveButton("Retry", (sender, args) =>
+                    {
+                        StartActivity(new Intent(Context, typeof(MainActivity)));
+                    })
+                    .Show();
+                }
             }
+            
             return null;
         }
 

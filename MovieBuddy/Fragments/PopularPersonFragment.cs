@@ -1,45 +1,43 @@
 ﻿using Android.Content;
 using Android.OS;
 using Android.Support.V7.Widget;
-using TMDbLib.Objects.Search;
+using TMDbLib.Objects.General;
 
 namespace MovieBuddy
 {
-    public class SearchPersonFragment : CastFragment
+    public class PopularPersonFragment : SearchPersonFragment
     {
-        protected SearchPersonAdapter<SearchPerson> searchPersonAdapter;
+        protected PopularPersonAdapter<PersonResult> popularPersonAdapter;
 
-        public static SearchPersonFragment NewInstance(string query)
+        public static PopularPersonFragment NewInstance()
         {
-            var frag1 = new SearchPersonFragment();
+            var frag1 = new PopularPersonFragment();
             Bundle bundle = new Bundle();
-            bundle.PutString("query", query);
             frag1.Arguments = bundle;
             return frag1;
         }
 
-        protected int page = 1;
         protected override void GetData()
         {
-            var data = MovieManager.Instance.SearchPerson(Query, page++);
+            var data = MovieManager.Instance.GetPopularPersons(page++);
             if (data == null) return;
             var recyclerViewState = rv.GetLayoutManager().OnSaveInstanceState();
-            searchPersonAdapter.LoadData(data);
+            popularPersonAdapter.LoadData(data);
             rv.GetLayoutManager().OnRestoreInstanceState(recyclerViewState);
         }
 
         protected override RecyclerView.Adapter SetAdapter()
         {
-            searchPersonAdapter = new SearchPersonAdapter<SearchPerson>();
-            searchPersonAdapter.ItemClick += OnItemClick;
-            return searchPersonAdapter;
+            popularPersonAdapter = new PopularPersonAdapter<PersonResult>();
+            popularPersonAdapter.ItemClick += OnItemClick;
+            return popularPersonAdapter;
         }
 
         protected override void OnItemClick(object sender, int position)
         {
             Intent intent = new Intent(this.Context, typeof(CastInfoActivity));
             Bundle b = new Bundle();
-            var cast = (sender as SearchPersonAdapter<SearchPerson>).Cast[position];
+            var cast = (sender as PopularPersonAdapter<PersonResult>).Cast[position];
             b.PutInt("castId", cast.Id);
             b.PutString("castName", cast.Name);
             b.PutString("imageUrl", cast.ProfilePath);

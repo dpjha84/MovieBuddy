@@ -1,7 +1,9 @@
 ﻿using Android.App;
 using Android.Content;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Xamarin.Essentials;
 
@@ -30,6 +32,28 @@ namespace MovieBuddy
             { "Telugu", "te" },
             { "Turkish", "tr" },
             { "Urdu", "ur" },
+        };
+
+        public static Dictionary<string, string> LanguageMap1 = new Dictionary<string, string> {
+            { "ar", "Arabic" },
+            { "bn", "Bengali" },
+            { "en", "English" },
+            { "fr", "French" },
+            { "de", "German" },
+            { "hi", "Hindi" },
+            { "it", "Italian" },
+            { "ja", "Japanese" },
+            { "kn", "Kannada" },
+            { "ko", "Korean" },
+            { "ml", "Malayalam" },
+            { "ne", "Nepali" },
+            { "pt", "Portuguese" },
+            { "ru", "Russian" },
+            { "es", "Spanish" },
+            { "ta", "Tamil" },
+            { "te", "Telugu" },
+            { "tr", "Turkish" },
+            { "ur", "Urdu" }
         };
 
         static List<int> starredMovies = null;
@@ -140,11 +164,28 @@ namespace MovieBuddy
             {
                 if (selectedLanguage == null)
                 {
-                    var languageInDisk = LocalCache.Instance.Get("MovieLanguage");
-                    if (languageInDisk == null)
+                    string languageInDisk;
+                    try
                     {
-                        languageInDisk = "Hindi";
-                        LocalCache.Instance.Set("MovieLanguage", languageInDisk);
+                        languageInDisk = LocalCache.Instance.Get("MovieLanguage");
+                        if (languageInDisk == null)
+                        {
+                            var deviceLanguage = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+                            if (LanguageMap1.ContainsKey(deviceLanguage))
+                            {
+                                if (RegionInfo.CurrentRegion.EnglishName == "India")
+                                    languageInDisk = "Hindi";
+                                else
+                                    languageInDisk = LanguageMap1[deviceLanguage];
+                            }
+                            else
+                                languageInDisk = "All";
+                            LocalCache.Instance.Set("MovieLanguage", languageInDisk);
+                        }                        
+                    }
+                    catch(Exception)
+                    {
+                        languageInDisk = "All";
                     }
                     selectedLanguage = languageInDisk;
                 }
@@ -154,26 +195,6 @@ namespace MovieBuddy
             {
                 selectedLanguage = value;
                 LocalCache.Instance.Set("MovieLanguage", selectedLanguage);
-            }
-        }
-
-        public static void CheckInternet(Context context)
-        {
-            var current = Connectivity.NetworkAccess;
-
-            switch (current)
-            {
-                case NetworkAccess.None:
-                case NetworkAccess.Unknown:
-                    new AlertDialog.Builder(context)
-                    .SetTitle("Delete entry")
-                    .SetMessage("No Internet")
-                    .SetPositiveButton("RETRY", (sender, args) =>
-                    {
-
-                    })
-                    .Show();
-                    return;
             }
         }
 

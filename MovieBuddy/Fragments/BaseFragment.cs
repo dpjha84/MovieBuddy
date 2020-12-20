@@ -1,6 +1,7 @@
 ﻿using Android.App;
 using Android.Content;
 using Android.OS;
+using Android.Widget;
 using Xamarin.Essentials;
 
 namespace MovieBuddy
@@ -41,6 +42,7 @@ namespace MovieBuddy
         public override void OnCreate(Bundle savedInstanceState)
         {
             MovieManager.EnsureLoaded();
+            //Toast.MakeText(this.Context, $"Calls: {TClientBase.calls}", ToastLength.Long).Show();
             base.OnCreate(savedInstanceState);
         }
 

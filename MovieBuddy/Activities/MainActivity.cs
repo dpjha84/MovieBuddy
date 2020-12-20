@@ -133,6 +133,7 @@ namespace MovieBuddy
                         StartActivity(new Intent(this, typeof(ToWatchMoviesActivity)));
                         break;
                 }
+                OverridePendingTransition(Resource.Animation.@Side_in_right, Resource.Animation.@Side_out_left);
                 drawerLayout.CloseDrawers();
             };
         }

@@ -6,6 +6,7 @@ using Android.Widget;
 using MovieBuddy.Data;
 using System;
 using System.Collections.Generic;
+using TSearchMovie = TMDbLib.Objects.Search.SearchMovie;
 
 namespace MovieBuddy
 {
@@ -27,10 +28,12 @@ namespace MovieBuddy
         protected override RecyclerView.Adapter SetAdapter()
         {
             ResetPages();
-            movieAdapter = new MoviesAdapter();
+            movieAdapter = GetAdapter();
             movieAdapter.ItemClick += OnItemClick;
             return movieAdapter;
         }
+
+        protected virtual ClickableWithPagingAdapter<TSearchMovie> GetAdapter() => new MoviesAdapter();
 
         protected virtual void ResetPages()
         {
@@ -74,7 +77,7 @@ namespace MovieBuddy
             try
             {
                 var movie = (sender as MoviesAdapter).movies[position];
-                Intent intent = new Intent(this.Context, typeof(MovieInfoActivity));
+                Intent intent = new Intent(this.Context, typeof(MovieInfoActivity));                
                 Bundle b = new Bundle();
                 b.PutInt("movieId", movie.Id);
                 b.PutString("movieName", movie.Title);
@@ -84,6 +87,7 @@ namespace MovieBuddy
                 b.PutString("imageUrl", !string.IsNullOrWhiteSpace(backdrop) ? backdrop : movie.PosterPath);
                 intent.PutExtras(b);
                 StartActivity(intent);
+                Activity.OverridePendingTransition(Resource.Animation.@Side_in_right, Resource.Animation.@Side_out_left);
             }
             catch (Exception ex)
             {
@@ -110,25 +114,6 @@ namespace MovieBuddy
                 movieAdapter.ItemClick -= OnItemClick;
             base.OnDestroy();
         }
-
-        //public override void OnStop()
-        //{
-        //    foreach (var imageView in adapter.ImageViewsToClean)
-        //    {
-        //        Helper.Clear(Context, imageView);
-        //    }
-        //    base.OnStop();
-        //}
-
-        //public override void OnResume()
-        //{
-        //    adapter = new MoviesAdapter(GetMovies());
-        //    //foreach (var imageView in adapter.moviesImageViews)
-        //    //{
-        //    //    Helper.SetImage(Context, imageView);
-        //    //}
-        //    base.OnResume();
-        //}
     }
 
     public enum MovieListType

@@ -13,6 +13,8 @@ using TMDbLib.Objects.People;
 using TCast = TMDbLib.Objects.Movies.Cast;
 using TReview = TMDbLib.Objects.Reviews.ReviewBase;
 using TSMovie = TMDbLib.Objects.Search.SearchMovie;
+using TFMovie = TMDbLib.Objects.Movies.Movie;
+using System.Threading.Tasks;
 
 namespace MovieBuddy
 {
@@ -21,9 +23,10 @@ namespace MovieBuddy
         public static readonly Dictionary<int, string> GenreMap = new Dictionary<int, string>();
         public static readonly Dictionary<string, int> GenreTextToIdMap = new Dictionary<string, int>();
         readonly Dictionary<string, string> languageMap = new Dictionary<string, string>();
-        readonly TMDbClient tmdbClient;
+        readonly TClient tClient;
+        //readonly TMDbClient tmdbClient;
         readonly YouTubeService youTubeClient;
-        const string tmdbApiKey = "c6b31d1cdad6a56a23f0c913e2482a31";
+        string tmdbApiKey;
         int personMoviesTotal = 0;
         MovieCredits movieCredits;
         int totalCast = 0;
@@ -52,7 +55,9 @@ namespace MovieBuddy
 
         private MovieManager()
         {
-            tmdbClient = new TMDbClient(tmdbApiKey);
+            //tmdbClient = new TMDbClient(tmdbApiKey);
+            tClient = new TClient();
+            tmdbApiKey = tClient.Key;
             youTubeClient = new YouTubeService(new BaseClientService.Initializer()
             {
                 ApiKey = "AIzaSyDFaNumZ4ZE3hDY-yDQi9VY_WDEYrS3xvo",
@@ -74,13 +79,13 @@ namespace MovieBuddy
 
         void Load()
         {
-            foreach (var g in GetCachedOrWebData(LocalCache.GenresKey, () => tmdbClient.GetMovieGenresAsync().Result))
+            foreach (var g in GetCachedOrWebData(LocalCache.GenresKey, () => tClient.GetMovieGenresAsync().Result))
             {
                 GenreMap.Add(g.Id, g.Name);
                 GenreTextToIdMap.Add(g.Name, g.Id);
             }
 
-            foreach (var l in GetCachedOrWebData(LocalCache.LanguagesKey, () => tmdbClient.GetLanguagesAsync().Result))
+            foreach (var l in GetCachedOrWebData(LocalCache.LanguagesKey, () => tClient.GetLanguagesAsync().Result))
                 languageMap.Add(l.Iso_639_1, l.EnglishName);
 
             var today = DateTime.Now;
@@ -88,43 +93,69 @@ namespace MovieBuddy
             var startDate = today.Subtract(TimeSpan.FromDays(60)).ToString("yyyy-MM-dd");
             nowPlayingBaseUrl = BuildUrl(startDate, "release_date.desc", endDate);
             upcomingBaseUrl = BuildUrl(today.AddDays(1).ToString("yyyy-MM-dd"), "release_date.asc");
-            filterNowPlaying = x => x.ReleaseDate >= DateTime.Parse(startDate) && x.ReleaseDate <= DateTime.Parse(endDate);
-            filterUpcoming = x => x.ReleaseDate > DateTime.Parse(endDate);
+            filterNowPlaying = x => x.ReleaseDate >= DateTime.Parse(startDate) && x.ReleaseDate <= DateTime.Parse(endDate) && x.GenreIds?.Count > 0 && x.PosterPath != null;
+            filterUpcoming = x => x.ReleaseDate > DateTime.Parse(endDate) && x.GenreIds?.Count > 0 && x.PosterPath != null;
+
+            Task.Run(() =>
+            {
+                try
+                {
+                    GetNowPlaying(1);
+                    GetUpcoming(1);
+                    GetPopular(1);
+                    GetTopRated(1);
+                    var list = nowPlayingRes.Concat(upcomingRes).Concat(popularRes).Concat(topRatedRes);
+                    foreach (var item in list)
+                    {
+                        GetFullOverview(item.Id);
+                        GetCastAndCrew(item.Id);
+                        GetVideos(item.Id, item.OriginalTitle, item.ReleaseDate, item.OriginalLanguage);
+                        GetReviews(item.Id);
+                        GetSimilar(item.Id, 1);
+                    }
+                }
+                catch(Exception ex)
+                {
+
+                }                
+            });
         }
 
-        public List<TSMovie> SearchMovie(string query, int page) => string.IsNullOrWhiteSpace(query) ? null : tmdbClient.SearchMovieAsync(query, page).Result.Results;
+        public List<TSMovie> SearchMovie(string query, int page) => string.IsNullOrWhiteSpace(query) ? null : tClient.SearchMovieAsync(query, page).Result.Results;
 
-        public List<TMDbLib.Objects.Search.SearchPerson> SearchPerson(string query, int page) => string.IsNullOrWhiteSpace(query) ? null : tmdbClient.SearchPersonAsync(query, page).Result.Results;
+        public List<TMDbLib.Objects.Search.SearchPerson> SearchPerson(string query, int page) => string.IsNullOrWhiteSpace(query) ? null : tClient.SearchPersonAsync(query, page).Result.Results;
 
-        public List<PersonResult> GetPopularPersons(int page) => tmdbClient.GetPersonListAsync(PersonListType.Popular, page).Result.Results;
+        public List<PersonResult> GetPopularPersons(int page) => tClient.GetPersonListAsync(PersonListType.Popular, page).Result.Results;
 
         public List<TSMovie> ExploreMovies(IList<int> exploreInfo, int page)
         {
             var startYear = exploreInfo[0];
             var endYear = exploreInfo[1];
             if (startYear > endYear) return null;
-
             var genreId = exploreInfo[2];
-
-            var movies = new DiscoverMovie(tmdbClient);
-            if (genreId != -1)
-                movies = movies.IncludeWithAllOfGenre(new List<int> { genreId });
-
-            for (int i = startYear; i <= endYear; i++)
-            {
-                movies = movies.WherePrimaryReleaseIsInYear(i);
-            }
-            return movies.Query(page).Result.Results;
+            return tClient.Discover(startYear, endYear, genreId, page);
         }
 
         public List<TSMovie> GetUpcoming(int page)
         {
             if (page == 1) upcomingTotalPage = int.MaxValue;
             if (page > upcomingTotalPage) return null;
-            if (Globals.SelectedLanguage == "All") return tmdbClient.GetMovieUpcomingListAsync(null, page).Result.Results;
-            var result = tmdbClient.GetMoviesByUrl(upcomingBaseUrl, page);
-            upcomingTotalPage = result.TotalPages;
-            return result.Results.Where(filterUpcoming).ToList();
+
+            if (page == 1)
+            {
+                if (upcomingRes == null)
+                {
+                    if (Globals.SelectedLanguage == "All") return tClient.GetMovieUpcomingListAsync(null, page).Result.Results;
+                    var result = tClient.GetMoviesByUrl(upcomingBaseUrl, page);
+                    upcomingTotalPage = result.TotalPages;
+                    upcomingRes = result.Results.Where(filterUpcoming).ToList();
+                }
+                return upcomingRes;
+            }
+            if (Globals.SelectedLanguage == "All") return tClient.GetMovieUpcomingListAsync(null, page).Result.Results;
+            var result1 = tClient.GetMoviesByUrl(upcomingBaseUrl, page);
+            upcomingTotalPage = result1.TotalPages;
+            return result1.Results.Where(filterUpcoming).ToList();
         }
 
         //public List<TSMovie> GetTrending(int page = 1) => page == 1 ? tmdbClient.GetTrendingMoviesAsync(TimeWindow.Week).Result.Results : null;
@@ -145,32 +176,67 @@ namespace MovieBuddy
         {
             if (page == 1) nowPlayingTotalPage = int.MaxValue;
             if (page > nowPlayingTotalPage) return null;
-            if (Globals.SelectedLanguage == "All") return tmdbClient.GetMovieNowPlayingListAsync(null, page).Result.Results;
 
-            var result = tmdbClient.GetMoviesByUrl(nowPlayingBaseUrl, page);
-            nowPlayingTotalPage = result.TotalPages;
-            return result.Results.Where(filterNowPlaying).ToList();
+            if (page == 1)
+            {
+                if (nowPlayingRes == null)
+                {
+                    if (Globals.SelectedLanguage == "All") return tClient.GetMovieNowPlayingListAsync(null, page).Result.Results;
+                    var result = tClient.GetMoviesByUrl(nowPlayingBaseUrl, page);
+                    nowPlayingTotalPage = result.TotalPages;
+                    nowPlayingRes = result.Results.Where(filterNowPlaying).ToList();
+                }
+                return nowPlayingRes;
+            }
+            if (Globals.SelectedLanguage == "All") return tClient.GetMovieNowPlayingListAsync(null, page).Result.Results;
+            var result1 = tClient.GetMoviesByUrl(nowPlayingBaseUrl, page);
+            nowPlayingTotalPage = result1.TotalPages;
+            return result1.Results.Where(filterNowPlaying).ToList();
         }
+        List<TSMovie> popularRes;
+        List<TSMovie> topRatedRes;
+        List<TSMovie> upcomingRes;
+        List<TSMovie> nowPlayingRes;
 
         public List<TSMovie> GetPopular(int page)
         {
             if (page > popularTotalPage) return null;
-            var res = tmdbClient.GetMoviePopularListAsync(null, page).Result;
-            popularTotalPage = res.TotalPages;
-            return res.Results;
+            if (page == 1)
+            {
+                if (popularRes == null)
+                {
+                    var res = tClient.GetMoviePopularListAsync(null, page).Result;
+                    popularTotalPage = res.TotalPages;
+                    popularRes = res.Results;
+                }
+                return popularRes;
+            }
+            var res1 = tClient.GetMoviePopularListAsync(null, page).Result;
+            popularTotalPage = res1.TotalPages;
+            return res1.Results;
         }
 
         public List<TSMovie> GetTopRated(int page)
         {
             if (page > topRatedTotalPage) return null;
-            var res = tmdbClient.GetMovieTopRatedListAsync(null, page).Result;
-            topRatedTotalPage = res.TotalPages;
-            return res.Results;
+            if (page == 1)
+            {
+                if (topRatedRes == null)
+                {
+                    var res = tClient.GetMovieTopRatedListAsync(null, page).Result;
+                    topRatedTotalPage = res.TotalPages;
+                    topRatedRes = res.Results;
+                }
+                return topRatedRes;
+            }
+            var res1 = tClient.GetMovieTopRatedListAsync(null, page).Result;
+            topRatedTotalPage = res1.TotalPages;
+            return res1.Results;
         }
 
         public string GetTrailer(int movieId)
         {
-            var videos = tmdbClient.GetMovieVideosAsync(movieId).Result.Results;
+            var videos = tClient.GetMovieVideosAsync(movieId).Result.Results;
             if (videos == null || videos.Count == 0) return null;
             return videos.FirstOrDefault(x => !string.IsNullOrWhiteSpace(x.Key)).Key;
         }
@@ -193,8 +259,6 @@ namespace MovieBuddy
                     var searchListResponse = searchListRequest.ExecuteAsync().Result;
                     return searchListResponse.Items.Select(x => x.Id.VideoId).ToList();
                 });
-                //videoCache.Add(movieId, data);
-                //return data;
             }
             catch (Exception)
             {
@@ -207,28 +271,37 @@ namespace MovieBuddy
 
         public Person GetPerson(int castId)
         {
-            return tmdbClient.GetPersonAsync(castId).Result;
+            return tClient.GetPersonAsync(castId).Result;
         }
 
         public List<TCast> GetCastAndCrew(int movieId, int page = 1)
         {
             if (page == 1)
             {
-                Credits = CacheRepo.Casts.GetOrCreate(movieId.ToString(), () => tmdbClient.GetMovieCreditsAsync(movieId).Result);
+                Credits = CacheRepo.Casts.GetOrCreate(movieId.ToString(), () => tClient.GetMovieCreditsAsync(movieId).Result);
                 totalCast = Credits.Cast.Count;
             }
             if (page > totalCast / 15 + 1) return null;
             return Credits.Cast.Skip((page - 1) * 15).Take(15).ToList();
         }
 
-        public List<TSMovie> GetSimilar(int movieId, int page) => CacheRepo.Similar.GetOrCreate(movieId.ToString(), () => tmdbClient.GetMovieSimilarAsync(movieId, page).Result.Results);
+        public List<TSMovie> GetSimilar(int movieId, int page) => CacheRepo.Similar.GetOrCreate(movieId.ToString(), () => tClient.GetMovieSimilarAsync(movieId, page).Result.Results);
 
+        CacheDictionary<int, TFMovie> movieCache = new CacheDictionary<int, TFMovie>(100, new LruRemovalStrategy<int>());
         public List<TSMovie> GetMovies(List<int> movieIds)
         {
-            var result = new List<TMDbLib.Objects.Movies.Movie>();
+            //TODO - Optimize
+            var result = new List<TFMovie>();
             foreach (var movieId in movieIds)
             {
-                result.Add(tmdbClient.GetMovieAsync(movieId).Result);
+                if (movieCache.ContainsKey(movieId))
+                    result.Add(movieCache[movieId]);
+                else
+                {
+                    var movie = tClient.GetMovieAsync(movieId).Result;
+                    movieCache.Add(movieId, movie);
+                    result.Add(movie);
+                }
             }
             return result.Select(x => new TSMovie
             {
@@ -239,13 +312,14 @@ namespace MovieBuddy
             }).ToList();
         }
 
-        public List<TReview> GetReviews(int movieId) => CacheRepo.Reviews.GetOrCreate(movieId.ToString(), () => tmdbClient.GetMovieReviewsAsync(movieId).Result.Results);
+        public List<TReview> GetReviews(int movieId) => CacheRepo.Reviews.GetOrCreate(movieId.ToString(), () => tClient.GetMovieReviewsAsync(movieId).Result.Results);
 
         public List<MovieRole> GetMovieCredits(int personId, int page)
         {
             if (page == 1)
             {
-                movieCredits = tmdbClient.GetPersonMovieCreditsAsync(personId).Result;
+                movieCredits = tClient.GetPersonMovieCreditsAsync(personId).Result;
+                movieCredits.Cast = movieCredits.Cast.Where(z=> z.ReleaseDate.HasValue).OrderByDescending(x => x.ReleaseDate).ToList();
                 personMoviesTotal = movieCredits.Cast.Count;
             }
             if (page > personMoviesTotal / 15 + 1) return null;
@@ -255,10 +329,9 @@ namespace MovieBuddy
         public Dictionary<string, string> GetFullOverview(int movieId)
         {
             return CacheRepo.Summary.GetOrCreate(movieId.ToString(), () =>
-            //return new Cache3<Dictionary<string, string>>("MovieSummaryCache").GetOrCreate(movieId.ToString(), () =>
             {
                 Dictionary<string, string> summaryMap = new Dictionary<string, string>();
-                var movie = tmdbClient.GetMovieAsync(movieId).Result;
+                var movie = tClient.GetMovieAsync(movieId).Result;
                 summaryMap.Add("Overview", movie.Overview);
                 if (movie.ReleaseDate.HasValue)
                     summaryMap.Add("Year", movie.ReleaseDate.Value.Year.ToString());

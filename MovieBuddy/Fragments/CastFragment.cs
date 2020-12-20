@@ -28,6 +28,7 @@ namespace MovieBuddy
             b.PutString("imageUrl", !string.IsNullOrWhiteSpace(backdrop) ? backdrop : cast.ProfilePath);
             intent.PutExtras(b);
             StartActivity(intent);
+            Activity.OverridePendingTransition(Resource.Animation.@Side_in_right, Resource.Animation.@Side_out_left);
         }
 
         protected override void SetupOnScroll()

@@ -1,5 +1,6 @@
 ﻿using Android.App;
 using Android.Content;
+using Android.Gms.Ads;
 using Android.OS;
 using Android.Support.Design.Widget;
 using Android.Support.V4.View;
@@ -13,13 +14,17 @@ namespace MovieBuddy
     {
         public CastInfoActivity()
         {
-            statusBar = new TransparentStatusBarSetter();
+            //statusBar = new TransparentStatusBarSetter();
         }
 
         protected override void OnCreate(Bundle bundle)
         {
             InitView(Resource.Layout.MovieInfoView, bundle);
             //statusBar.SetTransparent(this);
+
+            var mAdView = FindViewById<AdView>(Resource.Id.adView);
+            var adRequest = new AdRequest.Builder().Build();
+            mAdView.LoadAd(adRequest);
 
             string castName = Intent.GetStringExtra("castName");
             int castId = Intent.GetIntExtra("castId", 0);
