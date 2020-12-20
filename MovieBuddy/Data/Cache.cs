@@ -13,6 +13,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
+using TMDbLib.Objects.People;
 using TMDbLib.Objects.Reviews;
 using TCredits = TMDbLib.Objects.Movies.Credits;
 using TSMovie = TMDbLib.Objects.Search.SearchMovie;
@@ -26,12 +27,15 @@ namespace MovieBuddy.Data
         static Lazy<Cache<TCredits>> casts = new Lazy<Cache<TCredits>>(() => new Cache<TCredits>("MovieCastsCache"));
         static Lazy<Cache<List<ReviewBase>>> reviews = new Lazy<Cache<List<ReviewBase>>>(() => new Cache<List<ReviewBase>>("MovieReviewsCache"));
         static Lazy<Cache<List<TSMovie>>> similar = new Lazy<Cache<List<TSMovie>>>(() => new Cache<List<TSMovie>>("MovieSimilarCache"));
+        static Lazy<Cache<MovieCredits>> credits = new Lazy<Cache<MovieCredits>>(() => new Cache<MovieCredits>("PersonMovies"));
 
         public static Cache<Dictionary<string, string>> Summary => summary.Value;
         public static Cache<List<string>> Videos => videos.Value;
         public static Cache<TCredits> Casts => casts.Value;
         public static Cache<List<ReviewBase>> Reviews => reviews.Value;
         public static Cache<List<TSMovie>> Similar => similar.Value;
+
+        public static Cache<MovieCredits> Credits => credits.Value;
     }
 
     public class Cache<T>
@@ -58,22 +62,6 @@ namespace MovieBuddy.Data
         }
 
         public T GetOrCreate(string key, Func<T> createItem)
-        {
-            if (!_cache.TryGetValue(key, out CacheItem<T> cacheEntry) || DateTime.Now.Subtract(cacheEntry.TimeAdded) > TimeSpan.FromHours(12))
-            {
-                cacheEntry = new CacheItem<T>
-                {
-                    Data = createItem(),
-                    TimeAdded = DateTime.Now
-                };
-                _cache.Remove(key);
-                _cache.Add(key, cacheEntry);
-                LocalCache.Instance.Set(_cacheName, JsonConvert.SerializeObject(_cache));
-            }
-            return cacheEntry.Data;
-        }
-
-        public T GetOrCreate1(string key, Func<T> createItem)
         {
             if (!_cache.TryGetValue(key, out CacheItem<T> cacheEntry) || DateTime.Now.Subtract(cacheEntry.TimeAdded) > TimeSpan.FromHours(12))
             {

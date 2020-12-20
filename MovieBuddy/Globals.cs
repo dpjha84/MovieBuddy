@@ -158,7 +158,7 @@ namespace MovieBuddy
         }
 
         static string selectedLanguage = null;
-        public static string SelectedLanguage
+        public static string Language
         {
             get
             {

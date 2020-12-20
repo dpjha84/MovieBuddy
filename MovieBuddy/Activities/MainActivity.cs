@@ -179,7 +179,7 @@ namespace MovieBuddy
             {
                 RadioButton rb = new RadioButton(this);
                 rb.SetPadding(0, 20, 0, 20);
-                if (lang.Key == Globals.SelectedLanguage)
+                if (lang.Key == Globals.Language)
                     rb.Checked = true;
                 rb.Click += Rb_Click;
                 rb.SetText(lang.Key, TextView.BufferType.Normal);
@@ -191,7 +191,7 @@ namespace MovieBuddy
         private void Rb_Click(object sender, EventArgs e)
         {
             RadioButton rb = (RadioButton)sender;
-            Globals.SelectedLanguage = rb.Text;
+            Globals.Language = rb.Text;
             var prevSelectedTab = tabs.SelectedTabPosition;
             SetupTabbedView(toolbar);
             tabs.GetTabAt(prevSelectedTab).Select();

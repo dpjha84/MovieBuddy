@@ -15,6 +15,7 @@ using TReview = TMDbLib.Objects.Reviews.ReviewBase;
 using TSMovie = TMDbLib.Objects.Search.SearchMovie;
 using TFMovie = TMDbLib.Objects.Movies.Movie;
 using System.Threading.Tasks;
+using System.Collections.Concurrent;
 
 namespace MovieBuddy
 {
@@ -104,7 +105,7 @@ namespace MovieBuddy
                     GetUpcoming(1);
                     GetPopular(1);
                     GetTopRated(1);
-                    var list = nowPlayingRes.Concat(upcomingRes).Concat(popularRes).Concat(topRatedRes);
+                    var list = nowPlayingRes[Globals.Language].Concat(upcomingRes[Globals.Language]).Concat(popularRes).Concat(topRatedRes);
                     foreach (var item in list)
                     {
                         GetFullOverview(item.Id);
@@ -143,16 +144,16 @@ namespace MovieBuddy
 
             if (page == 1)
             {
-                if (upcomingRes == null)
+                if (!upcomingRes.ContainsKey(Globals.Language))
                 {
-                    if (Globals.SelectedLanguage == "All") return tClient.GetMovieUpcomingListAsync(null, page).Result.Results;
+                    if (Globals.Language == "All") return tClient.GetMovieUpcomingListAsync(null, page).Result.Results;
                     var result = tClient.GetMoviesByUrl(upcomingBaseUrl, page);
                     upcomingTotalPage = result.TotalPages;
-                    upcomingRes = result.Results.Where(filterUpcoming).ToList();
+                    upcomingRes.AddOrUpdate(Globals.Language, result.Results.Where(filterUpcoming).ToList(), (k, v) => v);
                 }
-                return upcomingRes;
+                return upcomingRes[Globals.Language];
             }
-            if (Globals.SelectedLanguage == "All") return tClient.GetMovieUpcomingListAsync(null, page).Result.Results;
+            if (Globals.Language == "All") return tClient.GetMovieUpcomingListAsync(null, page).Result.Results;
             var result1 = tClient.GetMoviesByUrl(upcomingBaseUrl, page);
             upcomingTotalPage = result1.TotalPages;
             return result1.Results.Where(filterUpcoming).ToList();
@@ -179,24 +180,24 @@ namespace MovieBuddy
 
             if (page == 1)
             {
-                if (nowPlayingRes == null)
+                if (!nowPlayingRes.ContainsKey(Globals.Language))
                 {
-                    if (Globals.SelectedLanguage == "All") return tClient.GetMovieNowPlayingListAsync(null, page).Result.Results;
+                    if (Globals.Language == "All") return tClient.GetMovieNowPlayingListAsync(null, page).Result.Results;
                     var result = tClient.GetMoviesByUrl(nowPlayingBaseUrl, page);
                     nowPlayingTotalPage = result.TotalPages;
-                    nowPlayingRes = result.Results.Where(filterNowPlaying).ToList();
+                    nowPlayingRes.AddOrUpdate(Globals.Language, result.Results.Where(filterNowPlaying).ToList(), (k, v) => v);
                 }
-                return nowPlayingRes;
+                return nowPlayingRes[Globals.Language];
             }
-            if (Globals.SelectedLanguage == "All") return tClient.GetMovieNowPlayingListAsync(null, page).Result.Results;
+            if (Globals.Language == "All") return tClient.GetMovieNowPlayingListAsync(null, page).Result.Results;
             var result1 = tClient.GetMoviesByUrl(nowPlayingBaseUrl, page);
             nowPlayingTotalPage = result1.TotalPages;
             return result1.Results.Where(filterNowPlaying).ToList();
         }
         List<TSMovie> popularRes;
         List<TSMovie> topRatedRes;
-        List<TSMovie> upcomingRes;
-        List<TSMovie> nowPlayingRes;
+        readonly ConcurrentDictionary<string, List<TSMovie>> upcomingRes = new ConcurrentDictionary<string, List<TSMovie>>();
+        readonly ConcurrentDictionary<string, List<TSMovie>> nowPlayingRes = new ConcurrentDictionary<string, List<TSMovie>>();
 
         public List<TSMovie> GetPopular(int page)
         {
@@ -285,7 +286,7 @@ namespace MovieBuddy
             return Credits.Cast.Skip((page - 1) * 15).Take(15).ToList();
         }
 
-        public List<TSMovie> GetSimilar(int movieId, int page) => CacheRepo.Similar.GetOrCreate(movieId.ToString(), () => tClient.GetMovieSimilarAsync(movieId, page).Result.Results);
+        public List<TSMovie> GetSimilar(int movieId, int page) => CacheRepo.Similar.GetOrCreate($"{movieId}-{page}", () => tClient.GetMovieSimilarAsync(movieId, page).Result.Results);
 
         CacheDictionary<int, TFMovie> movieCache = new CacheDictionary<int, TFMovie>(100, new LruRemovalStrategy<int>());
         public List<TSMovie> GetMovies(List<int> movieIds)
@@ -318,7 +319,7 @@ namespace MovieBuddy
         {
             if (page == 1)
             {
-                movieCredits = tClient.GetPersonMovieCreditsAsync(personId).Result;
+                movieCredits = CacheRepo.Credits.GetOrCreate(personId.ToString(), () => tClient.GetPersonMovieCreditsAsync(personId).Result);
                 movieCredits.Cast = movieCredits.Cast.Where(z=> z.ReleaseDate.HasValue).OrderByDescending(x => x.ReleaseDate).ToList();
                 personMoviesTotal = movieCredits.Cast.Count;
             }
