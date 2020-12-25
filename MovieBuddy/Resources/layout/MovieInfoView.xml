@@ -52,7 +52,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     android:layout_gravity="top"
-                    android:layout_marginBottom="32dp"
+                    android:layout_marginBottom="48dp"
                     app:layout_collapseMode="pin"
                     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
@@ -62,7 +62,7 @@
                     android:layout_height="wrap_content"
                     app:tabMode="scrollable"
                     android:layout_gravity="bottom"
-                    app:tabIndicatorColor="@color/accent"
+                    app:tabIndicatorColor="@color/primaryTextColor"
                     app:tabSelectedTextColor="@color/accent"
                     app:tabTextColor="@color/accent"
                     app:tabIndicatorHeight="3dp"/>
