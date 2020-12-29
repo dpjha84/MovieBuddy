@@ -22,9 +22,16 @@ namespace MovieBuddy
         public TClient()
         {
             tmdbClient = new TMDbClient(tmdbApiKey);
+            
         }
 
         public string Key { get { return tmdbApiKey; } }
+
+        public List<SearchMovie> GetByImdbId(string imdbId)
+        {
+            var data = tmdbClient.FindAsync(TMDbLib.Objects.Find.FindExternalSource.Imdb, imdbId).Result;
+            return data.MovieResults;
+        }
 
         public Task<SearchContainerWithDates<SearchMovie>> GetMovieNowPlayingListAsync(string language = null, int page = 0, string region = null, CancellationToken cancellationToken = default)
         {

@@ -12,7 +12,7 @@ using static Android.Widget.AdapterView;
 namespace MovieBuddy
 {
     [Activity(Label = "Explore Movies")]
-    public class ExploreActivity : ActivityBase
+    public class ExploreActivity : StaticThemeActivity
     {
         ExploreMovieInfo exploreInfo;
         bool loaded1 = false, loaded2 = false;

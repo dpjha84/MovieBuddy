@@ -240,9 +240,6 @@
     <AndroidResource Include="Resources\layout\nav_header.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\layout\PhotoCardView.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\layout\PopularPeople.xml" />
   </ItemGroup>
   <ItemGroup>

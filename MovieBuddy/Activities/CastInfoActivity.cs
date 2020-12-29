@@ -4,7 +4,11 @@ using Android.Gms.Ads;
 using Android.OS;
 using Android.Support.Design.Widget;
 using Android.Support.V4.View;
+using Android.Util;
+using Android.Views;
 using Android.Widget;
+using System;
+using System.Collections.Generic;
 
 namespace MovieBuddy
 {
@@ -12,15 +16,11 @@ namespace MovieBuddy
     [Activity(Label = "CastInfoActivity")]
     public class CastInfoActivity : ActivityBase
     {
-        public CastInfoActivity()
-        {
-            //statusBar = new TransparentStatusBarSetter();
-        }
-
         protected override void OnCreate(Bundle bundle)
         {
+            PreCreate();
+            ImageToScreenRatio = 0.5F;
             InitView(Resource.Layout.MovieInfoView, bundle);
-            //statusBar.SetTransparent(this);
 
             var mAdView = FindViewById<AdView>(Resource.Id.adView);
             var adRequest = new AdRequest.Builder().Build();

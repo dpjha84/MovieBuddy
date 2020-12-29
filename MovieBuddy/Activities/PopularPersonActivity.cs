@@ -7,7 +7,7 @@ using Android.Views;
 namespace MovieBuddy
 {
     [Activity(Label = "Popular People")]
-    public class PopularPersonActivity : ActivityBase
+    public class PopularPersonActivity : StaticThemeActivity
     {
         public PopularPersonActivity()
         {

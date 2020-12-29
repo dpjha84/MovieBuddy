@@ -7,7 +7,7 @@ using Android.Views;
 namespace MovieBuddy
 {
     [Activity(Label = "Favourite Movies")]
-    public class StarredMoviesActivity : ActivityBase
+    public class StarredMoviesActivity : StaticThemeActivity
     {
         public StarredMoviesActivity()
         {
@@ -27,7 +27,7 @@ namespace MovieBuddy
     }
 
     [Activity(Label = "Already Watched Movies")]
-    public class AlreadyWatchedMoviesActivity : ActivityBase
+    public class AlreadyWatchedMoviesActivity : StaticThemeActivity
     {
         public AlreadyWatchedMoviesActivity()
         {
@@ -47,7 +47,7 @@ namespace MovieBuddy
     }
 
     [Activity(Label = "To Watch Movies")]
-    public class ToWatchMoviesActivity : ActivityBase
+    public class ToWatchMoviesActivity : StaticThemeActivity
     {
         public ToWatchMoviesActivity()
         {

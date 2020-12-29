@@ -21,12 +21,12 @@ namespace MovieBuddy
         {
             try
             {
+                PreCreate();
                 InitView(Resource.Layout.MovieInfoView, bundle);
-                //statusBar.SetTransparent(this);
 
                 var mAdView = FindViewById<AdView>(Resource.Id.adView);
                 var adRequest = new AdRequest.Builder().Build();
-                mAdView.LoadAd(adRequest);
+                mAdView.LoadAd(adRequest);                
 
                 string movieName = Intent.GetStringExtra("movieName");
                 string movieLang = Intent.GetStringExtra("movieLanguage");
@@ -48,12 +48,14 @@ namespace MovieBuddy
                 Title = movieName;
 
                 var fab = FindViewById<Refractored.Fab.FloatingActionButton>(Resource.Id.fab);
+                fab.ColorNormal = ColorNormal.Data;
+                fab.ColorPressed = ColorDark.Data;
+                fab.ColorRipple = ColorAccent.Data;
                 fab.Visibility = ViewStates.Visible;
                 fab.Click += (sender, args) =>
                 {
-                    //Toast.MakeText(this, "FAB Clicked!", ToastLength.Short).Show();
                     ShowOptionsDialog();
-                };
+                };                
 
                 var image = FindViewById<ImageView>(Resource.Id.backdrop);
                 Helper.SetImage(this, Intent.GetStringExtra("imageUrl"), image, Resource.Drawable.noimage);

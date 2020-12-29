@@ -12,13 +12,20 @@ using static Android.Support.V7.Widget.SearchView;
 
 namespace MovieBuddy
 {
+    public class StaticThemeActivity : ActivityBase
+    {
+        protected override void PreCreate()
+        {
+        }
+    }
+
     [Activity(Label = "SearchActivity")]
-    public class SearchActivity : ActivityBase
+    public class SearchActivity : StaticThemeActivity
     {
         public SearchActivity()
         {
             adRenderer = new AdRenderer();
-        }
+        }        
 
         protected override void OnCreate(Bundle bundle)
         {

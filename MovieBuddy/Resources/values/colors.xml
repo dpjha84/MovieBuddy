@@ -21,4 +21,30 @@
 	<color name="ripple">#5472d3</color>
 	<color name="accent">#0d47a1</color>
 	<color name="accent_pressed">#002171</color>
+
+  <color name="primaryColor2">#b71c1c</color>
+  <color name="primaryLightColor2">#f05545</color>
+  <color name="primaryDarkColor2">#7f0000</color>
+
+  <color name="lightGreen">#33691e</color>
+  <color name="lightGreenLight">#629749</color>
+  <color name="lightGreenDark">#003d00</color>
+
+  <color name="red">#b71c1c</color>
+  <color name="redDark">#7f0000</color>
+
+  <color name="pink">#880e4f</color>
+  <color name="pinkDark">#560027</color>
+
+  <color name="purple">#4a148c</color>
+  <color name="purpleDark">#12005e</color>
+
+  <color name="darkPurple">#311b92</color>
+  <color name="darkPurpleDark">#000063</color>
+
+  <color name="indigo">#1a237e</color>
+  <color name="indigoDark">#000051</color>
+  
+  
+  
 </resources>

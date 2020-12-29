@@ -9,6 +9,62 @@
     <item name="windowActionBar">false</item>
     <item name="windowNoTitle">true</item>
   </style>
+
+  <style name="LightGreen" parent="AppTheme">
+    <!-- Customize your theme here. -->
+    <item name="colorPrimary">@color/lightGreen</item>
+    <item name="colorPrimaryDark">@color/lightGreenDark</item>
+    <item name="colorAccent">@color/lightGreenLight</item>
+  </style>
+
+  <style name="Red" parent="AppTheme">
+    <item name="colorPrimary">@color/red</item>
+    <item name="colorPrimaryDark">@color/redDark</item>
+    <item name="colorAccent">#f05545</item>
+  </style>
+
+  <style name="Pink" parent="AppTheme">
+    <item name="colorPrimary">@color/pink</item>
+    <item name="colorPrimaryDark">@color/pinkDark</item>
+    <item name="colorAccent">#bc477b</item>
+  </style>
+
+  <style name="DarkOrange" parent="AppTheme">
+    <item name="colorPrimary">#bf360c</item>
+    <item name="colorPrimaryDark">#870000</item>
+    <item name="colorAccent">#f9683a</item>
+  </style>
+
+  <style name="Purple" parent="AppTheme">
+    <item name="colorPrimary">#4a148c</item>
+    <item name="colorPrimaryDark">#12005e</item>
+    <item name="colorAccent">#7c43bd</item>
+  </style>
+
+  <style name="Lime" parent="AppTheme">
+    <item name="colorPrimary">#827717</item>
+    <item name="colorPrimaryDark">#524c00</item>
+    <item name="colorAccent">#b4a647</item>
+  </style>
+
+  <style name="Amber" parent="AppTheme">
+    <item name="colorPrimary">#ff6f00</item>
+    <item name="colorPrimaryDark">#c43e00</item>
+    <item name="colorAccent">#ffa040</item>
+  </style>
+
+  <style name="Brown" parent="AppTheme">
+    <item name="colorPrimary">#3e2723</item>
+    <item name="colorPrimaryDark">#1b0000</item>
+    <item name="colorAccent">#6a4f4b</item>
+  </style>
+
+  <style name="BlueGrey" parent="AppTheme">
+    <item name="colorPrimary">#263238</item>
+    <item name="colorPrimaryDark">#000a12</item>
+    <item name="colorAccent">#4f5b62</item>
+  </style>
+  
   <style name="Theme.Splash" parent="Theme.AppCompat.Light.DarkActionBar">
     <item name="android:windowBackground">@drawable/splash</item>
     <item name="android:windowNoTitle">true</item>
