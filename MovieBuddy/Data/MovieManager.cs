@@ -16,6 +16,7 @@ using TSMovie = TMDbLib.Objects.Search.SearchMovie;
 using TFMovie = TMDbLib.Objects.Movies.Movie;
 using System.Threading.Tasks;
 using System.Collections.Concurrent;
+using IMDbApiLib.Models;
 
 namespace MovieBuddy
 {
@@ -25,6 +26,7 @@ namespace MovieBuddy
         public static readonly Dictionary<string, int> GenreTextToIdMap = new Dictionary<string, int>();
         readonly Dictionary<string, string> languageMap = new Dictionary<string, string>();
         readonly TClient tClient;
+        readonly ImdbClient imdbClient;
         //readonly TMDbClient tmdbClient;
         readonly YouTubeService youTubeClient;
         string tmdbApiKey;
@@ -58,6 +60,7 @@ namespace MovieBuddy
         {
             //tmdbClient = new TMDbClient(tmdbApiKey);
             tClient = new TClient();
+            imdbClient = new ImdbClient();
             tmdbApiKey = tClient.Key;
             youTubeClient = new YouTubeService(new BaseClientService.Initializer()
             {
@@ -120,6 +123,24 @@ namespace MovieBuddy
 
                 }                
             });
+        }
+
+        List<Top250DataDetail> top250Movies = null;
+        public List<TSMovie> GetImdbTop250(int page)
+        {
+            //var t = imdbClient.GetTitle();
+            if(top250Movies == null)
+                top250Movies = imdbClient.GetTop250();
+            //var result = new List<TSMovie>();
+            return top250Movies.Skip((page - 1) * 15).Take(15).Select(m => CacheRepo.MovieByImdbId.GetOrCreate(m.Id, () => tClient.GetByImdbId(m.Id)[0])).ToList();
+            //{
+            //    CacheRepo.MovieByImdbId.GetOrCreate(movie.Id, () => tClient.GetByImdbId(movie.Id)[0]);
+            //    if (!movieCache2.ContainsKey(movie.Id))
+            //        movieCache2.Add(movie.Id, tClient.GetByImdbId(movie.Id)[0]);
+            //    result.Add(movieCache2[movie.Id]);
+            //}
+            //return result;
+            //return top250Movies.Skip((page - 1) * 15).Take(15).Select(m => tClient.GetByImdbId(m.Id)[0]).ToList();
         }
 
         public List<TSMovie> SearchMovie(string query, int page) => string.IsNullOrWhiteSpace(query) ? null : tClient.SearchMovieAsync(query, page).Result.Results;
@@ -289,6 +310,7 @@ namespace MovieBuddy
         public List<TSMovie> GetSimilar(int movieId, int page) => CacheRepo.Similar.GetOrCreate($"{movieId}-{page}", () => tClient.GetMovieSimilarAsync(movieId, page).Result.Results);
 
         CacheDictionary<int, TFMovie> movieCache = new CacheDictionary<int, TFMovie>(100, new LruRemovalStrategy<int>());
+        CacheDictionary<string, TSMovie> movieCache2 = new CacheDictionary<string, TSMovie>(250, new LruRemovalStrategy<string>());
         public List<TSMovie> GetMovies(List<int> movieIds)
         {
             //TODO - Optimize

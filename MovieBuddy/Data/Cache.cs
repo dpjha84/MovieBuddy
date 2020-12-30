@@ -27,6 +27,7 @@ namespace MovieBuddy.Data
         static Lazy<Cache<TCredits>> casts = new Lazy<Cache<TCredits>>(() => new Cache<TCredits>("MovieCastsCache"));
         static Lazy<Cache<List<ReviewBase>>> reviews = new Lazy<Cache<List<ReviewBase>>>(() => new Cache<List<ReviewBase>>("MovieReviewsCache"));
         static Lazy<Cache<List<TSMovie>>> similar = new Lazy<Cache<List<TSMovie>>>(() => new Cache<List<TSMovie>>("MovieSimilarCache"));
+        static Lazy<Cache<TSMovie>> movieByImdbId = new Lazy<Cache<TSMovie>>(() => new Cache<TSMovie>("MovieByImdbId"));
         static Lazy<Cache<MovieCredits>> credits = new Lazy<Cache<MovieCredits>>(() => new Cache<MovieCredits>("PersonMovies"));
 
         public static Cache<Dictionary<string, string>> Summary => summary.Value;
@@ -36,6 +37,8 @@ namespace MovieBuddy.Data
         public static Cache<List<TSMovie>> Similar => similar.Value;
 
         public static Cache<MovieCredits> Credits => credits.Value;
+
+        public static Cache<TSMovie> MovieByImdbId => movieByImdbId.Value;
     }
 
     public class Cache<T>

@@ -6,7 +6,7 @@ namespace MovieBuddy.Data
     public class PagedMovie
     {
         public static PagedMovie Instance = new PagedMovie();
-        private int nowPlayingPage = 0, upcomingPage = 0, popularPage = 0, topRatedPage = 0;
+        private int nowPlayingPage = 0, upcomingPage = 0, popularPage = 0, topRatedPage = 0, imdbTop250Page = 0;
 
         public void Reset(MovieListType type)
         {
@@ -27,6 +27,9 @@ namespace MovieBuddy.Data
                 case MovieListType.TopRated:
                     topRatedPage = 0;
                     break;
+                case MovieListType.ImdbTop250:
+                    imdbTop250Page = 0;
+                    break;
                 default:
                     throw new ArgumentException("Invalid Movie List Type");
             }
@@ -45,6 +48,8 @@ namespace MovieBuddy.Data
                 MovieListType.Popular => MovieManager.Instance.GetPopular(++popularPage),
 
                 MovieListType.TopRated => MovieManager.Instance.GetTopRated(++topRatedPage),
+
+                MovieListType.ImdbTop250 => MovieManager.Instance.GetImdbTop250(++imdbTop250Page),
 
                 _ => throw new ArgumentException("Invalid Movie List Type"),
             };

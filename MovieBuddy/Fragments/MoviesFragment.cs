@@ -122,6 +122,7 @@ namespace MovieBuddy
         Upcoming,
         //Trending,
         Popular,
-        TopRated
+        TopRated,
+        ImdbTop250
     }
 }
