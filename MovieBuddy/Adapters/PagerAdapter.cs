@@ -53,9 +53,9 @@ namespace MovieBuddy
                 case 2:
                     return MoviesFragment.NewInstance(MovieListType.Popular);
                 case 3:
-                    return MoviesFragment.NewInstance(MovieListType.TopRated);
+                    return TmdbTopRatedMoviesFragment.NewInstance();
                 case 4:
-                    return MoviesFragment.NewInstance(MovieListType.ImdbTop250);
+                    return ImdbMoviesFragment.NewInstance();
                 default:
                     return null;
             }

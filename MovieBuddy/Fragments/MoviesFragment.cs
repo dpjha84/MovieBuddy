@@ -10,6 +10,40 @@ using TSearchMovie = TMDbLib.Objects.Search.SearchMovie;
 
 namespace MovieBuddy
 {
+    public class ImdbMoviesFragment : MoviesFragment
+    {
+        public static MoviesFragment NewInstance()
+        {
+            var frag1 = new ImdbMoviesFragment();
+            Bundle bundle = new Bundle();
+            bundle.PutInt("movieListType", (int)MovieListType.ImdbTop250);
+            frag1.Arguments = bundle;
+            return frag1;
+        }
+
+        protected override ClickableWithPagingAdapter<TSearchMovie> GetAdapter()
+        {
+            return new ImdbMoviesAdapter();
+        }
+    }
+
+    public class TmdbTopRatedMoviesFragment : MoviesFragment
+    {
+        public static MoviesFragment NewInstance()
+        {
+            var frag1 = new TmdbTopRatedMoviesFragment();
+            Bundle bundle = new Bundle();
+            bundle.PutInt("movieListType", (int)MovieListType.TopRated);
+            frag1.Arguments = bundle;
+            return frag1;
+        }
+
+        protected override ClickableWithPagingAdapter<TSearchMovie> GetAdapter()
+        {
+            return new TmdbTopRatedMoviesAdapter();
+        }
+    }
+
     public class MoviesFragment : RecyclerViewFragment
     {
 
@@ -69,8 +103,6 @@ namespace MovieBuddy
             base.OnCreate(savedInstanceState);
             HasOptionsMenu = true;
         }
-
-
 
         protected override void OnItemClick(object sender, int position)
         {

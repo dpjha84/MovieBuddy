@@ -27,6 +27,7 @@ namespace MovieBuddy
             //int prev = 0;
             foreach (var item in content)
             {
+                if (item.Key == "TmdbRating") continue;
                 var ss = new SpannableString(item.Key);
                 ss.SetSpan(new StyleSpan(TypefaceStyle.Bold), 0, item.Key.Length, SpanTypes.ExclusiveExclusive);
                 str.Append(ss);
@@ -44,6 +45,9 @@ namespace MovieBuddy
             //    prev += content[i].Length;
             //    prev++;
             //}
+            vh.TmdbRating.Text = content.TryGetValue("TmdbRating", out string rating) ? rating : "--";
+            vh.ImdbRating.Text = content.TryGetValue("ImdbRating", out rating) ? rating : "--";
+            vh.RottenTomatoesRating.Text = content.TryGetValue("RottenTomatoesRating", out rating) ? rating : "--";
             vh.MovieSummary.TextFormatted = str;
         }
 
@@ -68,9 +72,16 @@ namespace MovieBuddy
         {
             public TextView MovieSummary { get; private set; }
 
+            public TextView TmdbRating { get; private set; }
+            public TextView ImdbRating { get; private set; }
+            public TextView RottenTomatoesRating { get; private set; }
+
             public MovieSummaryViewHolder(View itemView, Action<int> listener) : base(itemView)
             {
                 MovieSummary = itemView.FindViewById<TextView>(Resource.Id.movieSummary);
+                TmdbRating = itemView.FindViewById<TextView>(Resource.Id.tmdbRating);
+                ImdbRating = itemView.FindViewById<TextView>(Resource.Id.imdbRating);
+                RottenTomatoesRating = itemView.FindViewById<TextView>(Resource.Id.rottenTomatoesRating);
                 itemView.Click += (sender, e) => listener(base.LayoutPosition);
             }
         }

@@ -112,9 +112,15 @@ namespace MovieBuddy
             MovieViewHolder vh = holder as MovieViewHolder;
             //ImageViewsToClean.Add(vh.Image);
             var movie = movies[position];
-            Helper.SetImage(vh.Image.Context, movie.PosterPath, vh.Image, Resource.Drawable.noimage);
+            //Helper.SetImage(vh.Image.Context, movie.PosterPath, vh.Image, Resource.Drawable.noimage);
+            SetImage(vh, movie);
             vh.Name.Text = movie.Title;
             vh.Genre.Text = GetExtraText(movie);
+        }
+
+        protected virtual void SetImage(MovieViewHolder vh, TSearchMovie movie)
+        {
+            Helper.SetImage(vh.Image.Context, movie.PosterPath, vh.Image, Resource.Drawable.noimage);
         }
 
         protected virtual string GetExtraText(TSearchMovie movie) => movie.GenreIds?.Count > 0 ? MovieManager.Instance.GetGenreText(movie.GenreIds[0]) : "";
@@ -129,7 +135,7 @@ namespace MovieBuddy
             get { return movies.Count; }
         }
 
-        class MovieViewHolder : RecyclerView.ViewHolder
+        protected class MovieViewHolder : RecyclerView.ViewHolder
         {
             public ImageView Image { get; private set; }
             public TextView Name { get; private set; }
@@ -206,5 +212,15 @@ namespace MovieBuddy
     public class CastMoviesAdapter : MoviesAdapter
     {
         protected override string GetExtraText(TSearchMovie movie) => movie.ReleaseDate.HasValue ? movie.ReleaseDate.Value.Year.ToString() : "";
+    }
+
+    public class ImdbMoviesAdapter : MoviesAdapter
+    {
+        protected override string GetExtraText(TSearchMovie movie) => movie.OriginalTitle;
+    }
+
+    public class TmdbTopRatedMoviesAdapter : MoviesAdapter
+    {
+        protected override string GetExtraText(TSearchMovie movie) => $"{movie.VoteAverage*10}%";
     }
 }

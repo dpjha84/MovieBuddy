@@ -8,6 +8,7 @@ using CacheManager.Core;
 using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -28,6 +29,7 @@ namespace MovieBuddy.Data
         static Lazy<Cache<List<ReviewBase>>> reviews = new Lazy<Cache<List<ReviewBase>>>(() => new Cache<List<ReviewBase>>("MovieReviewsCache"));
         static Lazy<Cache<List<TSMovie>>> similar = new Lazy<Cache<List<TSMovie>>>(() => new Cache<List<TSMovie>>("MovieSimilarCache"));
         static Lazy<Cache<TSMovie>> movieByImdbId = new Lazy<Cache<TSMovie>>(() => new Cache<TSMovie>("MovieByImdbId"));
+        static Lazy<Cache<TmdbStatic>> tmdbStaticByImdbId = new Lazy<Cache<TmdbStatic>>(() => new Cache<TmdbStatic>("TmdbStaticByImdbId", true));
         static Lazy<Cache<MovieCredits>> credits = new Lazy<Cache<MovieCredits>>(() => new Cache<MovieCredits>("PersonMovies"));
 
         public static Cache<Dictionary<string, string>> Summary => summary.Value;
@@ -39,42 +41,53 @@ namespace MovieBuddy.Data
         public static Cache<MovieCredits> Credits => credits.Value;
 
         public static Cache<TSMovie> MovieByImdbId => movieByImdbId.Value;
+        public static Cache<TmdbStatic> TmdbStaticByImdbId => tmdbStaticByImdbId.Value;
     }
 
+    public class TmdbStatic
+    {
+        public int Id { get; set; }
+
+        public string Poster { get; set; }
+
+        public string Backdrop { get; set; }
+    }
     public class Cache<T>
     {
-        private static Dictionary<string, CacheItem<T>> _cache;
+        private static ConcurrentDictionary<string, CacheItem<T>> _cache;
         private readonly string _cacheName;
-        public Cache(string cacheName)
+        private readonly bool _noExpiry;
+        public Cache(string cacheName, bool noExpiry = false)
         {
             _cacheName = cacheName;
+            _noExpiry = noExpiry;
             var cacheInDisk = LocalCache.Instance.Get(_cacheName);
             if (!string.IsNullOrWhiteSpace(cacheInDisk))
             {
                 try
                 {
-                    _cache = JsonConvert.DeserializeObject<Dictionary<string, CacheItem<T>>>(cacheInDisk);
+                    _cache = JsonConvert.DeserializeObject<ConcurrentDictionary<string, CacheItem<T>>>(cacheInDisk);
                 }
                 catch (Exception ex)
                 {
-                    _cache = new Dictionary<string, CacheItem<T>>();
+                    _cache = new ConcurrentDictionary<string, CacheItem<T>>();
                 }
             }
             else
-                _cache = new Dictionary<string, CacheItem<T>>();
+                _cache = new ConcurrentDictionary<string, CacheItem<T>>();
         }
 
         public T GetOrCreate(string key, Func<T> createItem)
         {
-            if (!_cache.TryGetValue(key, out CacheItem<T> cacheEntry) || DateTime.Now.Subtract(cacheEntry.TimeAdded) > TimeSpan.FromHours(12))
+            if (!_cache.TryGetValue(key, out CacheItem<T> cacheEntry) || (!_noExpiry && DateTime.Now.Subtract(cacheEntry.TimeAdded) > TimeSpan.FromHours(12)))
             {
                 cacheEntry = new CacheItem<T>
                 {
                     Data = createItem(),
                     TimeAdded = DateTime.Now
                 };
-                _cache.Remove(key);
-                _cache.Add(key, cacheEntry);
+                //_cache.Remove(key);
+                _cache.AddOrUpdate(key, cacheEntry, (k, v) => v);
                 LocalCache.Instance.Set(_cacheName, JsonConvert.SerializeObject(_cache));
             }
             return cacheEntry.Data;

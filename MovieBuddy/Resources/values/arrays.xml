@@ -5,7 +5,7 @@
     <item>UPCOMING</item>
     <!--<item>TRENDING</item>-->
     <item>POPULAR</item>
-    <item>TOP RATED</item>
+    <item>TMDB TOP RATED</item>
     <item>IMDB TOP 250</item>
   </string-array>
 <string-array name="movieDetails">

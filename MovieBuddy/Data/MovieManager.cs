@@ -27,6 +27,7 @@ namespace MovieBuddy
         readonly Dictionary<string, string> languageMap = new Dictionary<string, string>();
         readonly TClient tClient;
         readonly ImdbClient imdbClient;
+        readonly OClient oClient;
         //readonly TMDbClient tmdbClient;
         readonly YouTubeService youTubeClient;
         string tmdbApiKey;
@@ -58,9 +59,9 @@ namespace MovieBuddy
 
         private MovieManager()
         {
-            //tmdbClient = new TMDbClient(tmdbApiKey);
             tClient = new TClient();
             imdbClient = new ImdbClient();
+            oClient = new OClient();
             tmdbApiKey = tClient.Key;
             youTubeClient = new YouTubeService(new BaseClientService.Initializer()
             {
@@ -108,6 +109,10 @@ namespace MovieBuddy
                     GetUpcoming(1);
                     GetPopular(1);
                     GetTopRated(1);
+                    for (int i = 0; i < 17; i++)
+                    {
+                        GetImdbTop250(i + 1);
+                    }
                     var list = nowPlayingRes[Globals.Language].Concat(upcomingRes[Globals.Language]).Concat(popularRes).Concat(topRatedRes);
                     foreach (var item in list)
                     {
@@ -116,7 +121,7 @@ namespace MovieBuddy
                         GetVideos(item.Id, item.OriginalTitle, item.ReleaseDate, item.OriginalLanguage);
                         GetReviews(item.Id);
                         GetSimilar(item.Id, 1);
-                    }
+                    }                    
                 }
                 catch(Exception ex)
                 {
@@ -128,19 +133,24 @@ namespace MovieBuddy
         List<Top250DataDetail> top250Movies = null;
         public List<TSMovie> GetImdbTop250(int page)
         {
-            //var t = imdbClient.GetTitle();
             if(top250Movies == null)
                 top250Movies = imdbClient.GetTop250();
-            //var result = new List<TSMovie>();
-            return top250Movies.Skip((page - 1) * 15).Take(15).Select(m => CacheRepo.MovieByImdbId.GetOrCreate(m.Id, () => tClient.GetByImdbId(m.Id)[0])).ToList();
-            //{
-            //    CacheRepo.MovieByImdbId.GetOrCreate(movie.Id, () => tClient.GetByImdbId(movie.Id)[0]);
-            //    if (!movieCache2.ContainsKey(movie.Id))
-            //        movieCache2.Add(movie.Id, tClient.GetByImdbId(movie.Id)[0]);
-            //    result.Add(movieCache2[movie.Id]);
-            //}
-            //return result;
-            //return top250Movies.Skip((page - 1) * 15).Take(15).Select(m => tClient.GetByImdbId(m.Id)[0]).ToList();
+            return top250Movies.Skip((page - 1) * 15).Take(15).Select(m =>
+            {
+                var ms = CacheRepo.TmdbStaticByImdbId.GetOrCreate(m.Id, () =>
+                {
+                    var movie = CacheRepo.MovieByImdbId.GetOrCreate(m.Id, () => tClient.GetByImdbId(m.Id));
+                    return new TmdbStatic { Id = movie.Id, Backdrop = movie.BackdropPath, Poster = movie.PosterPath };
+                });
+                return new TSMovie
+                {
+                    Id = ms.Id,
+                    Title = m.Title,
+                    PosterPath = ms.Poster,
+                    BackdropPath = ms.Backdrop,
+                    OriginalTitle = m.IMDbRating.ToString()
+                };
+            }).ToList();
         }
 
         public List<TSMovie> SearchMovie(string query, int page) => string.IsNullOrWhiteSpace(query) ? null : tClient.SearchMovieAsync(query, page).Result.Results;
@@ -310,7 +320,6 @@ namespace MovieBuddy
         public List<TSMovie> GetSimilar(int movieId, int page) => CacheRepo.Similar.GetOrCreate($"{movieId}-{page}", () => tClient.GetMovieSimilarAsync(movieId, page).Result.Results);
 
         CacheDictionary<int, TFMovie> movieCache = new CacheDictionary<int, TFMovie>(100, new LruRemovalStrategy<int>());
-        CacheDictionary<string, TSMovie> movieCache2 = new CacheDictionary<string, TSMovie>(250, new LruRemovalStrategy<string>());
         public List<TSMovie> GetMovies(List<int> movieIds)
         {
             //TODO - Optimize
@@ -355,13 +364,36 @@ namespace MovieBuddy
             {
                 Dictionary<string, string> summaryMap = new Dictionary<string, string>();
                 var movie = tClient.GetMovieAsync(movieId).Result;
-                summaryMap.Add("Overview", movie.Overview);
+                if (!string.IsNullOrWhiteSpace(movie.Tagline))
+                    summaryMap.Add("Tagline", movie.Tagline);
+                if (!string.IsNullOrWhiteSpace(movie.Overview))
+                    summaryMap.Add("Overview", movie.Overview);                
                 if (movie.ReleaseDate.HasValue)
                     summaryMap.Add("Year", movie.ReleaseDate.Value.Year.ToString());
                 if (movie.Genres != null)
                     summaryMap.Add("Genres", string.Join(", ", movie.Genres.Select(x => GenreMap[x.Id])));
                 if (movie.ReleaseDate.HasValue)
                     summaryMap.Add("Release date", movie.ReleaseDate.Value.ToString("dd MMMM yyyy"));
+                if (movie.Runtime.HasValue)
+                    summaryMap.Add("Runtime", $"{movie.Runtime.Value}m");
+                if(movie.Budget != 0)
+                    summaryMap.Add("Budget", $"${movie.Budget}");
+                if (movie.VoteAverage != 0)
+                    summaryMap.Add("TmdbRating", $"{movie.VoteAverage*10}%");
+                if (!string.IsNullOrWhiteSpace(movie.ImdbId))
+                {
+                    var item = oClient.GetItem(movie.ImdbId);
+                    //summaryMap.Add("ImdbRating", item.ImdbRating);
+                    if (item.Ratings.Count > 0)
+                    {
+                        summaryMap.Add("ImdbRating", item.Ratings[0].Value.Replace("/10", ""));
+                    }
+                    if (item.Ratings.Count > 1)
+                    {
+                        //var val = item.Ratings[1].Value.Replace("/100", "").Replace("%", "");
+                        summaryMap.Add("RottenTomatoesRating", $"{item.Ratings[1].Value.Replace("/100", "").Replace("%", "")}%");
+                    }
+                }
                 summaryMap.Add("Language", languageMap[movie.OriginalLanguage]);
                 return summaryMap;
             });
