@@ -109,11 +109,12 @@ namespace MovieBuddy
                     GetUpcoming(1);
                     GetPopular(1);
                     GetTopRated(1);
-                    for (int i = 0; i < 17; i++)
+                    var imdbList = GetImdbTop250(1);
+                    for (int i = 1; i < 17; i++)
                     {
                         GetImdbTop250(i + 1);
                     }
-                    var list = nowPlayingRes[Globals.Language].Concat(upcomingRes[Globals.Language]).Concat(popularRes).Concat(topRatedRes);
+                    var list = nowPlayingRes[Globals.Language].Concat(upcomingRes[Globals.Language]).Concat(popularRes).Concat(topRatedRes).Concat(imdbList);
                     foreach (var item in list)
                     {
                         GetFullOverview(item.Id);
@@ -266,37 +267,39 @@ namespace MovieBuddy
             return res1.Results;
         }
 
-        public string GetTrailer(int movieId)
+        public List<string> GetTrailer(int movieId)
         {
             var videos = tClient.GetMovieVideosAsync(movieId).Result.Results;
             if (videos == null || videos.Count == 0) return null;
-            return videos.FirstOrDefault(x => !string.IsNullOrWhiteSpace(x.Key)).Key;
+            return videos.Where(x => !string.IsNullOrWhiteSpace(x.Key)).Select(x => x.Key).ToList();
         }
 
         public List<string> GetVideos(int movieId, string movieName, DateTime? releaseDate, string lang, int page = 1)
         {
             if (page > 1) return null;
-            try
-            {
-                return CacheRepo.Videos.GetOrCreate(movieId.ToString(), () =>
-                {
-                    if (videoCache.ContainsKey(movieId)) return videoCache[movieId];
-                    var year = releaseDate.HasValue ? releaseDate.Value.Year : 0;
-                    var searchListRequest = youTubeClient.Search.List("snippet");
-                    searchListRequest.Q = year != 0 ? $"{movieName} {year} Full Movie" : $"{movieName} Full Movie";
-                    searchListRequest.Type = new List<string> { "video" };
-                    if (!string.IsNullOrWhiteSpace(lang))
-                        searchListRequest.RelevanceLanguage = lang;
-                    searchListRequest.MaxResults = releaseDate.HasValue && releaseDate.Value > DateTime.Now ? 1 : 5;
-                    var searchListResponse = searchListRequest.ExecuteAsync().Result;
-                    return searchListResponse.Items.Select(x => x.Id.VideoId).ToList();
-                });
-            }
-            catch (Exception)
-            {
-                var trailer = GetTrailer(movieId);
-                return trailer != null ? new List<string> { trailer } : null;
-            }
+            var videos = GetTrailer(movieId);
+            return videos ?? null;
+            //try
+            //{
+            //    return CacheRepo.Videos.GetOrCreate(movieId.ToString(), () =>
+            //    {
+            //        if (videoCache.ContainsKey(movieId)) return videoCache[movieId];
+            //        var year = releaseDate.HasValue ? releaseDate.Value.Year : 0;
+            //        var searchListRequest = youTubeClient.Search.List("snippet");
+            //        searchListRequest.Q = year != 0 ? $"{movieName} {year} Full Movie" : $"{movieName} Full Movie";
+            //        searchListRequest.Type = new List<string> { "video" };
+            //        if (!string.IsNullOrWhiteSpace(lang))
+            //            searchListRequest.RelevanceLanguage = lang;
+            //        searchListRequest.MaxResults = releaseDate.HasValue && releaseDate.Value > DateTime.Now ? 1 : 5;
+            //        var searchListResponse = searchListRequest.ExecuteAsync().Result;
+            //        return searchListResponse.Items.Select(x => x.Id.VideoId).ToList();
+            //    });
+            //}
+            //catch (Exception)
+            //{
+            //    var videos = GetTrailer(movieId);
+            //    return videos ?? null;
+            //}
         }
 
         Dictionary<int, List<string>> videoCache = new Dictionary<int, List<string>>();
@@ -380,18 +383,21 @@ namespace MovieBuddy
                     summaryMap.Add("Budget", $"${movie.Budget}");
                 if (movie.VoteAverage != 0)
                     summaryMap.Add("TmdbRating", $"{movie.VoteAverage*10}%");
-                if (!string.IsNullOrWhiteSpace(movie.ImdbId))
+                if (!string.IsNullOrWhiteSpace(movie.ImdbId) && movie.ImdbId != "0")
                 {
                     var item = oClient.GetItem(movie.ImdbId);
-                    //summaryMap.Add("ImdbRating", item.ImdbRating);
-                    if (item.Ratings.Count > 0)
+                    if (item != null)
                     {
-                        summaryMap.Add("ImdbRating", item.Ratings[0].Value.Replace("/10", ""));
-                    }
-                    if (item.Ratings.Count > 1)
-                    {
-                        //var val = item.Ratings[1].Value.Replace("/100", "").Replace("%", "");
-                        summaryMap.Add("RottenTomatoesRating", $"{item.Ratings[1].Value.Replace("/100", "").Replace("%", "")}%");
+                        //summaryMap.Add("ImdbRating", item.ImdbRating);
+                        if (item.Ratings.Count > 0)
+                        {
+                            summaryMap.Add("ImdbRating", item.Ratings[0].Value.Replace("/10", ""));
+                        }
+                        if (item.Ratings.Count > 1)
+                        {
+                            //var val = item.Ratings[1].Value.Replace("/100", "").Replace("%", "");
+                            summaryMap.Add("RottenTomatoesRating", $"{item.Ratings[1].Value.Replace("/100", "").Replace("%", "")}%");
+                        }
                     }
                 }
                 summaryMap.Add("Language", languageMap[movie.OriginalLanguage]);

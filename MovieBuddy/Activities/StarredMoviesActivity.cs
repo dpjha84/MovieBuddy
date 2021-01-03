@@ -6,7 +6,7 @@ using Android.Views;
 
 namespace MovieBuddy
 {
-    [Activity(Label = "Favourite Movies")]
+    [Activity(Label = "Favourites")]
     public class StarredMoviesActivity : StaticThemeActivity
     {
         public StarredMoviesActivity()
@@ -19,14 +19,14 @@ namespace MovieBuddy
             InitView(Resource.Layout.PopularPeople, bundle);
             adRenderer.RenderAd(FindViewById<AdView>(Resource.Id.adView));
 
-            Title = "Favourite Movies";
+            Title = "Favourites";
             var fragmentTransaction = SupportFragmentManager.BeginTransaction();
             fragmentTransaction.Add(Resource.Id.frameLayout1, StarredMoviesFragment.NewInstance());
             fragmentTransaction.Commit();
         }
     }
 
-    [Activity(Label = "Already Watched Movies")]
+    [Activity(Label = "Watch History")]
     public class AlreadyWatchedMoviesActivity : StaticThemeActivity
     {
         public AlreadyWatchedMoviesActivity()
@@ -39,14 +39,14 @@ namespace MovieBuddy
             InitView(Resource.Layout.PopularPeople, bundle);
             adRenderer.RenderAd(FindViewById<AdView>(Resource.Id.adView));
 
-            Title = "Already Watched Movies";
+            Title = "Watch History";
             var fragmentTransaction = SupportFragmentManager.BeginTransaction();
             fragmentTransaction.Replace(Resource.Id.frameLayout1, AlreadyWatchedMoviesFragment.NewInstance());
             fragmentTransaction.Commit();
         }
     }
 
-    [Activity(Label = "To Watch Movies")]
+    [Activity(Label = "Watch List")]
     public class ToWatchMoviesActivity : StaticThemeActivity
     {
         public ToWatchMoviesActivity()
@@ -59,7 +59,7 @@ namespace MovieBuddy
             InitView(Resource.Layout.PopularPeople, bundle);
             adRenderer.RenderAd(FindViewById<AdView>(Resource.Id.adView));
 
-            Title = "To Watch Movies";
+            Title = "Watch List";
             var fragmentTransaction = SupportFragmentManager.BeginTransaction();
             fragmentTransaction.Add(Resource.Id.frameLayout1, ToWatchMoviesFragment.NewInstance());
             fragmentTransaction.Commit();

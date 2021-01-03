@@ -1,19 +1,7 @@
-﻿using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
-using CacheManager.Core;
-using Microsoft.Extensions.Caching.Memory;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
 using TMDbLib.Objects.People;
 using TMDbLib.Objects.Reviews;
 using TCredits = TMDbLib.Objects.Movies.Credits;
@@ -79,7 +67,7 @@ namespace MovieBuddy.Data
 
         public T GetOrCreate(string key, Func<T> createItem)
         {
-            if (!_cache.TryGetValue(key, out CacheItem<T> cacheEntry) || (!_noExpiry && DateTime.Now.Subtract(cacheEntry.TimeAdded) > TimeSpan.FromHours(12)))
+            if (!_cache.TryGetValue(key, out CacheItem<T> cacheEntry) || (!_noExpiry && DateTime.Now.Subtract(cacheEntry.TimeAdded) > TimeSpan.FromHours(24)))
             {
                 cacheEntry = new CacheItem<T>
                 {
@@ -87,7 +75,7 @@ namespace MovieBuddy.Data
                     TimeAdded = DateTime.Now
                 };
                 //_cache.Remove(key);
-                _cache.AddOrUpdate(key, cacheEntry, (k, v) => v);
+                _cache.AddOrUpdate(key, cacheEntry, (k, v) => cacheEntry);
                 LocalCache.Instance.Set(_cacheName, JsonConvert.SerializeObject(_cache));
             }
             return cacheEntry.Data;

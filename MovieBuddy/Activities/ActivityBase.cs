@@ -61,6 +61,8 @@ namespace MovieBuddy
             Xamarin.Essentials.Platform.Init(this, bundle);
 
             FindViewById<View>(Resource.Id.viewTransparent)?.SetBackgroundColor(Color.ParseColor("#" + Integer.ToHexString(ColorNormal.Data).Substring(2)));
+            if(ColorAccent != null)
+                FindViewById<TabLayout>(Resource.Id.tabs)?.SetSelectedTabIndicatorColor(ColorAccent.Data);
 
             //Toast.MakeText(this, $"Calls: {TClientBase.calls}", ToastLength.Long).Show();
             var appbar = FindViewById<AppBarLayout>(Resource.Id.appbar);

@@ -67,7 +67,7 @@
                     app:tabIndicatorColor="@color/primaryTextColor"
                     app:tabSelectedTextColor="@android:color/darker_gray"
                     app:tabTextColor="@color/primaryTextColor"
-                    app:tabIndicatorHeight="3dp"/>
+                    app:tabIndicatorHeight="5dp"/>
 
             </android.support.design.widget.CollapsingToolbarLayout>
 

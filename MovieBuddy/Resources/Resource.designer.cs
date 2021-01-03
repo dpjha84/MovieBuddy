@@ -497,16 +497,13 @@ namespace MovieBuddy
 			public const int movieDetails = 2130903042;
 			
 			// aapt resource value: 0x7F030003
-			public const int movie_options_array = 2130903043;
+			public const int searchDetails = 2130903043;
 			
 			// aapt resource value: 0x7F030004
-			public const int searchDetails = 2130903044;
+			public const int sections = 2130903044;
 			
 			// aapt resource value: 0x7F030005
-			public const int sections = 2130903045;
-			
-			// aapt resource value: 0x7F030006
-			public const int year_array = 2130903046;
+			public const int year_array = 2130903045;
 			
 			static Array()
 			{

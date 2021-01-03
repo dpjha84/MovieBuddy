@@ -24,7 +24,14 @@ namespace MovieBuddy.Data
 
         public Item GetItem(string id)
         {
-            return omdb.GetItemById(id);
+            try
+            {
+                return omdb.GetItemById(id);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }            
         }
     }
 }

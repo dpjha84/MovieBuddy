@@ -29,6 +29,7 @@ namespace MovieBuddy
 
         public SearchMovie GetByImdbId(string imdbId)
         {
+            base.Track();
             var data = tmdbClient.FindAsync(TMDbLib.Objects.Find.FindExternalSource.Imdb, imdbId).Result;
             return data.MovieResults[0];
         }
@@ -164,7 +165,7 @@ namespace MovieBuddy
         public static int calls = 0;
         protected void Track()
         {
-            //calls++;
+            calls++;
             //Toast.MakeText(null, $"Call count: {calls}", ToastLength.Short);
         }
     }

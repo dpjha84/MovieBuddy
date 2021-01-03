@@ -19,11 +19,11 @@
 		<item
 			android:id="@+id/watchedMovies"
 			android:icon="@drawable/watched"
-			android:title="Already Watched Movies" />
+			android:title="Watch History" />
 		<item
 			android:id="@+id/toWatchMovies"
 			android:icon="@drawable/towatch"
-			android:title="To Watch Movies" />
+			android:title="Watch List" />
 	</group>
 	
 	<group android:checkableBehavior="single" android:id="@+id/shareandFeedback">

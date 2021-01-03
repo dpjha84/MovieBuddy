@@ -32,7 +32,7 @@ namespace MovieBuddy
             {
                 if (!IsConnected()) return null;
 
-                trailerId = MovieManager.Instance.GetTrailer(MovieId);
+                trailerId = MovieManager.Instance.GetTrailer(MovieId)[0];
                 if (trailerId == null) return base.OnCreateView(inflater, container, savedInstanceState);
 
                 var rootView = inflater.Inflate(Resource.Layout.trailer, container, false);

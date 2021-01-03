@@ -13,10 +13,12 @@ namespace MovieBuddy
     public class MovieSummaryAdapter : ClickableAdapter
     {
         public Dictionary<string, string> content;
+        private bool _showRatingBar = false;
 
-        public MovieSummaryAdapter(Dictionary<string, string> content)
+        public MovieSummaryAdapter(Dictionary<string, string> content, bool showRatingBar = false)
         {
             this.content = content;
+            this._showRatingBar = showRatingBar;
         }
 
         public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
@@ -27,7 +29,7 @@ namespace MovieBuddy
             //int prev = 0;
             foreach (var item in content)
             {
-                if (item.Key == "TmdbRating") continue;
+                if (item.Key.EndsWith("Rating")) continue;
                 var ss = new SpannableString(item.Key);
                 ss.SetSpan(new StyleSpan(TypefaceStyle.Bold), 0, item.Key.Length, SpanTypes.ExclusiveExclusive);
                 str.Append(ss);
@@ -35,19 +37,13 @@ namespace MovieBuddy
                 str.Append(item.Value);
                 str.Append(new SpannableString("\n\n"));
             }
-            //for (int i = 0; i < content.Count; i++)
-            //{
-            //    if (i % 2 == 0)
-            //    {
-            //        str.SetSpan(new StyleSpan(TypefaceStyle.Bold), prev, prev + content[i].Length,
-            //            SpanTypes.ExclusiveExclusive);
-            //    }
-            //    prev += content[i].Length;
-            //    prev++;
-            //}
-            vh.TmdbRating.Text = content.TryGetValue("TmdbRating", out string rating) ? rating : "--";
-            vh.ImdbRating.Text = content.TryGetValue("ImdbRating", out rating) ? rating : "--";
-            vh.RottenTomatoesRating.Text = content.TryGetValue("RottenTomatoesRating", out rating) ? rating : "--";
+            if (_showRatingBar)
+            {
+                vh.RatingBar.Visibility = ViewStates.Visible;
+                vh.TmdbRating.Text = content.TryGetValue("TmdbRating", out string rating) ? rating : "--";
+                vh.ImdbRating.Text = content.TryGetValue("ImdbRating", out rating) ? rating : "--";
+                vh.RottenTomatoesRating.Text = content.TryGetValue("RottenTomatoesRating", out rating) ? rating : "--";
+            }
             vh.MovieSummary.TextFormatted = str;
         }
 
@@ -75,9 +71,11 @@ namespace MovieBuddy
             public TextView TmdbRating { get; private set; }
             public TextView ImdbRating { get; private set; }
             public TextView RottenTomatoesRating { get; private set; }
+            public CardView RatingBar { get; private set; }
 
             public MovieSummaryViewHolder(View itemView, Action<int> listener) : base(itemView)
             {
+                RatingBar = itemView.FindViewById<CardView>(Resource.Id.ratingBar);
                 MovieSummary = itemView.FindViewById<TextView>(Resource.Id.movieSummary);
                 TmdbRating = itemView.FindViewById<TextView>(Resource.Id.tmdbRating);
                 ImdbRating = itemView.FindViewById<TextView>(Resource.Id.imdbRating);

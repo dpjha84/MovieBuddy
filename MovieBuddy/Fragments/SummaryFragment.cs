@@ -7,6 +7,7 @@ namespace MovieBuddy
 {
     public class SummaryFragment : RecyclerViewFragment
     {
+        protected bool ShowRatingBar = false;
         public static SummaryFragment NewInstance(string name, int movieId)
         {
             var frag1 = new SummaryFragment();
@@ -21,6 +22,7 @@ namespace MovieBuddy
 
         protected virtual Dictionary<string, string> GetContent()
         {
+            ShowRatingBar = true;
             return MovieManager.Instance.GetFullOverview(MovieId);
         }
 
@@ -37,7 +39,7 @@ namespace MovieBuddy
             //    Toast.MakeText(Activity, "FAB Clicked!", ToastLength.Short).Show();
             //};
 
-            adapter = new MovieSummaryAdapter(GetContent());
+            adapter = new MovieSummaryAdapter(GetContent(), ShowRatingBar);
             
             return adapter;
         }

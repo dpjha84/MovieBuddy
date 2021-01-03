@@ -89,6 +89,13 @@ namespace MovieBuddy
             StartActivity(intent);
         }
 
+        const string AddFav = "Add to Favourite";
+        const string RemoveFav = "Remove from Favourite";
+        const string AddWatchHistory = "Add to Watch History";
+        const string RemoveWatchHistory = "Remove from Watch History";
+        const string AddWatchList = "Add to Watch List";
+        const string RemoveWatchList = "Remove from Watch List";
+        const string ChooseAction = "Choose Action on this movie";
         private void ShowOptionsDialog()
         {
             var dialogView = LayoutInflater.Inflate(Resource.Layout.movie_options, null);
@@ -96,23 +103,23 @@ namespace MovieBuddy
             //var adap = new ArrayAdapter<string>(this, Resource.Layout.select_dialog_singlechoice_material);
             using (var dialog = new Android.App.AlertDialog.Builder(this))
             {
-                dialog.SetTitle("Choose Action on this movie");
+                dialog.SetTitle(ChooseAction);
                 dialog.SetView(dialogView);
                 dialog.SetNegativeButton("Cancel", (s, a) => { });
                 alertDialog = dialog.Create();
             }
-            var items = new string[] { "Add to Favourite", "Add to Already Watched", "Add to Watch List" };
+            var items = new string[] { AddFav, AddWatchHistory, AddWatchList };
             if (Globals.StarredMovies.Contains(movieId))
             {
-                items[0] = "Remove from Favourite";
+                items[0] = RemoveFav;
             }
             if (Globals.WatchedMovies.Contains(movieId))
             {
-                items[1] = "Remove from Already Watched";
+                items[1] = RemoveWatchHistory;
             }
             if (Globals.ToWatchMovies.Contains(movieId))
             {
-                items[2] = "Remove from 'To Watch' List";
+                items[2] = RemoveWatchList;
             }
             var list = (ListView)dialogView.FindViewById(Resource.Id.listMovieOptions);
             var adapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleListItem1, items);
@@ -120,21 +127,21 @@ namespace MovieBuddy
             {                
                 if (e.Position == 0)
                 {
-                    if(items[0] == "Add to Favourite")
+                    if(items[0] == AddFav)
                         Globals.AddToStarredMovies(movieId);
                     else
                         Globals.RemoveFromStarredMovies(movieId);
                 }
                 else if (e.Position == 1)
                 {
-                    if (items[1] == "Add to Already Watched")
+                    if (items[1] == AddWatchHistory)
                         Globals.AddToWatchedMovies(movieId);
                     else
                         Globals.RemoveFromWatchedMovies(movieId);
                 }
                 else
                 {
-                    if (items[2] == "Add to Watch List")
+                    if (items[2] == AddWatchList)
                         Globals.AddToWatchMovies(movieId);
                     else
                         Globals.RemoveFromToWatchMovies(movieId);
