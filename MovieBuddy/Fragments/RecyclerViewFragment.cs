@@ -39,7 +39,8 @@ namespace MovieBuddy
 
                 adapter1.HasStableIds = true;
                 GetData();
-                rv.SetAdapter(adapter1);                
+                rv.SetAdapter(adapter1);
+                HideLoading();
                 return rootView;
             }
             catch (Exception ex)

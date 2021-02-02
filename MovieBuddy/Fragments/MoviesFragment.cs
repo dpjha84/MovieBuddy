@@ -1,8 +1,11 @@
+using Android.App;
 using Android.Content;
 using Android.OS;
+using Android.Runtime;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
+using Java.Interop;
 using MovieBuddy.Data;
 using System;
 using System.Collections.Generic;
@@ -108,6 +111,7 @@ namespace MovieBuddy
         {
             try
             {
+                base.OnItemClick(sender, position);
                 var movie = (sender as MoviesAdapter).movies[position];
                 Intent intent = new Intent(this.Context, typeof(MovieInfoActivity));                
                 Bundle b = new Bundle();

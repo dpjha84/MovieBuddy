@@ -199,5 +199,18 @@ namespace MovieBuddy
         }
 
         public static List<int> Years = Enumerable.Range(1951, 75).ToList();
+
+        static AlertDialog loading = null;
+        public static AlertDialog Loading(Context context)
+        {
+            //if(loading == null)
+            //{
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.SetCancelable(false); // if you want user to wait for some process to finish,
+                builder.SetView(Resource.Layout.loading);
+                loading = builder.Create();
+            //}
+            return loading;
+        }
     }
 }

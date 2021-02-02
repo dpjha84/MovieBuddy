@@ -10,6 +10,7 @@ namespace MovieBuddy
     {
         protected AdapterBase adapter;
         protected string movieName;
+        static AlertDialog loading;
 
         protected string MovieName { get { return Arguments.GetString("movieName"); } }
         protected int MovieId { get { return Arguments.GetInt("movieId"); } }
@@ -19,6 +20,21 @@ namespace MovieBuddy
         public BaseFragment()
         {
 
+        }
+
+        public void ShowLoading()
+        {
+            AlertDialog.Builder builder = new AlertDialog.Builder(Context);
+            builder.SetCancelable(false);
+            builder.SetView(Resource.Layout.loading);
+            loading = builder.Create();
+            loading.Show();
+        }
+
+        public void HideLoading()
+        {
+            loading?.Dismiss();
+            loading = null;
         }
 
         protected bool IsConnected()
@@ -48,6 +64,7 @@ namespace MovieBuddy
 
         protected virtual void OnItemClick(object sender, int position)
         {
+            ShowLoading();
         }
     }
 }

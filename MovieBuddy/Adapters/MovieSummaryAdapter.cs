@@ -13,6 +13,7 @@ namespace MovieBuddy
     public class MovieSummaryAdapter : ClickableAdapter
     {
         public Dictionary<string, string> content;
+        //public ImageView imdbImage;
         private bool _showRatingBar = false;
 
         public MovieSummaryAdapter(Dictionary<string, string> content, bool showRatingBar = false)
@@ -43,10 +44,10 @@ namespace MovieBuddy
                 vh.TmdbRating.Text = content.TryGetValue("TmdbRating", out string rating) ? rating : "--";
                 vh.ImdbRating.Text = content.TryGetValue("ImdbRating", out rating) ? rating : "--";
                 vh.RottenTomatoesRating.Text = content.TryGetValue("RottenTomatoesRating", out rating) ? rating : "--";
+                //imdbImage = vh.ImdbImage;
             }
             vh.MovieSummary.TextFormatted = str;
         }
-
 
         public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
         {
@@ -69,6 +70,8 @@ namespace MovieBuddy
             public TextView MovieSummary { get; private set; }
 
             public TextView TmdbRating { get; private set; }
+            public ImageView TmdbImage { get; private set; }
+            public ImageView ImdbImage { get; private set; }
             public TextView ImdbRating { get; private set; }
             public TextView RottenTomatoesRating { get; private set; }
             public CardView RatingBar { get; private set; }
@@ -80,6 +83,9 @@ namespace MovieBuddy
                 TmdbRating = itemView.FindViewById<TextView>(Resource.Id.tmdbRating);
                 ImdbRating = itemView.FindViewById<TextView>(Resource.Id.imdbRating);
                 RottenTomatoesRating = itemView.FindViewById<TextView>(Resource.Id.rottenTomatoesRating);
+                //TmdbImage = itemView.FindViewById<ImageView>(Resource.Id.tmdbImage);
+                //ImdbImage = itemView.FindViewById<ImageView>(Resource.Id.imdbImage);
+                //TmdbImage.Click += (sender, e) => imdbLink(base.LayoutPosition);
                 itemView.Click += (sender, e) => listener(base.LayoutPosition);
             }
         }

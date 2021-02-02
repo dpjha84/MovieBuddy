@@ -1,6 +1,8 @@
+using Android.Content;
 using Android.OS;
 using Android.Support.V7.Widget;
 using Refractored.Fab;
+using System;
 using System.Collections.Generic;
 
 namespace MovieBuddy
@@ -40,8 +42,23 @@ namespace MovieBuddy
             //};
 
             adapter = new MovieSummaryAdapter(GetContent(), ShowRatingBar);
-            
+            //(adapter as MovieSummaryAdapter).imdbImage.Click += ImdbImage_Click;
             return adapter;
+        }
+
+        private void ImdbImage_Click(object sender, System.EventArgs e)
+        {
+            try
+            {
+                //base.OnItemClick(sender, position);
+                //var videoId = (sender as VideosAdapter).videos[position];
+                Intent intent = new Intent(Intent.ActionView, Android.Net.Uri.Parse($"https://www.youtube.com/embed/{123}"));
+                StartActivity(intent);
+            }
+            catch (Exception ex)
+            {
+                //Toast.MakeText(Application.Context, ex.ToString(), ToastLength.Long).Show();
+            }
         }
     }
 }

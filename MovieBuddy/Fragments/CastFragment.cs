@@ -1,3 +1,4 @@
+using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Support.V7.Widget;
@@ -19,6 +20,7 @@ namespace MovieBuddy
 
         protected override void OnItemClick(object sender, int position)
         {
+            base.OnItemClick(sender, position);
             Intent intent = new Intent(this.Context, typeof(CastInfoActivity));
             Bundle b = new Bundle();
             b.PutInt("castId", (sender as CastAdapter).Cast[position].Id);

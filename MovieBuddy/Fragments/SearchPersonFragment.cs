@@ -37,6 +37,7 @@ namespace MovieBuddy
 
         protected override void OnItemClick(object sender, int position)
         {
+            ShowLoading();
             Intent intent = new Intent(this.Context, typeof(CastInfoActivity));
             Bundle b = new Bundle();
             var cast = (sender as SearchPersonAdapter<SearchPerson>).Cast[position];
