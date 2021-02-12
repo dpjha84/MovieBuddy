@@ -74,7 +74,6 @@ namespace MovieBuddy
         {
             try
             {
-                base.OnItemClick(sender, position);
                 var videoId = (sender as VideosAdapter).videos[position];
                 Intent intent = new Intent(Intent.ActionView, Android.Net.Uri.Parse($"https://www.youtube.com/embed/{videoId}"));
                 StartActivity(intent);

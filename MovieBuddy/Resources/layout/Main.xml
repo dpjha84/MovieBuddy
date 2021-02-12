@@ -51,7 +51,7 @@
             android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"
             ads:adSize="BANNER"
-            ads:adUnitId="@string/test_banner_ad_unit_id" />
+            ads:adUnitId="@string/main_ad_unit_id" />
     </RelativeLayout>
     <FrameLayout
         android:id="@+id/frameLayout1"

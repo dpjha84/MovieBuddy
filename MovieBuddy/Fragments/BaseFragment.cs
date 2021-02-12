@@ -10,7 +10,7 @@ namespace MovieBuddy
     {
         protected AdapterBase adapter;
         protected string movieName;
-        static AlertDialog loading;
+        protected static AlertDialog loading;
 
         protected string MovieName { get { return Arguments.GetString("movieName"); } }
         protected int MovieId { get { return Arguments.GetInt("movieId"); } }
@@ -31,11 +31,7 @@ namespace MovieBuddy
             loading.Show();
         }
 
-        public void HideLoading()
-        {
-            loading?.Dismiss();
-            loading = null;
-        }
+        protected virtual void HideLoading() {}
 
         protected bool IsConnected()
         {

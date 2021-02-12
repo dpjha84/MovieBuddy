@@ -48,7 +48,13 @@ namespace MovieBuddy
         }
 
         protected override ClickableWithPagingAdapter<TSearchMovie> GetAdapter() => new CastMoviesAdapter();
-        
+
+        protected override void HideLoading()
+        {
+            loading?.Dismiss();
+            loading = null;
+        }
+
         int page = 1;
         protected override List<TMDbLib.Objects.Search.SearchMovie> GetMovies()
         {

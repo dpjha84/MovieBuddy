@@ -16,6 +16,6 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         app:adSize="BANNER"
-        app:adUnitId="@string/test_banner_ad_unit_id"
+        app:adUnitId="@string/image_viewer_ad_unit_id"
         android:layout_gravity="bottom|center"/>
 </RelativeLayout>

@@ -33,6 +33,12 @@ namespace MovieBuddy
             Activity.OverridePendingTransition(Resource.Animation.@Side_in_right, Resource.Animation.@Side_out_left);
         }
 
+        protected override void HideLoading()
+        {
+            loading?.Dismiss();
+            loading = null;
+        }
+
         protected override void SetupOnScroll()
         {
             var onScrollListener = new RecyclerViewOnScrollListener();
