@@ -3,11 +3,11 @@
 	<string name="hello">Hello World, Click Me!</string>
 	<string name="app_name">Movie Buddy</string>
   <string name="main_ad_unit_id">ca-app-pub-9351754143985661/3624151405</string>
-	<string name="movie_info_ad_unit_id">ca-app-pub-9351754143985661/7910003742</string>
+	<!--<string name="movie_info_ad_unit_id">ca-app-pub-9351754143985661/7910003742</string>
 	<string name="explore_ad_unit_id">ca-app-pub-9351754143985661/8624976155</string>
 	<string name="image_viewer_ad_unit_id">ca-app-pub-9351754143985661/8980199370</string>
 	<string name="popular_people_ad_unit_id">ca-app-pub-9351754143985661/8597055997</string>
-	<string name="search_ad_unit_id">ca-app-pub-9351754143985661/9718565971</string>
+	<string name="search_ad_unit_id">ca-app-pub-9351754143985661/9718565971</string>-->
   <string name="language_dialog_header">"Choose Movie Language:"</string>
 	<string name="planet_prompt">Choose a planet</string>	
 </resources>
