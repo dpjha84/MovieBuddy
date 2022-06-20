@@ -4,10 +4,8 @@ using Android.Gms.Ads;
 using Android.OS;
 using Android.Support.Design.Widget;
 using Android.Support.V4.View;
-using Android.Support.V7.App;
 using Android.Views;
 using Android.Widget;
-using Jaeger;
 using System;
 
 namespace MovieBuddy
@@ -15,7 +13,7 @@ namespace MovieBuddy
     [Activity(Label = "MovieInfoActivity")]
     public class MovieInfoActivity : ActivityBase
     {
-        int movieId;
+        private int movieId;
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -26,7 +24,7 @@ namespace MovieBuddy
 
                 var mAdView = FindViewById<AdView>(Resource.Id.adView);
                 var adRequest = new AdRequest.Builder().Build();
-                mAdView.LoadAd(adRequest);                
+                mAdView.LoadAd(adRequest);
 
                 string movieName = Intent.GetStringExtra("movieName");
                 string movieLang = Intent.GetStringExtra("movieLanguage");
@@ -55,7 +53,7 @@ namespace MovieBuddy
                 fab.Click += (sender, args) =>
                 {
                     ShowOptionsDialog();
-                };                
+                };
 
                 var image = FindViewById<ImageView>(Resource.Id.backdrop);
                 Helper.SetImage(this, Intent.GetStringExtra("imageUrl"), image, Resource.Drawable.noimage);
@@ -89,13 +87,13 @@ namespace MovieBuddy
             StartActivity(intent);
         }
 
-        const string AddFav = "Add to Favourite";
-        const string RemoveFav = "Remove from Favourite";
-        const string AddWatchHistory = "Add to Watch History";
-        const string RemoveWatchHistory = "Remove from Watch History";
-        const string AddWatchList = "Add to Watch List";
-        const string RemoveWatchList = "Remove from Watch List";
-        const string ChooseAction = "Choose Action on this movie";
+        private const string AddFav = "Add to Favourite";
+        private const string RemoveFav = "Remove from Favourite";
+        private const string AddWatchHistory = "Add to Watch History";
+        private const string RemoveWatchHistory = "Remove from Watch History";
+        private const string AddWatchList = "Add to Watch List";
+        private const string RemoveWatchList = "Remove from Watch List";
+        private const string ChooseAction = "Choose Action on this movie";
         private void ShowOptionsDialog()
         {
             var dialogView = LayoutInflater.Inflate(Resource.Layout.movie_options, null);
@@ -124,10 +122,10 @@ namespace MovieBuddy
             var list = (ListView)dialogView.FindViewById(Resource.Id.listMovieOptions);
             var adapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleListItem1, items);
             list.ItemClick += (object sender, Android.Widget.AdapterView.ItemClickEventArgs e) =>
-            {                
+            {
                 if (e.Position == 0)
                 {
-                    if(items[0] == AddFav)
+                    if (items[0] == AddFav)
                         Globals.AddToStarredMovies(movieId);
                     else
                         Globals.RemoveFromStarredMovies(movieId);

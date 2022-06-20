@@ -1,5 +1,4 @@
-﻿using Android.Content;
-using Android.Graphics;
+﻿using Android.Graphics;
 using Android.Support.V7.Widget;
 using Android.Text;
 using Android.Text.Style;
@@ -14,7 +13,7 @@ namespace MovieBuddy
     {
         public Dictionary<string, string> content;
         //public ImageView imdbImage;
-        private bool _showRatingBar = false;
+        private readonly bool _showRatingBar = false;
 
         public MovieSummaryAdapter(Dictionary<string, string> content, bool showRatingBar = false)
         {
@@ -65,7 +64,7 @@ namespace MovieBuddy
             get { return 1; }
         }
 
-        class MovieSummaryViewHolder : RecyclerView.ViewHolder
+        private class MovieSummaryViewHolder : RecyclerView.ViewHolder
         {
             public TextView MovieSummary { get; private set; }
 
@@ -89,5 +88,5 @@ namespace MovieBuddy
                 itemView.Click += (sender, e) => listener(base.LayoutPosition);
             }
         }
-    }    
+    }
 }

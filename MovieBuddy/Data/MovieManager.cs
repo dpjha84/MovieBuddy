@@ -1,23 +1,20 @@
 ﻿using Google.Apis.Services;
 using Google.Apis.YouTube.v3;
+using IMDbApiLib.Models;
 using MovieBuddy.Data;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using TMDbLib.Client;
-using TMDbLib.Objects.Discover;
+using System.Threading.Tasks;
 using TMDbLib.Objects.General;
 using TMDbLib.Objects.People;
 using TCast = TMDbLib.Objects.Movies.Cast;
+using TFMovie = TMDbLib.Objects.Movies.Movie;
 using TReview = TMDbLib.Objects.Reviews.ReviewBase;
 using TSMovie = TMDbLib.Objects.Search.SearchMovie;
-using TFMovie = TMDbLib.Objects.Movies.Movie;
-using System.Threading.Tasks;
-using System.Collections.Concurrent;
-using IMDbApiLib.Models;
-using TMDbLib.Objects.Search;
 
 namespace MovieBuddy
 {
@@ -25,23 +22,25 @@ namespace MovieBuddy
     {
         public static readonly Dictionary<int, string> GenreMap = new Dictionary<int, string>();
         public static readonly Dictionary<string, int> GenreTextToIdMap = new Dictionary<string, int>();
-        readonly Dictionary<string, string> languageMap = new Dictionary<string, string>();
-        readonly TClient tClient;
-        readonly ImdbClient imdbClient;
-        readonly OClient oClient;
+        private readonly Dictionary<string, string> languageMap = new Dictionary<string, string>();
+        private readonly TClient tClient;
+        private readonly ImdbClient imdbClient;
+        private readonly OClient oClient;
+
         //readonly TMDbClient tmdbClient;
-        readonly YouTubeService youTubeClient;
-        string tmdbApiKey;
-        int personMoviesTotal = 0;
-        MovieCredits movieCredits;
-        int totalCast = 0;
-        TMDbLib.Objects.Movies.Credits Credits;
-        string nowPlayingBaseUrl, upcomingBaseUrl;
-        Func<TSMovie, bool> filterNowPlaying, filterUpcoming;
-        int nowPlayingTotalPage = int.MaxValue, upcomingTotalPage = int.MaxValue, popularTotalPage = int.MaxValue, topRatedTotalPage = int.MaxValue;
+        private readonly YouTubeService youTubeClient;
+        private readonly string tmdbApiKey;
+        private int personMoviesTotal = 0;
+        private MovieCredits movieCredits;
+        private int totalCast = 0;
+        private TMDbLib.Objects.Movies.Credits Credits;
+        private string nowPlayingBaseUrl, upcomingBaseUrl;
+        private Func<TSMovie, bool> filterNowPlaying, filterUpcoming;
+        private int nowPlayingTotalPage = int.MaxValue, upcomingTotalPage = int.MaxValue, popularTotalPage = int.MaxValue, topRatedTotalPage = int.MaxValue;
 
         public static MovieManager Instance { get; private set; }
-        static bool loaded = false;
+
+        private static bool loaded = false;
 
         public static void Init()
         {
@@ -71,7 +70,7 @@ namespace MovieBuddy
             });
         }
 
-        T GetCachedOrWebData<T>(string key, Func<T> getDataFromWeb = null)
+        private T GetCachedOrWebData<T>(string key, Func<T> getDataFromWeb = null)
         {
             string cacheData = LocalCache.Instance.Get(key);
             if (string.IsNullOrWhiteSpace(cacheData) && getDataFromWeb != null)
@@ -83,7 +82,7 @@ namespace MovieBuddy
             return JsonConvert.DeserializeObject<T>(cacheData);
         }
 
-        void Load()
+        private void Load()
         {
             foreach (var g in GetCachedOrWebData(LocalCache.GenresKey, () => tClient.GetMovieGenresAsync().Result))
             {
@@ -123,19 +122,19 @@ namespace MovieBuddy
                         GetVideos(item.Id, item.OriginalTitle, item.ReleaseDate, item.OriginalLanguage);
                         GetReviews(item.Id);
                         GetSimilar(item.Id, 1);
-                    }                    
+                    }
                 }
-                catch(Exception ex)
+                catch (Exception)
                 {
 
-                }                
+                }
             });
         }
 
-        List<Top250DataDetail> top250Movies = null;
+        private List<Top250DataDetail> top250Movies = null;
         public List<TSMovie> GetImdbTop250(int page)
         {
-            if(top250Movies == null)
+            if (top250Movies == null)
                 top250Movies = imdbClient.GetTop250();
             return top250Movies.Skip((page - 1) * 15).Take(15).Select(m =>
             {
@@ -194,7 +193,7 @@ namespace MovieBuddy
 
         //public List<TSMovie> GetTrending(int page = 1) => page == 1 ? tmdbClient.GetTrendingMoviesAsync(TimeWindow.Week).Result.Results : null;
 
-        string BuildUrl(string startDate, string sortBy, string endDate = null)
+        private string BuildUrl(string startDate, string sortBy, string endDate = null)
         {
             var sb = new StringBuilder();
             sb.Append("https://api.themoviedb.org/3/discover/movie?");
@@ -227,10 +226,11 @@ namespace MovieBuddy
             nowPlayingTotalPage = result1.TotalPages;
             return result1.Results.Where(filterNowPlaying).ToList();
         }
-        List<TSMovie> popularRes;
-        List<TSMovie> topRatedRes;
-        readonly ConcurrentDictionary<string, List<TSMovie>> upcomingRes = new ConcurrentDictionary<string, List<TSMovie>>();
-        readonly ConcurrentDictionary<string, List<TSMovie>> nowPlayingRes = new ConcurrentDictionary<string, List<TSMovie>>();
+
+        private List<TSMovie> popularRes;
+        private List<TSMovie> topRatedRes;
+        private readonly ConcurrentDictionary<string, List<TSMovie>> upcomingRes = new ConcurrentDictionary<string, List<TSMovie>>();
+        private readonly ConcurrentDictionary<string, List<TSMovie>> nowPlayingRes = new ConcurrentDictionary<string, List<TSMovie>>();
 
         public List<TSMovie> GetPopular(int page)
         {
@@ -282,7 +282,7 @@ namespace MovieBuddy
                     if (videos1 == null || videos1.Count == 0) continue;
                     foreach (var item in videos1)
                     {
-                        if(!string.IsNullOrWhiteSpace(item.Key)
+                        if (!string.IsNullOrWhiteSpace(item.Key)
                             && !string.IsNullOrWhiteSpace(item.Type)
                             && (item.Type.Equals("Trailer", StringComparison.InvariantCultureIgnoreCase) || item.Type.Equals("Teaser", StringComparison.InvariantCultureIgnoreCase))
                             && item.Key.IsValidVideo())
@@ -320,7 +320,7 @@ namespace MovieBuddy
             }
         }
 
-        Dictionary<int, List<string>> videoCache = new Dictionary<int, List<string>>();
+        private readonly Dictionary<int, List<string>> videoCache = new Dictionary<int, List<string>>();
 
         public Person GetPerson(int castId)
         {
@@ -340,7 +340,7 @@ namespace MovieBuddy
 
         public List<TSMovie> GetSimilar(int movieId, int page) => CacheRepo.Similar.GetOrCreate($"{movieId}-{page}", () => tClient.GetMovieSimilarAsync(movieId, page).Result.Results);
 
-        CacheDictionary<int, TFMovie> movieCache = new CacheDictionary<int, TFMovie>(100, new LruRemovalStrategy<int>());
+        private readonly CacheDictionary<int, TFMovie> movieCache = new CacheDictionary<int, TFMovie>(100, new LruRemovalStrategy<int>());
         public List<TSMovie> GetMovies(List<int> movieIds)
         {
             //TODO - Optimize
@@ -372,7 +372,7 @@ namespace MovieBuddy
             if (page == 1)
             {
                 movieCredits = CacheRepo.Credits.GetOrCreate(personId.ToString(), () => tClient.GetPersonMovieCreditsAsync(personId).Result);
-                movieCredits.Cast = movieCredits.Cast.Where(z=> z.ReleaseDate.HasValue).OrderByDescending(x => x.ReleaseDate).ToList();
+                movieCredits.Cast = movieCredits.Cast.Where(z => z.ReleaseDate.HasValue).OrderByDescending(x => x.ReleaseDate).ToList();
                 personMoviesTotal = movieCredits.Cast.Count;
             }
             if (page > personMoviesTotal / 15 + 1) return null;
@@ -388,7 +388,7 @@ namespace MovieBuddy
                 if (!string.IsNullOrWhiteSpace(movie.Tagline))
                     summaryMap.Add("Tagline", movie.Tagline);
                 if (!string.IsNullOrWhiteSpace(movie.Overview))
-                    summaryMap.Add("Overview", movie.Overview);                
+                    summaryMap.Add("Overview", movie.Overview);
                 if (movie.ReleaseDate.HasValue)
                     summaryMap.Add("Year", movie.ReleaseDate.Value.Year.ToString());
                 if (movie.Genres != null)
@@ -397,10 +397,10 @@ namespace MovieBuddy
                     summaryMap.Add("Release date", movie.ReleaseDate.Value.ToString("dd MMMM yyyy"));
                 if (movie.Runtime.HasValue)
                     summaryMap.Add("Runtime", $"{movie.Runtime.Value}m");
-                if(movie.Budget != 0)
+                if (movie.Budget != 0)
                     summaryMap.Add("Budget", $"${movie.Budget}");
                 if (movie.VoteAverage != 0)
-                    summaryMap.Add("TmdbRating", $"{movie.VoteAverage*10}%");
+                    summaryMap.Add("TmdbRating", $"{movie.VoteAverage * 10}%");
                 if (!string.IsNullOrWhiteSpace(movie.ImdbId) && movie.ImdbId != "0")
                 {
                     var item = oClient.GetItem(movie.ImdbId);

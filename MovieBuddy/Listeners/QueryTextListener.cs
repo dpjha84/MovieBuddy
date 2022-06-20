@@ -10,12 +10,12 @@ namespace MovieBuddy
 {
     public class QueryTextListener : Java.Lang.Object, IOnQueryTextListener
     {
-        ViewPager mViewPager;
-        TabLayout mTabLayout;
-        Android.Support.V7.Widget.Toolbar toolbar;
-        Context context;
-        Android.Support.V4.App.FragmentManager mgr;
-        TypeAssistant assistant;
+        private readonly ViewPager mViewPager;
+        private readonly TabLayout mTabLayout;
+        private readonly Android.Support.V7.Widget.Toolbar toolbar;
+        private readonly Context context;
+        private readonly Android.Support.V4.App.FragmentManager mgr;
+        private readonly TypeAssistant assistant;
         public QueryTextListener(Context c, ViewPager pager, TabLayout layout, Android.Support.V7.Widget.Toolbar t, Android.Support.V4.App.FragmentManager m)
         {
             mViewPager = pager;
@@ -27,7 +27,7 @@ namespace MovieBuddy
             assistant.Idled += assistant_Idled;
         }
 
-        void assistant_Idled(object sender, EventArgs e)
+        private void assistant_Idled(object sender, EventArgs e)
         {
             MainThread.BeginInvokeOnMainThread(() =>
             {
@@ -44,7 +44,7 @@ namespace MovieBuddy
             });
         }
 
-        string newText;
+        private string newText;
         public bool OnQueryTextChange(string text)
         {
             newText = text;
@@ -61,7 +61,8 @@ namespace MovieBuddy
     {
         public event EventHandler Idled = delegate { };
         public int WaitingMilliSeconds { get; set; }
-        System.Threading.Timer waitingTimer;
+
+        private readonly System.Threading.Timer waitingTimer;
 
         public TypeAssistant(int waitingMilliSeconds = 600)
         {

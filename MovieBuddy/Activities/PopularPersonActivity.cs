@@ -1,8 +1,6 @@
 ﻿using Android.App;
 using Android.Gms.Ads;
 using Android.OS;
-using Android.Support.V7.App;
-using Android.Views;
 
 namespace MovieBuddy
 {

@@ -19,14 +19,14 @@ namespace MovieBuddy
     public class MainActivity : AppCompatActivity
     {
         protected AdView mAdView;
-        DrawerLayout drawerLayout;
-        NavigationView navigationView;
-        IMenuItem previousItem;
-        Android.Support.V7.Widget.Toolbar toolbar;
-        HomePagerAdapter pagerAdapter;
-        ViewPager viewPager;
-        TabLayout tabs;
-        Dialog dialog;
+        private DrawerLayout drawerLayout;
+        private NavigationView navigationView;
+        private IMenuItem previousItem;
+        private Android.Support.V7.Widget.Toolbar toolbar;
+        private HomePagerAdapter pagerAdapter;
+        private ViewPager viewPager;
+        private TabLayout tabs;
+        private Dialog dialog;
 
         protected override void OnCreate(Bundle bundle)
         {

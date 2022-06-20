@@ -1,7 +1,6 @@
 using Android.Content;
 using Android.OS;
 using Android.Support.V7.Widget;
-using Refractored.Fab;
 using System;
 using System.Collections.Generic;
 
@@ -55,7 +54,7 @@ namespace MovieBuddy
                 Intent intent = new Intent(Intent.ActionView, Android.Net.Uri.Parse($"https://www.youtube.com/embed/{123}"));
                 StartActivity(intent);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //Toast.MakeText(Application.Context, ex.ToString(), ToastLength.Long).Show();
             }

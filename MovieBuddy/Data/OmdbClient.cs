@@ -1,21 +1,12 @@
-﻿using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
-using OMDbApiNet;
+﻿using OMDbApiNet;
 using OMDbApiNet.Model;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace MovieBuddy.Data
 {
     public class OClient
     {
-        OmdbClient omdb;
+        private readonly OmdbClient omdb;
 
         public OClient()
         {
@@ -28,10 +19,10 @@ namespace MovieBuddy.Data
             {
                 return omdb.GetItemById(id);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
-            }            
+            }
         }
     }
 }

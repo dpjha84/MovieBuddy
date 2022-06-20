@@ -1,28 +1,25 @@
 ﻿using System.Collections.Generic;
-using TMDbLib.Client;
-using TMDbLib.Objects.General;
-using System.Threading.Tasks;
 using System.Threading;
-using TMDbLib.Objects.Languages;
-using TMDbLib.Objects.Search;
-using TMDbLib.Objects.People;
+using System.Threading.Tasks;
+using TMDbLib.Client;
 using TMDbLib.Objects.Discover;
-using TMDbLib.Objects.Reviews;
+using TMDbLib.Objects.General;
+using TMDbLib.Objects.Languages;
 using TMDbLib.Objects.Movies;
-using System.Net.Http;
-using Newtonsoft.Json;
-using Android.Widget;
+using TMDbLib.Objects.People;
+using TMDbLib.Objects.Reviews;
+using TMDbLib.Objects.Search;
 
 namespace MovieBuddy
 {
     public class TClient : TClientBase
     {
-        readonly TMDbClient tmdbClient;
-        const string tmdbApiKey = "c6b31d1cdad6a56a23f0c913e2482a31";
+        private readonly TMDbClient tmdbClient;
+        private const string tmdbApiKey = "c6b31d1cdad6a56a23f0c913e2482a31";
         public TClient()
         {
             tmdbClient = new TMDbClient(tmdbApiKey);
-            
+
         }
 
         public string Key { get { return tmdbApiKey; } }
@@ -121,7 +118,7 @@ namespace MovieBuddy
         public Task<ResultContainer<Video>> GetMovieVideosAsync(int movieId, CancellationToken cancellationToken = default)
         {
             base.Track();
-            return tmdbClient.GetMovieVideosAsync( movieId, cancellationToken);
+            return tmdbClient.GetMovieVideosAsync(movieId, cancellationToken);
         }
 
         public Task<Person> GetPersonAsync(int personId, PersonMethods extraMethods = PersonMethods.Undefined, CancellationToken cancellationToken = default)

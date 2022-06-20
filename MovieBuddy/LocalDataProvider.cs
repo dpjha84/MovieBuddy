@@ -10,7 +10,7 @@ namespace MovieBuddy
     {
         public const string GenresKey = "GenreList";
         public const string LanguagesKey = "LanguageList";
-        const string Prefs = "MySharedPrefs";
+        private const string Prefs = "MySharedPrefs";
 
         public static LocalCache Instance { get; } = new LocalCache();
         public void Reset()
@@ -28,7 +28,7 @@ namespace MovieBuddy
             prefEditor.Commit();
         }
 
-        ISharedPreferences SharedPref { get; } = Application.Context.GetSharedPreferences(Prefs, FileCreationMode.Private);
+        private ISharedPreferences SharedPref { get; } = Application.Context.GetSharedPreferences(Prefs, FileCreationMode.Private);
     }
 
     //public class PagedDataProvider
@@ -59,11 +59,11 @@ namespace MovieBuddy
 
     public class PagedFetcher<T> : IEnumerable<Page<T>>, IEnumerator<Page<T>>
     {
-        int skip = 0;
-        int pageSize = 3;
-        int totalItems = int.MaxValue;
-        readonly TMDbLib.Client.TMDbClient client;
-        Func<T> webDataFetcher;
+        private int skip = 0;
+        private readonly int pageSize = 3;
+        private readonly int totalItems = int.MaxValue;
+        private readonly TMDbLib.Client.TMDbClient client;
+        private readonly Func<T> webDataFetcher;
         private Page<T> currentPage;
 
         public PagedFetcher(TMDbLib.Client.TMDbClient client, Func<T> getWebData)

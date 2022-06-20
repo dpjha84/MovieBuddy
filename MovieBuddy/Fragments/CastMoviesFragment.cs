@@ -55,7 +55,7 @@ namespace MovieBuddy
             loading = null;
         }
 
-        int page = 1;
+        private int page = 1;
         protected override List<TMDbLib.Objects.Search.SearchMovie> GetMovies()
         {
             var data = MovieManager.Instance.GetMovieCredits(CastId, page++);

@@ -1,4 +1,3 @@
-using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Support.V7.Widget;
@@ -48,7 +47,8 @@ namespace MovieBuddy
             };
             nsv.SetOnScrollChangeListener(onScrollListener);
         }
-        int page = 1;
+
+        private int page = 1;
         protected override void GetData()
         {
             var data = MovieManager.Instance.GetCastAndCrew(MovieId, page++);

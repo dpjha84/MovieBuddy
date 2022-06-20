@@ -45,7 +45,7 @@ namespace MovieBuddy
             }
             catch (Exception ex)
             {
-                if(ex.InnerException is Java.Net.UnknownHostException)
+                if (ex.InnerException is Java.Net.UnknownHostException)
                 {
                     new AlertDialog.Builder(Context)
                     .SetTitle("No Internet")
@@ -57,7 +57,7 @@ namespace MovieBuddy
                     .Show();
                 }
             }
-            
+
             return null;
         }
 

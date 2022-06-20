@@ -14,7 +14,7 @@ namespace MovieBuddy
             return frag1;
         }
 
-        int page = 1;
+        private int page = 1;
         protected override List<TMDbLib.Objects.Search.SearchMovie> GetMovies()
         {
             return MovieManager.Instance.SearchMovie(Query, page++);

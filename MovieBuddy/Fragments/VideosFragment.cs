@@ -2,14 +2,10 @@
 using Android.Content;
 using Android.OS;
 using Android.Support.V7.Widget;
-using Android.Views;
 using Android.Widget;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
 
 namespace MovieBuddy
 {
@@ -23,7 +19,7 @@ namespace MovieBuddy
             return frag1;
         }
 
-        int page = 0;
+        private int page = 0;
         protected override List<TMDbLib.Objects.Search.SearchMovie> GetMovies()
         {
             return MovieManager.Instance.GetMovies(Globals.StarredMovies.Skip((page++) * 9).Take(9).ToList());
@@ -54,7 +50,7 @@ namespace MovieBuddy
             return movieAdapter;
         }
 
-        int page = 1;
+        private int page = 1;
         protected override void GetData()
         {
             var date = Arguments.GetString("relaseDate");

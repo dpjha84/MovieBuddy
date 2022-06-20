@@ -2,7 +2,6 @@
 using Android.Support.V4.App;
 using Android.Views;
 using Android.Widget;
-using System;
 using static Android.Widget.TextView;
 
 namespace MovieBuddy
@@ -36,7 +35,8 @@ namespace MovieBuddy
             return tab;
         }
     }
-    class HomePagerAdapter : PagerAdapter
+
+    internal class HomePagerAdapter : PagerAdapter
     {
         public HomePagerAdapter(Context context, FragmentManager fm) : base(context, Resource.Array.sections, fm) { }
 
@@ -64,13 +64,13 @@ namespace MovieBuddy
         }
     }
 
-    class MoviePagerAdapter : PagerAdapter
+    internal class MoviePagerAdapter : PagerAdapter
     {
-        string movieName;
-        int movieId;
-        string backdrop;
-        string releaseDate;
-        string lang;
+        private readonly string movieName;
+        private readonly int movieId;
+        private readonly string backdrop;
+        private readonly string releaseDate;
+        private readonly string lang;
 
         public MoviePagerAdapter(Context context, FragmentManager fm, string movieName, int movieId, string backdrop, string releaseDate, string lang)
             : base(context, Resource.Array.movieDetails, fm)
@@ -86,7 +86,7 @@ namespace MovieBuddy
         {
             return position switch
             {
-                0 => SummaryFragment.NewInstance(movieName, movieId),                
+                0 => SummaryFragment.NewInstance(movieName, movieId),
                 1 => CastFragment.NewInstance(movieId),
                 2 => VideosFragment.NewInstance(movieName, movieId, releaseDate, lang),
                 //3 => TrailerFragment.NewInstance(movieName, movieId, backdrop),
@@ -97,9 +97,9 @@ namespace MovieBuddy
         }
     }
 
-    class SearchPagerAdapter : PagerAdapter
+    internal class SearchPagerAdapter : PagerAdapter
     {
-        string query;
+        private readonly string query;
 
         public SearchPagerAdapter(Context context, FragmentManager fm, string query)
             : base(context, Resource.Array.searchDetails, fm)
@@ -118,10 +118,10 @@ namespace MovieBuddy
         }
     }
 
-    class CastPagerAdapter : PagerAdapter
+    internal class CastPagerAdapter : PagerAdapter
     {
-        string castName;
-        int castId;
+        private readonly string castName;
+        private readonly int castId;
 
         public CastPagerAdapter(Context context, FragmentManager fm, string castName, int castId)
             : base(context, Resource.Array.castDetails, fm)

@@ -4,11 +4,7 @@ using Android.Gms.Ads;
 using Android.OS;
 using Android.Support.Design.Widget;
 using Android.Support.V4.View;
-using Android.Util;
-using Android.Views;
 using Android.Widget;
-using System;
-using System.Collections.Generic;
 
 namespace MovieBuddy
 {

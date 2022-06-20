@@ -11,14 +11,14 @@ namespace MovieBuddy.Data
 {
     public class CacheRepo
     {
-        static Lazy<Cache<Dictionary<string, string>>> summary = new Lazy<Cache<Dictionary<string, string>>>(() => new Cache<Dictionary<string, string>>("MovieSummaryCache"));
-        static Lazy<Cache<List<string>>> videos = new Lazy<Cache<List<string>>>(() => new Cache<List<string>>("MovieVideosCache"));
-        static Lazy<Cache<TCredits>> casts = new Lazy<Cache<TCredits>>(() => new Cache<TCredits>("MovieCastsCache"));
-        static Lazy<Cache<List<ReviewBase>>> reviews = new Lazy<Cache<List<ReviewBase>>>(() => new Cache<List<ReviewBase>>("MovieReviewsCache"));
-        static Lazy<Cache<List<TSMovie>>> similar = new Lazy<Cache<List<TSMovie>>>(() => new Cache<List<TSMovie>>("MovieSimilarCache"));
-        static Lazy<Cache<TSMovie>> movieByImdbId = new Lazy<Cache<TSMovie>>(() => new Cache<TSMovie>("MovieByImdbId"));
-        static Lazy<Cache<TmdbStatic>> tmdbStaticByImdbId = new Lazy<Cache<TmdbStatic>>(() => new Cache<TmdbStatic>("TmdbStaticByImdbId", true));
-        static Lazy<Cache<MovieCredits>> credits = new Lazy<Cache<MovieCredits>>(() => new Cache<MovieCredits>("PersonMovies"));
+        private static readonly Lazy<Cache<Dictionary<string, string>>> summary = new Lazy<Cache<Dictionary<string, string>>>(() => new Cache<Dictionary<string, string>>("MovieSummaryCache"));
+        private static readonly Lazy<Cache<List<string>>> videos = new Lazy<Cache<List<string>>>(() => new Cache<List<string>>("MovieVideosCache"));
+        private static readonly Lazy<Cache<TCredits>> casts = new Lazy<Cache<TCredits>>(() => new Cache<TCredits>("MovieCastsCache"));
+        private static readonly Lazy<Cache<List<ReviewBase>>> reviews = new Lazy<Cache<List<ReviewBase>>>(() => new Cache<List<ReviewBase>>("MovieReviewsCache"));
+        private static readonly Lazy<Cache<List<TSMovie>>> similar = new Lazy<Cache<List<TSMovie>>>(() => new Cache<List<TSMovie>>("MovieSimilarCache"));
+        private static readonly Lazy<Cache<TSMovie>> movieByImdbId = new Lazy<Cache<TSMovie>>(() => new Cache<TSMovie>("MovieByImdbId"));
+        private static readonly Lazy<Cache<TmdbStatic>> tmdbStaticByImdbId = new Lazy<Cache<TmdbStatic>>(() => new Cache<TmdbStatic>("TmdbStaticByImdbId", true));
+        private static readonly Lazy<Cache<MovieCredits>> credits = new Lazy<Cache<MovieCredits>>(() => new Cache<MovieCredits>("PersonMovies"));
 
         public static Cache<Dictionary<string, string>> Summary => summary.Value;
         public static Cache<List<string>> Videos => videos.Value;
@@ -56,7 +56,7 @@ namespace MovieBuddy.Data
                 {
                     _cache = JsonConvert.DeserializeObject<ConcurrentDictionary<string, CacheItem<T>>>(cacheInDisk);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     _cache = new ConcurrentDictionary<string, CacheItem<T>>();
                 }

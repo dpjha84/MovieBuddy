@@ -1,7 +1,5 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using TMDbLib.Objects.Reviews;
 
 //using TMDbLib.Objects.General;
 //using TMDbLib.Objects.Movies;
@@ -122,7 +120,7 @@ namespace MovieBuddy
         public int Id { get; set; }
     }
 
-    
+
 
     public partial class Crew
     {
@@ -339,7 +337,7 @@ namespace MovieBuddy
     //    public static string ToJson(TmdbMovie movie) => JsonConvert.SerializeObject(movie, Converter.Settings);
     //}
 
-    
+
 
     public partial class SpokenLanguage
     {

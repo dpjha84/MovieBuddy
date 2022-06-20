@@ -14,7 +14,7 @@ namespace MovieBuddy
             return frag1;
         }
 
-        int page = 0;
+        private int page = 0;
         protected override List<TMDbLib.Objects.Search.SearchMovie> GetMovies()
         {
             return MovieManager.Instance.GetMovies(Globals.StarredMovies.Skip((page++) * 12).Take(12).ToList());
@@ -33,7 +33,7 @@ namespace MovieBuddy
             return frag1;
         }
 
-        int page = 0;
+        private int page = 0;
         protected override List<TMDbLib.Objects.Search.SearchMovie> GetMovies()
         {
             //var movieIds = Arguments.GetIntArray("movieIds");
@@ -53,7 +53,7 @@ namespace MovieBuddy
             return frag1;
         }
 
-        int page = 0;
+        private int page = 0;
         protected override List<TMDbLib.Objects.Search.SearchMovie> GetMovies()
         {
             //var movieIds = Arguments.GetIntArray("movieIds");
@@ -74,7 +74,7 @@ namespace MovieBuddy
             return frag1;
         }
 
-        int page = 1;
+        private int page = 1;
         protected override List<TMDbLib.Objects.Search.SearchMovie> GetMovies()
         {
             return MovieManager.Instance.GetSimilar(MovieId, page++);
@@ -106,7 +106,7 @@ namespace MovieBuddy
             return frag1;
         }
 
-        int page = 1;
+        private int page = 1;
         protected override List<TMDbLib.Objects.Search.SearchMovie> GetMovies()
         {
             var info = Arguments.GetIntArray("exploreMovieInfo");

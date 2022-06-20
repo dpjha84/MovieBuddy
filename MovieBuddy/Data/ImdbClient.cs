@@ -1,14 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using IMDbApiLib;
 using IMDbApiLib.Models;
-using IMDbApiLib;
 using Newtonsoft.Json;
-using System.IO;
+using System.Collections.Generic;
 
 namespace MovieBuddy
 {
     public class ImdbClient
     {
-        ApiLib imdb;
+        private readonly ApiLib imdb;
         public ImdbClient()
         {
             imdb = new ApiLib("k_yy89lphl");

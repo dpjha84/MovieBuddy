@@ -91,7 +91,7 @@ namespace MovieBuddy
         }
     }
 
-    class CastViewHolder : RecyclerView.ViewHolder
+    internal class CastViewHolder : RecyclerView.ViewHolder
     {
         public TextView CastName { get; private set; }
 

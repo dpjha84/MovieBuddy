@@ -7,7 +7,6 @@ using Android.Support.Design.Widget;
 using Android.Support.V7.App;
 using Android.Util;
 using Android.Views;
-using Android.Widget;
 using Jaeger;
 using Java.Lang;
 using System;
@@ -50,7 +49,7 @@ namespace MovieBuddy
         protected TypedValue ColorNormal;
         protected TypedValue ColorDark;
         protected TypedValue ColorAccent;
-        readonly Random random = new Random();
+        private readonly Random random = new Random();
 
         protected void InitView(int resourceId, Bundle bundle)
         {
@@ -61,7 +60,7 @@ namespace MovieBuddy
             Xamarin.Essentials.Platform.Init(this, bundle);
 
             FindViewById<View>(Resource.Id.viewTransparent)?.SetBackgroundColor(Color.ParseColor("#" + Integer.ToHexString(ColorNormal.Data).Substring(2)));
-            if(ColorAccent != null)
+            if (ColorAccent != null)
                 FindViewById<TabLayout>(Resource.Id.tabs)?.SetSelectedTabIndicatorColor(ColorAccent.Data);
 
             //Toast.MakeText(this, $"Calls: {TClientBase.calls}", ToastLength.Long).Show();

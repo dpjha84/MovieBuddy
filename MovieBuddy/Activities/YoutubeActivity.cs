@@ -1,15 +1,8 @@
 ﻿using Android.App;
-using Android.Content;
 using Android.OS;
-using Android.Runtime;
-using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Webkit;
 using Android.Widget;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace MovieBuddy.Activities
 {
@@ -43,13 +36,13 @@ namespace MovieBuddy.Activities
 
     public class FullScreenClient : WebChromeClient
     {
-        readonly FrameLayout.LayoutParams matchParentLayout = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MatchParent,
+        private readonly FrameLayout.LayoutParams matchParentLayout = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MatchParent,
                                                                                                          ViewGroup.LayoutParams.MatchParent);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MatchParent,
+        private readonly LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MatchParent,
                                                                            ViewGroup.LayoutParams.MatchParent);
-        readonly ViewGroup content;
-        readonly ViewGroup parent;
-        View customView;
+        private readonly ViewGroup content;
+        private readonly ViewGroup parent;
+        private View customView;
 
         public FullScreenClient(ViewGroup parent, ViewGroup content)
         {

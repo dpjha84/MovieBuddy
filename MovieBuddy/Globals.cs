@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Xamarin.Essentials;
 
 namespace MovieBuddy
 {
@@ -55,10 +54,9 @@ namespace MovieBuddy
             { "tr", "Turkish" },
             { "ur", "Urdu" }
         };
-
-        static List<int> starredMovies = null;
-        static List<int> watchedMovies = null;
-        static List<int> toWatchMovies = null;
+        private static List<int> starredMovies = null;
+        private static List<int> watchedMovies = null;
+        private static List<int> toWatchMovies = null;
 
         public static void AddToStarredMovies(int movieId)
         {
@@ -157,7 +155,7 @@ namespace MovieBuddy
             }
         }
 
-        static string selectedLanguage = null;
+        private static string selectedLanguage = null;
         public static string Language
         {
             get
@@ -181,9 +179,9 @@ namespace MovieBuddy
                             else
                                 languageInDisk = "All";
                             LocalCache.Instance.Set("MovieLanguage", languageInDisk);
-                        }                        
+                        }
                     }
-                    catch(Exception)
+                    catch (Exception)
                     {
                         languageInDisk = "All";
                     }
@@ -199,16 +197,15 @@ namespace MovieBuddy
         }
 
         public static List<int> Years = Enumerable.Range(1951, 75).ToList();
-
-        static AlertDialog loading = null;
+        private static AlertDialog loading = null;
         public static AlertDialog Loading(Context context)
         {
             //if(loading == null)
             //{
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.SetCancelable(false); // if you want user to wait for some process to finish,
-                builder.SetView(Resource.Layout.loading);
-                loading = builder.Create();
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.SetCancelable(false); // if you want user to wait for some process to finish,
+            builder.SetView(Resource.Layout.loading);
+            loading = builder.Create();
             //}
             return loading;
         }

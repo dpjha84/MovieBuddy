@@ -1,11 +1,4 @@
-﻿using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Views;
-using Android.Widget;
-using System;
-
-namespace MovieBuddy
+﻿namespace MovieBuddy
 {
     public class TrailerFragment : BaseFragment
     {

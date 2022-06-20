@@ -4,11 +4,8 @@ using Android.Gms.Ads;
 using Android.OS;
 using Android.Support.Design.Widget;
 using Android.Support.V4.View;
-using Android.Support.V7.App;
-using Android.Views;
 using Android.Widget;
 using System;
-using static Android.Support.V7.Widget.SearchView;
 
 namespace MovieBuddy
 {
@@ -25,7 +22,7 @@ namespace MovieBuddy
         public SearchActivity()
         {
             adRenderer = new AdRenderer();
-        }        
+        }
 
         protected override void OnCreate(Bundle bundle)
         {

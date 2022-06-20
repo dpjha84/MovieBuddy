@@ -41,7 +41,7 @@ namespace MovieBuddy
                     .Apply(RequestOptions.PlaceholderOf(Resource.Drawable.noimage));
                 //.Apply(RequestOptions.SignatureOf(new ObjectKey(DateTime.Now.Millisecond)));
                 //var requestOptions = req .diskCacheStrategy(DiskCacheStrategy.All)
-                if(absoluteUrl)
+                if (absoluteUrl)
                     Glide.With(castInfoActivity).Load(backdrop).Apply(requestOptions).Into(imageView);
                 else
                     Glide.With(castInfoActivity).Load($"https://image.tmdb.org/t/p/w500/{backdrop}").Apply(requestOptions).Into(imageView);

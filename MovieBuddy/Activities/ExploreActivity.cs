@@ -1,8 +1,6 @@
 ﻿using Android.App;
 using Android.Gms.Ads;
 using Android.OS;
-using Android.Support.V7.App;
-using Android.Views;
 using Android.Widget;
 using System;
 using System.Collections.Generic;
@@ -14,8 +12,8 @@ namespace MovieBuddy
     [Activity(Label = "Explore Movies")]
     public class ExploreActivity : StaticThemeActivity
     {
-        ExploreMovieInfo exploreInfo;
-        bool loaded1 = false, loaded2 = false;
+        private ExploreMovieInfo exploreInfo;
+        private bool loaded1 = false, loaded2 = false;
 
         public ExploreActivity()
         {
@@ -65,7 +63,7 @@ namespace MovieBuddy
 
         private void spinner_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
         {
-            if(!loaded1)
+            if (!loaded1)
             {
                 loaded1 = true;
                 return;

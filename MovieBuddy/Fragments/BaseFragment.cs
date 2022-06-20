@@ -1,7 +1,6 @@
 ﻿using Android.App;
 using Android.Content;
 using Android.OS;
-using Android.Widget;
 using Xamarin.Essentials;
 
 namespace MovieBuddy
@@ -31,7 +30,7 @@ namespace MovieBuddy
             loading.Show();
         }
 
-        protected virtual void HideLoading() {}
+        protected virtual void HideLoading() { }
 
         protected bool IsConnected()
         {
