@@ -9,7 +9,7 @@ namespace MovieBuddy.Data
     {
         public static SearchContainer<TMovie> GetMoviesByUrl(this TClient tmdbClient, string url, int page)
         {
-            //TClientBase.calls++;
+            TClientBase.calls++;
             url += $"page={page}&with_original_language={Globals.LanguageMap[Globals.Language]}";
             using (var client = new HttpClient())
             {

@@ -107,6 +107,7 @@ namespace MovieBuddy
                 {
                     GetNowPlaying(1);
                     GetUpcoming(1);
+                    GetVideos(0, null, null, null, 1);                    
                     GetPopular(1);
                     GetTopRated(1);
                     var imdbList = GetImdbTop250(1);
@@ -119,7 +120,7 @@ namespace MovieBuddy
                     {
                         GetFullOverview(item.Id);
                         GetCastAndCrew(item.Id);
-                        GetVideos(item.Id, item.OriginalTitle, item.ReleaseDate, item.OriginalLanguage);
+                        //GetVideos(item.Id, item.OriginalTitle, item.ReleaseDate, item.OriginalLanguage);
                         GetReviews(item.Id);
                         GetSimilar(item.Id, 1);
                     }
@@ -268,7 +269,7 @@ namespace MovieBuddy
             return res1.Results;
         }
 
-        public List<string> GetTrailer(int movieId, int page)
+        private List<string> GetTrailer(int movieId, int page)
         {
             if (movieId == 0)
             {
@@ -285,7 +286,8 @@ namespace MovieBuddy
                         if (!string.IsNullOrWhiteSpace(item.Key)
                             && !string.IsNullOrWhiteSpace(item.Type)
                             && (item.Type.Equals("Trailer", StringComparison.InvariantCultureIgnoreCase) || item.Type.Equals("Teaser", StringComparison.InvariantCultureIgnoreCase))
-                            && item.Key.IsValidVideo())
+                            && item.Key.IsValidVideo()
+                            )
                         {
                             videos.Add(item.Key);
                             break;
@@ -305,10 +307,10 @@ namespace MovieBuddy
 
         public List<string> GetVideos(int movieId, string movieName, DateTime? releaseDate, string lang, int page = 1)
         {
-            //if (page > 1) return null;
             try
             {
-                return CacheRepo.Videos.GetOrCreate($"trailers_{Globals.Language}_{page}", () =>
+                var key = movieId == 0 ? $"trailers_{Globals.Language}_{page}" : $"trailers_{movieId}";
+                return CacheRepo.Videos.GetOrCreate(key, () =>
                 {
                     var videos = GetTrailer(movieId, page);
                     return videos ?? null;

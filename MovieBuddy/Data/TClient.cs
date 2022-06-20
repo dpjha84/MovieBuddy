@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Android.Widget;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using TMDbLib.Client;
@@ -163,6 +165,7 @@ namespace MovieBuddy
         protected void Track()
         {
             calls++;
+            Debug.WriteLine($"Call count: {calls}");
             //Toast.MakeText(null, $"Call count: {calls}", ToastLength.Short);
         }
     }

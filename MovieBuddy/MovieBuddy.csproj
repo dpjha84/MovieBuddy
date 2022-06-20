@@ -120,7 +120,6 @@
     <Compile Include="Fragments\SearchPersonFragment.cs" />
     <Compile Include="Fragments\SimilarMoviesFragment.cs" />
     <Compile Include="Fragments\SummaryFragment.cs" />
-    <Compile Include="Fragments\TrailerFragment.cs" />
     <Compile Include="Fragments\VideosFragment.cs" />
     <Compile Include="Globals.cs" />
     <Compile Include="Helper.cs" />
@@ -652,11 +651,9 @@
   <ItemGroup>
     <AndroidAsset Include="assets\player.html" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Resources\raw\" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\layout\trailer1.xml" />
+    <AndroidResource Include="Resources\raw\Player.html" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

@@ -17,6 +17,7 @@ namespace MovieBuddy
 
         protected RecyclerView rv;
         protected NestedScrollView nsv;
+        protected GridLayoutManager llm;
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             try
@@ -30,7 +31,7 @@ namespace MovieBuddy
                 rv.NestedScrollingEnabled = false;
                 rv.HasFixedSize = true;
 
-                var llm = new GridLayoutManager(this.Context, SpanCount, GridLayoutManager.Vertical, false);
+                llm = new GridLayoutManager(this.Context, SpanCount, GridLayoutManager.Vertical, false);
                 rv.SetLayoutManager(llm);
 
                 SetupOnScroll();

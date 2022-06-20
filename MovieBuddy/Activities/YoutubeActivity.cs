@@ -13,22 +13,22 @@ namespace MovieBuddy.Activities
         {
             base.OnCreate(savedInstanceState);
 
-            SetContentView(Resource.Layout.trailer1);
-            var webView = FindViewById<WebView>(Resource.Id.webView1);
-            var linearLayout = FindViewById<LinearLayout>(Resource.Id.ll1);
-            var contentLayout = FindViewById<LinearLayout>(Resource.Id.ll2);
+            //SetContentView(Resource.Layout.trailer1);
+            //var webView = FindViewById<WebView>(Resource.Id.webView1);
+            //var linearLayout = FindViewById<LinearLayout>(Resource.Id.ll1);
+            //var contentLayout = FindViewById<LinearLayout>(Resource.Id.ll2);
 
-            var url = "<iframe width=\"100%\" height=\"100%\" src=\"https://www.youtube.com/embed/rX_Xr-F-hEQ\" frameborder=\"0\" allowfullscreen/>";
+            //var url = "<iframe width=\"100%\" height=\"100%\" src=\"https://www.youtube.com/embed/rX_Xr-F-hEQ\" frameborder=\"0\" allowfullscreen/>";
 
-            WebSettings webSettings = webView.Settings;
+            //WebSettings webSettings = webView.Settings;
 
-            webSettings.JavaScriptEnabled = true;
-            webView.SetWebChromeClient(new FullScreenClient(linearLayout, contentLayout));
+            //webSettings.JavaScriptEnabled = true;
+            //webView.SetWebChromeClient(new FullScreenClient(linearLayout, contentLayout));
             //webSettings.SetLayoutAlgorithm(WebSettings.LayoutAlgorithm.Normal);
-            webSettings.LoadWithOverviewMode = true;
-            webSettings.UseWideViewPort = true;
+            //webSettings.LoadWithOverviewMode = true;
+            //webSettings.UseWideViewPort = true;
 
-            webView.LoadData(url, "text/html", "utf-8");
+            //webView.LoadData(url, "text/html", "utf-8");
             //Helper.SetImage(this, Intent.GetStringExtra("url"), webView, Resource.Drawable.noimage);
             // Create your application here
         }

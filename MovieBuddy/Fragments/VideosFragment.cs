@@ -2,6 +2,8 @@
 using Android.Content;
 using Android.OS;
 using Android.Support.V7.Widget;
+using Android.Views;
+using Android.Webkit;
 using Android.Widget;
 using System;
 using System.Collections.Generic;
@@ -9,25 +11,6 @@ using System.Linq;
 
 namespace MovieBuddy
 {
-    public class VideosFragment1 : MoviesFragment
-    {
-        public static VideosFragment1 NewInstance()
-        {
-            var frag1 = new VideosFragment1();
-            Bundle bundle = new Bundle();
-            frag1.Arguments = bundle;
-            return frag1;
-        }
-
-        private int page = 0;
-        protected override List<TMDbLib.Objects.Search.SearchMovie> GetMovies()
-        {
-            return MovieManager.Instance.GetMovies(Globals.StarredMovies.Skip((page++) * 9).Take(9).ToList());
-        }
-
-        protected override void ResetPages() { }
-    }
-
     public class VideosFragment : MoviesFragment
     {
         public static VideosFragment NewInstance(string movieName = null, int movieId = 0, string relaseDate = null, string lang = null)
@@ -44,7 +27,7 @@ namespace MovieBuddy
 
         protected override RecyclerView.Adapter SetAdapter()
         {
-            ResetPages();
+            //ResetPages();
             movieAdapter = new VideosAdapter();
             movieAdapter.ItemClick += OnItemClick;
             return movieAdapter;
@@ -59,25 +42,83 @@ namespace MovieBuddy
                 relaseDate = DateTime.Parse(date);
             //DateTime ? relaseDate = !string.IsNullOrWhiteSpace(date) ? DateTime.Parse(date) : null;
             var lang = Arguments.GetString("lang");
+            if (MovieId > 0 && page > 1)
+                return;
             var data = MovieManager.Instance.GetVideos(MovieId, MovieName, relaseDate, lang, page++);
-            if (data == null) return;
+            if (data == null)
+                return;
             var recyclerViewState = rv.GetLayoutManager().OnSaveInstanceState();
             movieAdapter.LoadVideos(data);
             rv.GetLayoutManager().OnRestoreInstanceState(recyclerViewState);
         }
+
+        //WebView webView;
+        //ImageView thumbnail;
+        //ImageView playButton;
+        //public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+        //{
+        //    View rootView = inflater.Inflate(Resource.Layout.video, container, false);
+
+        //    webView = rootView.FindViewById<WebView>(Resource.Id.mWebView);
+        //    thumbnail = rootView.FindViewById<ImageView>(Resource.Id.mediaPreview);
+        //    playButton = rootView.FindViewById<ImageView>(Resource.Id.playButton);
+        //    return base.OnCreateView(inflater, container, savedInstanceState);
+        //}
 
 
         protected override void OnItemClick(object sender, int position)
         {
             try
             {
+                var vh = rv.FindViewHolderForAdapterPosition(position) as VideosViewHolder;
+                vh.WebView.Visibility = ViewStates.Visible;
                 var videoId = (sender as VideosAdapter).videos[position];
-                Intent intent = new Intent(Intent.ActionView, Android.Net.Uri.Parse($"https://www.youtube.com/embed/{videoId}"));
-                StartActivity(intent);
+                //webView.LoadUrl($"https://google.com");
+                //vh.WebView.LoadUrl($"https://www.youtube.com/embed/{videoId}");
+                //thumbnail.Visibility = ViewStates.Gone;
+                //playButton.Visibility = ViewStates.Gone;
+
+                //string myYouTubeVideoUrl = $"https://www.youtube.com/embed/{videoId}";
+                //var url = $"<iframe width=\"800\" height=\"600\" src=\"{myYouTubeVideoUrl}\" frameborder=\"0\" allowfullscreen/>";
+                WebSettings webSettings = vh.WebView.Settings;
+                webSettings.JavaScriptEnabled = true;
+                webSettings.MediaPlaybackRequiresUserGesture = false;
+                webSettings.CacheMode = CacheModes.CacheElseNetwork;
+                //vh.WebView.SetWebViewClient(new MyWebViewClient());
+                if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.Kitkat)
+                    vh.WebView.SetLayerType(LayerType.Hardware, null);
+                else
+                    vh.WebView.SetLayerType(LayerType.Software, null);
+
+                //vh.WebView.SetWebChromeClient(new FullScreenClient(vh.ParentLayout, vh.ContentLayout));
+                //webView.SetWebChromeClient(new WebChromeClient());
+                webSettings.SetLayoutAlgorithm(WebSettings.LayoutAlgorithm.NarrowColumns);
+                vh.WebView.SetWebViewClient(new WebViewClient());
+                vh.WebView.SetWebChromeClient(new WebChromeClient());
+                webSettings.SavePassword = true;
+                webSettings.SaveFormData = true;
+                webSettings.SetEnableSmoothTransition(true);
+                webSettings.LoadWithOverviewMode = true;
+                webSettings.UseWideViewPort = true;
+                webSettings.SetRenderPriority(WebSettings.RenderPriority.High);
+                webSettings.SetAppCacheEnabled(true);
+                vh.WebView.ScrollBarStyle = ScrollbarStyles.InsideOverlay;
+                webSettings.DomStorageEnabled = true;
+
+                vh.WebView.LoadUrl($"file:///android_asset/player.html?videoId={videoId}");
             }
             catch (Exception ex)
             {
                 Toast.MakeText(Application.Context, ex.ToString(), ToastLength.Long).Show();
+            }
+        }
+
+        public class MyWebViewClient : WebViewClient
+        {
+            public override void OnPageFinished(WebView view, string url)
+            {
+                base.OnPageFinished(view, url);
+                view.LoadUrl("javascript:(function() { document.getElementsByTagName('video')[0].play(); })()");
             }
         }
 
