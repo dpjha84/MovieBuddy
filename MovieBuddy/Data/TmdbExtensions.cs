@@ -23,5 +23,19 @@ namespace MovieBuddy.Data
             }
             return null;
         }
+
+        public static bool IsValidVideo(this string videoId)
+        {
+            using (var client = new HttpClient())
+            {
+                var response = client.GetAsync($"https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v={videoId}");
+                if (response.Result.IsSuccessStatusCode)
+                {
+                    //var data = response.Result.Content.ReadAsStringAsync();
+                    return true;// JsonConvert.DeserializeObject<SearchContainer<TMovie>>(data.Result);
+                }
+            }
+            return false;
+        }
     }
 }

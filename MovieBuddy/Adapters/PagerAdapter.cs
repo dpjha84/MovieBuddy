@@ -45,16 +45,18 @@ namespace MovieBuddy
             switch (position)
             {
                 case 0:
-                    return MoviesFragment.NewInstance(MovieListType.NowPlaying);
+                    return VideosFragment.NewInstance();
                 case 1:
+                    return MoviesFragment.NewInstance(MovieListType.NowPlaying);
+                case 2:
                     return MoviesFragment.NewInstance(MovieListType.Upcoming);
                 //case 2:
                 //    return MoviesFragment.NewInstance(MovieListType.Trending);
-                case 2:
-                    return MoviesFragment.NewInstance(MovieListType.Popular);
                 case 3:
-                    return TmdbTopRatedMoviesFragment.NewInstance();
+                    return MoviesFragment.NewInstance(MovieListType.Popular);
                 case 4:
+                    return TmdbTopRatedMoviesFragment.NewInstance();
+                case 5:
                     return ImdbMoviesFragment.NewInstance();
                 default:
                     return null;

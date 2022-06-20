@@ -34,7 +34,7 @@ namespace MovieBuddy
 
     public class VideosFragment : MoviesFragment
     {
-        public static VideosFragment NewInstance(string movieName, int movieId, string relaseDate, string lang)
+        public static VideosFragment NewInstance(string movieName = null, int movieId = 0, string relaseDate = null, string lang = null)
         {
             var frag1 = new VideosFragment();
             Bundle bundle = new Bundle();
@@ -70,6 +70,7 @@ namespace MovieBuddy
             rv.GetLayoutManager().OnRestoreInstanceState(recyclerViewState);
         }
 
+
         protected override void OnItemClick(object sender, int position)
         {
             try
@@ -88,7 +89,7 @@ namespace MovieBuddy
         {
             get
             {
-                return Resources.Configuration.Orientation == Android.Content.Res.Orientation.Portrait ? 1 : 3;
+                return Resources.Configuration.Orientation == Android.Content.Res.Orientation.Portrait ? 1 : 2;
             }
         }
 

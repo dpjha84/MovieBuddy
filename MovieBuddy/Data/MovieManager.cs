@@ -17,6 +17,7 @@ using TFMovie = TMDbLib.Objects.Movies.Movie;
 using System.Threading.Tasks;
 using System.Collections.Concurrent;
 using IMDbApiLib.Models;
+using TMDbLib.Objects.Search;
 
 namespace MovieBuddy
 {
@@ -267,39 +268,56 @@ namespace MovieBuddy
             return res1.Results;
         }
 
-        public List<string> GetTrailer(int movieId)
+        public List<string> GetTrailer(int movieId, int page)
         {
-            var videos = tClient.GetMovieVideosAsync(movieId).Result.Results;
-            if (videos == null || videos.Count == 0) return null;
-            return videos.Where(x => !string.IsNullOrWhiteSpace(x.Key)).Select(x => x.Key).ToList();
+            if (movieId == 0)
+            {
+                var videos = new List<string>();
+                var movies = GetUpcoming(page) ?? new List<TSMovie>();
+                var now = GetNowPlaying(page) ?? new List<TSMovie>();
+                movies.AddRange(now);
+                foreach (var movie in movies)
+                {
+                    var videos1 = tClient.GetMovieVideosAsync(movie.Id).Result.Results;
+                    if (videos1 == null || videos1.Count == 0) continue;
+                    foreach (var item in videos1)
+                    {
+                        if(!string.IsNullOrWhiteSpace(item.Key)
+                            && !string.IsNullOrWhiteSpace(item.Type)
+                            && (item.Type.Equals("Trailer", StringComparison.InvariantCultureIgnoreCase) || item.Type.Equals("Teaser", StringComparison.InvariantCultureIgnoreCase))
+                            && item.Key.IsValidVideo())
+                        {
+                            videos.Add(item.Key);
+                            break;
+                        }
+                    }
+                    //videos.AddRange(videos1.Where(x => !string.IsNullOrWhiteSpace(x.Key) && x.Key.IsValidVideo()).Select(x => x.Key).ToList());
+                }
+                return videos;
+            }
+            else
+            {
+                var videos = tClient.GetMovieVideosAsync(movieId).Result.Results;
+                if (videos == null || videos.Count == 0) return null;
+                return videos.Where(x => !string.IsNullOrWhiteSpace(x.Key)).Select(x => x.Key).ToList();
+            }
         }
 
         public List<string> GetVideos(int movieId, string movieName, DateTime? releaseDate, string lang, int page = 1)
         {
-            if (page > 1) return null;
-            var videos = GetTrailer(movieId);
-            return videos ?? null;
-            //try
-            //{
-            //    return CacheRepo.Videos.GetOrCreate(movieId.ToString(), () =>
-            //    {
-            //        if (videoCache.ContainsKey(movieId)) return videoCache[movieId];
-            //        var year = releaseDate.HasValue ? releaseDate.Value.Year : 0;
-            //        var searchListRequest = youTubeClient.Search.List("snippet");
-            //        searchListRequest.Q = year != 0 ? $"{movieName} {year} Full Movie" : $"{movieName} Full Movie";
-            //        searchListRequest.Type = new List<string> { "video" };
-            //        if (!string.IsNullOrWhiteSpace(lang))
-            //            searchListRequest.RelevanceLanguage = lang;
-            //        searchListRequest.MaxResults = releaseDate.HasValue && releaseDate.Value > DateTime.Now ? 1 : 5;
-            //        var searchListResponse = searchListRequest.ExecuteAsync().Result;
-            //        return searchListResponse.Items.Select(x => x.Id.VideoId).ToList();
-            //    });
-            //}
-            //catch (Exception)
-            //{
-            //    var videos = GetTrailer(movieId);
-            //    return videos ?? null;
-            //}
+            //if (page > 1) return null;
+            try
+            {
+                return CacheRepo.Videos.GetOrCreate($"trailers_{Globals.Language}_{page}", () =>
+                {
+                    var videos = GetTrailer(movieId, page);
+                    return videos ?? null;
+                });
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         Dictionary<int, List<string>> videoCache = new Dictionary<int, List<string>>();

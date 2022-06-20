@@ -84,6 +84,7 @@
     <Compile Include="Activities\SplashActivity.cs" />
     <Compile Include="Activities\StarredMoviesActivity.cs" />
     <Compile Include="Activities\TrailerActivity.cs" />
+    <Compile Include="Activities\YoutubeActivity.cs" />
     <Compile Include="Adapters\CastAdapter.cs" />
     <Compile Include="Adapters\MoviesAdapter.cs" />
     <Compile Include="Adapters\MovieSummaryAdapter.cs" />
@@ -636,6 +637,15 @@
     <AndroidResource Include="Resources\layout\loading.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="assets\player.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\raw\" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\trailer1.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
