@@ -1,6 +1,8 @@
 ﻿using Android.Widget;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using TMDbLib.Client;
@@ -17,7 +19,7 @@ namespace MovieBuddy
     public class TClient : TClientBase
     {
         private readonly TMDbClient tmdbClient;
-        private const string tmdbApiKey = "c6b31d1cdad6a56a23f0c913e2482a31";
+        public const string tmdbApiKey = "c6b31d1cdad6a56a23f0c913e2482a31";
         public TClient()
         {
             tmdbClient = new TMDbClient(tmdbApiKey);
@@ -161,12 +163,23 @@ namespace MovieBuddy
 
     public class TClientBase
     {
-        public static int calls = 0;
-        protected void Track()
+        private static int calls = 0;
+
+        public static void IncreaseCalls([CallerMemberName] string memberName = "")
         {
-            calls++;
-            Debug.WriteLine($"Call count: {calls}");
+            Interlocked.Increment(ref calls);
+            Debug.WriteLine($"*********************** {memberName} Call count: {calls}***********************");
+        }
+        protected void Track([CallerMemberName] string memberName = "")
+        {
+            Interlocked.Increment(ref calls);
+            Debug.WriteLine($"*********************** {memberName} Call count: {calls}***********************");
             //Toast.MakeText(null, $"Call count: {calls}", ToastLength.Short);
+        }
+
+        public static void LogError(Exception ex, [CallerMemberName] string memberName = "")
+        {
+            Debug.WriteLine($"*********************** {memberName} Exception: {ex}***********************");
         }
     }
 }

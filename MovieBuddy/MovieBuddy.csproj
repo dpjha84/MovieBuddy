@@ -60,7 +60,7 @@
     <EnableLLVM>false</EnableLLVM>
     <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
     <BundleAssemblies>false</BundleAssemblies>
-    <AndroidPackageFormat>aab</AndroidPackageFormat>
+    <AndroidPackageFormat>apk</AndroidPackageFormat>
     <AndroidUseAapt2>true</AndroidUseAapt2>
     <AndroidCreatePackagePerAbi>false</AndroidCreatePackagePerAbi>
   </PropertyGroup>
@@ -105,10 +105,13 @@
     <Compile Include="Data\CacheDictionary.cs" />
     <Compile Include="Data\ImdbClient.cs" />
     <Compile Include="Data\MovieManager.cs" />
+    <Compile Include="Data\MoviesWithTrailer.cs" />
+    <Compile Include="Data\NowPlayingMovies.cs" />
     <Compile Include="Data\OmdbClient.cs" />
     <Compile Include="Data\PagedMovie.cs" />
     <Compile Include="Data\TClient.cs" />
     <Compile Include="Data\TmdbExtensions.cs" />
+    <Compile Include="Data\UpcomingMovies.cs" />
     <Compile Include="Fragments\BaseFragment.cs" />
     <Compile Include="Fragments\CastFragment.cs" />
     <Compile Include="Fragments\CastMoviesFragment.cs" />

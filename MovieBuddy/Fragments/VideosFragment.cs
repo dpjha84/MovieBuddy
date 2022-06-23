@@ -40,7 +40,6 @@ namespace MovieBuddy
             DateTime? relaseDate = null;
             if (!string.IsNullOrWhiteSpace(date))
                 relaseDate = DateTime.Parse(date);
-            //DateTime ? relaseDate = !string.IsNullOrWhiteSpace(date) ? DateTime.Parse(date) : null;
             var lang = Arguments.GetString("lang");
             if (MovieId > 0 && page > 1)
                 return;
@@ -52,20 +51,6 @@ namespace MovieBuddy
             rv.GetLayoutManager().OnRestoreInstanceState(recyclerViewState);
         }
 
-        //WebView webView;
-        //ImageView thumbnail;
-        //ImageView playButton;
-        //public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-        //{
-        //    View rootView = inflater.Inflate(Resource.Layout.video, container, false);
-
-        //    webView = rootView.FindViewById<WebView>(Resource.Id.mWebView);
-        //    thumbnail = rootView.FindViewById<ImageView>(Resource.Id.mediaPreview);
-        //    playButton = rootView.FindViewById<ImageView>(Resource.Id.playButton);
-        //    return base.OnCreateView(inflater, container, savedInstanceState);
-        //}
-
-
         protected override void OnItemClick(object sender, int position)
         {
             try
@@ -73,13 +58,6 @@ namespace MovieBuddy
                 var vh = rv.FindViewHolderForAdapterPosition(position) as VideosViewHolder;
                 vh.WebView.Visibility = ViewStates.Visible;
                 var videoId = (sender as VideosAdapter).videos[position];
-                //webView.LoadUrl($"https://google.com");
-                //vh.WebView.LoadUrl($"https://www.youtube.com/embed/{videoId}");
-                //thumbnail.Visibility = ViewStates.Gone;
-                //playButton.Visibility = ViewStates.Gone;
-
-                //string myYouTubeVideoUrl = $"https://www.youtube.com/embed/{videoId}";
-                //var url = $"<iframe width=\"800\" height=\"600\" src=\"{myYouTubeVideoUrl}\" frameborder=\"0\" allowfullscreen/>";
                 WebSettings webSettings = vh.WebView.Settings;
                 webSettings.JavaScriptEnabled = true;
                 webSettings.MediaPlaybackRequiresUserGesture = false;

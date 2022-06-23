@@ -27,16 +27,13 @@ namespace MovieBuddy
         private readonly ImdbClient imdbClient;
         private readonly OClient oClient;
 
-        //readonly TMDbClient tmdbClient;
         private readonly YouTubeService youTubeClient;
         private readonly string tmdbApiKey;
         private int personMoviesTotal = 0;
         private MovieCredits movieCredits;
         private int totalCast = 0;
         private TMDbLib.Objects.Movies.Credits Credits;
-        private string nowPlayingBaseUrl, upcomingBaseUrl;
-        private Func<TSMovie, bool> filterNowPlaying, filterUpcoming;
-        private int nowPlayingTotalPage = int.MaxValue, upcomingTotalPage = int.MaxValue, popularTotalPage = int.MaxValue, topRatedTotalPage = int.MaxValue;
+        private int popularTotalPage = int.MaxValue, topRatedTotalPage = int.MaxValue;
 
         public static MovieManager Instance { get; private set; }
 
@@ -93,21 +90,13 @@ namespace MovieBuddy
             foreach (var l in GetCachedOrWebData(LocalCache.LanguagesKey, () => tClient.GetLanguagesAsync().Result))
                 languageMap.Add(l.Iso_639_1, l.EnglishName);
 
-            var today = DateTime.Now;
-            var endDate = today.ToString("yyyy-MM-dd");
-            var startDate = today.Subtract(TimeSpan.FromDays(60)).ToString("yyyy-MM-dd");
-            nowPlayingBaseUrl = BuildUrl(startDate, "release_date.desc", endDate);
-            upcomingBaseUrl = BuildUrl(today.AddDays(1).ToString("yyyy-MM-dd"), "release_date.asc");
-            filterNowPlaying = x => x.ReleaseDate >= DateTime.Parse(startDate) && x.ReleaseDate <= DateTime.Parse(endDate) && x.GenreIds?.Count > 0 && x.PosterPath != null;
-            filterUpcoming = x => x.ReleaseDate > DateTime.Parse(endDate) && x.GenreIds?.Count > 0 && x.PosterPath != null;
-
             Task.Run(() =>
             {
                 try
                 {
-                    GetNowPlaying(1);
-                    GetUpcoming(1);
-                    GetVideos(0, null, null, null, 1);                    
+                    //var nowPlaying = GetNowPlaying(1);
+                    //var upcoming = GetUpcoming(1);
+                    //GetVideos(0, null, null, null, 1);                    
                     GetPopular(1);
                     GetTopRated(1);
                     var imdbList = GetImdbTop250(1);
@@ -115,19 +104,19 @@ namespace MovieBuddy
                     {
                         GetImdbTop250(i + 1);
                     }
-                    var list = nowPlayingRes[Globals.Language].Concat(upcomingRes[Globals.Language]).Concat(popularRes).Concat(topRatedRes).Concat(imdbList);
-                    foreach (var item in list)
-                    {
-                        GetFullOverview(item.Id);
-                        GetCastAndCrew(item.Id);
-                        //GetVideos(item.Id, item.OriginalTitle, item.ReleaseDate, item.OriginalLanguage);
-                        GetReviews(item.Id);
-                        GetSimilar(item.Id, 1);
-                    }
+                    //var list = nowPlaying.Concat(upcoming).Concat(popularRes).Concat(topRatedRes).Concat(imdbList);
+                    //foreach (var item in list)
+                    //{
+                    //    GetFullOverview(item.Id);
+                    //    GetCastAndCrew(item.Id);
+                    //    //GetVideos(item.Id, item.OriginalTitle, item.ReleaseDate, item.OriginalLanguage);
+                    //    GetReviews(item.Id);
+                    //    GetSimilar(item.Id, 1);
+                    //}
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-
+                    TClient.LogError(ex);
                 }
             });
         }
@@ -170,68 +159,12 @@ namespace MovieBuddy
             return tClient.Discover(startYear, endYear, genreId, page);
         }
 
-        public List<TSMovie> GetUpcoming(int page)
-        {
-            if (page == 1) upcomingTotalPage = int.MaxValue;
-            if (page > upcomingTotalPage) return null;
+        public List<TSMovie> GetUpcoming(int page) => UpcomingMovies.Instance.Get(page);
 
-            if (page == 1)
-            {
-                if (!upcomingRes.ContainsKey(Globals.Language))
-                {
-                    if (Globals.Language == "All") return tClient.GetMovieUpcomingListAsync(null, page).Result.Results;
-                    var result = tClient.GetMoviesByUrl(upcomingBaseUrl, page);
-                    upcomingTotalPage = result.TotalPages;
-                    upcomingRes.AddOrUpdate(Globals.Language, result.Results.Where(filterUpcoming).ToList(), (k, v) => v);
-                }
-                return upcomingRes[Globals.Language];
-            }
-            if (Globals.Language == "All") return tClient.GetMovieUpcomingListAsync(null, page).Result.Results;
-            var result1 = tClient.GetMoviesByUrl(upcomingBaseUrl, page);
-            upcomingTotalPage = result1.TotalPages;
-            return result1.Results.Where(filterUpcoming).ToList();
-        }
-
-        //public List<TSMovie> GetTrending(int page = 1) => page == 1 ? tmdbClient.GetTrendingMoviesAsync(TimeWindow.Week).Result.Results : null;
-
-        private string BuildUrl(string startDate, string sortBy, string endDate = null)
-        {
-            var sb = new StringBuilder();
-            sb.Append("https://api.themoviedb.org/3/discover/movie?");
-            sb.Append($"api_key={tmdbApiKey}&");
-            sb.Append($"release_date.gte={startDate}&");
-            sb.Append($"sort_by={sortBy}&");
-            if (endDate != null)
-                sb.Append($"release_date.lte={endDate}&");
-            return sb.ToString();
-        }
-
-        public List<TSMovie> GetNowPlaying(int page)
-        {
-            if (page == 1) nowPlayingTotalPage = int.MaxValue;
-            if (page > nowPlayingTotalPage) return null;
-
-            if (page == 1)
-            {
-                if (!nowPlayingRes.ContainsKey(Globals.Language))
-                {
-                    if (Globals.Language == "All") return tClient.GetMovieNowPlayingListAsync(null, page).Result.Results;
-                    var result = tClient.GetMoviesByUrl(nowPlayingBaseUrl, page);
-                    nowPlayingTotalPage = result.TotalPages;
-                    nowPlayingRes.AddOrUpdate(Globals.Language, result.Results.Where(filterNowPlaying).ToList(), (k, v) => v);
-                }
-                return nowPlayingRes[Globals.Language];
-            }
-            if (Globals.Language == "All") return tClient.GetMovieNowPlayingListAsync(null, page).Result.Results;
-            var result1 = tClient.GetMoviesByUrl(nowPlayingBaseUrl, page);
-            nowPlayingTotalPage = result1.TotalPages;
-            return result1.Results.Where(filterNowPlaying).ToList();
-        }
+        public List<TSMovie> GetNowPlaying(int page) => NowPlayingMovies.Instance.Get(page);
 
         private List<TSMovie> popularRes;
         private List<TSMovie> topRatedRes;
-        private readonly ConcurrentDictionary<string, List<TSMovie>> upcomingRes = new ConcurrentDictionary<string, List<TSMovie>>();
-        private readonly ConcurrentDictionary<string, List<TSMovie>> nowPlayingRes = new ConcurrentDictionary<string, List<TSMovie>>();
 
         public List<TSMovie> GetPopular(int page)
         {
@@ -273,29 +206,11 @@ namespace MovieBuddy
         {
             if (movieId == 0)
             {
-                var videos = new List<string>();
-                var movies = GetUpcoming(page) ?? new List<TSMovie>();
-                var now = GetNowPlaying(page) ?? new List<TSMovie>();
-                movies.AddRange(now);
-                foreach (var movie in movies)
-                {
-                    var videos1 = tClient.GetMovieVideosAsync(movie.Id).Result.Results;
-                    if (videos1 == null || videos1.Count == 0) continue;
-                    foreach (var item in videos1)
-                    {
-                        if (!string.IsNullOrWhiteSpace(item.Key)
-                            && !string.IsNullOrWhiteSpace(item.Type)
-                            && (item.Type.Equals("Trailer", StringComparison.InvariantCultureIgnoreCase) || item.Type.Equals("Teaser", StringComparison.InvariantCultureIgnoreCase))
-                            && item.Key.IsValidVideo()
-                            )
-                        {
-                            videos.Add(item.Key);
-                            break;
-                        }
-                    }
-                    //videos.AddRange(videos1.Where(x => !string.IsNullOrWhiteSpace(x.Key) && x.Key.IsValidVideo()).Select(x => x.Key).ToList());
-                }
-                return videos;
+                return MoviesWithTrailer.Instance.Get(page);
+                //var videos = LoadTrailers(GetNowPlaying(page));
+                //if(videos.Count < 5)
+                //    videos.AddRange(LoadTrailers(GetUpcoming(page)));
+                //return videos;
             }
             else
             {
@@ -316,13 +231,11 @@ namespace MovieBuddy
                     return videos ?? null;
                 });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return null;
             }
         }
-
-        private readonly Dictionary<int, List<string>> videoCache = new Dictionary<int, List<string>>();
 
         public Person GetPerson(int castId)
         {

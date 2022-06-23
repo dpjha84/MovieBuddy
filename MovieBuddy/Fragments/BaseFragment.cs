@@ -1,6 +1,7 @@
 ﻿using Android.App;
 using Android.Content;
 using Android.OS;
+using System;
 using Xamarin.Essentials;
 
 namespace MovieBuddy
@@ -52,9 +53,16 @@ namespace MovieBuddy
         }
         public override void OnCreate(Bundle savedInstanceState)
         {
-            MovieManager.EnsureLoaded();
-            //Toast.MakeText(this.Context, $"Calls: {TClientBase.calls}", ToastLength.Long).Show();
-            base.OnCreate(savedInstanceState);
+            try
+            {
+                MovieManager.EnsureLoaded();
+                //Toast.MakeText(this.Context, $"Calls: {TClientBase.calls}", ToastLength.Long).Show();
+                base.OnCreate(savedInstanceState);
+            }
+            catch (Exception ex)
+            {
+            }
+            
         }
 
         protected virtual void OnItemClick(object sender, int position)

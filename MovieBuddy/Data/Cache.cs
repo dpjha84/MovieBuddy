@@ -19,12 +19,17 @@ namespace MovieBuddy.Data
         private static readonly Lazy<Cache<TSMovie>> movieByImdbId = new Lazy<Cache<TSMovie>>(() => new Cache<TSMovie>("MovieByImdbId"));
         private static readonly Lazy<Cache<TmdbStatic>> tmdbStaticByImdbId = new Lazy<Cache<TmdbStatic>>(() => new Cache<TmdbStatic>("TmdbStaticByImdbId", true));
         private static readonly Lazy<Cache<MovieCredits>> credits = new Lazy<Cache<MovieCredits>>(() => new Cache<MovieCredits>("PersonMovies"));
+        private static readonly Lazy<Cache<List<TSMovie>>> nowPlaying = new Lazy<Cache<List<TSMovie>>>(() => new Cache<List<TSMovie>>("NowPlayingMovies"));
+        private static readonly Lazy<Cache<List<TSMovie>>> upcoming = new Lazy<Cache<List<TSMovie>>>(() => new Cache<List<TSMovie>>("UpcomingMovies"));
 
         public static Cache<Dictionary<string, string>> Summary => summary.Value;
         public static Cache<List<string>> Videos => videos.Value;
         public static Cache<TCredits> Casts => casts.Value;
         public static Cache<List<ReviewBase>> Reviews => reviews.Value;
         public static Cache<List<TSMovie>> Similar => similar.Value;
+
+        public static Cache<List<TSMovie>> NowPlaying => nowPlaying.Value;
+        public static Cache<List<TSMovie>> Upcoming => upcoming.Value;
 
         public static Cache<MovieCredits> Credits => credits.Value;
 
