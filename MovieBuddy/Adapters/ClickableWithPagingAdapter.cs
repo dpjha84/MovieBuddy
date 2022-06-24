@@ -6,6 +6,7 @@ namespace MovieBuddy
     public abstract class ClickableWithPagingAdapter<T> : AdapterBase, IClickableWithPagingAdapter<T>
     {
         public event EventHandler<int> ItemClick;
+        public event EventHandler<int> YoutubeClick;
         public virtual void LoadData(List<T> data)
         {
             AddToCollection(data);
@@ -20,6 +21,11 @@ namespace MovieBuddy
         public void OnClick(int position)
         {
             ItemClick?.Invoke(this, position);
+        }
+
+        public void OnYoutubeClick(int position)
+        {
+            YoutubeClick?.Invoke(this, position);
         }
 
 

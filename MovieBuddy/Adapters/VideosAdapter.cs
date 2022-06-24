@@ -66,7 +66,7 @@ namespace MovieBuddy
 
         protected override RecyclerView.ViewHolder GetViewHolder(View view, View contentView, View parentView)
         {
-            return new VideosViewHolder(view, contentView, parentView, OnClick);
+            return new VideosViewHolder(view, contentView, parentView, OnClick, OnYoutubeClick);
         }
 
         public override int ItemCount
@@ -82,9 +82,11 @@ namespace MovieBuddy
         public CardView ParentLayout { get; private set; }
         public ImageView Thumbnail { get; private set; }
         public ImageView PlayButton { get; private set; }
+        public ImageView YoutubeButton { get; private set; }
+        //public ImageView YoutubeButton1 { get; private set; }
         public TextView Genre { get; private set; }
 
-        public VideosViewHolder(View itemView, View contentView, View parentView, Action<int> listener) : base(itemView)
+        public VideosViewHolder(View itemView, View contentView, View parentView, Action<int> listener, Action<int> youtubeClickListener) : base(itemView)
         {
             //Helper.SetImage(this.Context, $"https://img.youtube.com/vi/{trailerId}/0.jpg", backdropImage, Resource.Drawable.noimage, true);
             WebView = itemView.FindViewById<WebView>(Resource.Id.mWebView);
@@ -95,7 +97,11 @@ namespace MovieBuddy
             ParentLayout = itemView.FindViewById<CardView>(Resource.Id.videoCardView);
             Thumbnail = itemView.FindViewById<ImageView>(Resource.Id.mediaPreview);
             PlayButton = itemView.FindViewById<ImageView>(Resource.Id.playButton);
-            itemView.Click += (sender, e) => listener(base.LayoutPosition);
+            YoutubeButton = itemView.FindViewById<ImageView>(Resource.Id.youtubeButton);
+            //YoutubeButton1 = itemView.FindViewById<ImageView>(Resource.Id.youtubeButton1);
+            PlayButton.Click += (sender, e) => listener(base.LayoutPosition);
+            YoutubeButton.Click += (sender, e) => youtubeClickListener(base.LayoutPosition);
+            //YoutubeButton1.Click += (sender, e) => youtubeClickListener(base.LayoutPosition);
         }
     }
 }

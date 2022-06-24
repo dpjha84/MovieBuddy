@@ -69,5 +69,9 @@ namespace MovieBuddy
         {
             ShowLoading();
         }
+
+        protected virtual void OnYoutubeItemClick(object sender, int position)
+        {
+        }
     }
 }

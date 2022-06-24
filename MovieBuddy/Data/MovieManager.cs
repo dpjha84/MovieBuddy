@@ -90,35 +90,39 @@ namespace MovieBuddy
             foreach (var l in GetCachedOrWebData(LocalCache.LanguagesKey, () => tClient.GetLanguagesAsync().Result))
                 languageMap.Add(l.Iso_639_1, l.EnglishName);
 
-            Task.Run(() =>
-            {
-                try
-                {
-                    //var nowPlaying = GetNowPlaying(1);
-                    //var upcoming = GetUpcoming(1);
-                    //GetVideos(0, null, null, null, 1);                    
-                    GetPopular(1);
-                    GetTopRated(1);
-                    var imdbList = GetImdbTop250(1);
-                    for (int i = 1; i < 17; i++)
-                    {
-                        GetImdbTop250(i + 1);
-                    }
-                    //var list = nowPlaying.Concat(upcoming).Concat(popularRes).Concat(topRatedRes).Concat(imdbList);
-                    //foreach (var item in list)
-                    //{
-                    //    GetFullOverview(item.Id);
-                    //    GetCastAndCrew(item.Id);
-                    //    //GetVideos(item.Id, item.OriginalTitle, item.ReleaseDate, item.OriginalLanguage);
-                    //    GetReviews(item.Id);
-                    //    GetSimilar(item.Id, 1);
-                    //}
-                }
-                catch (Exception ex)
-                {
-                    TClient.LogError(ex);
-                }
-            });
+            _ = MoviesWithTrailer.Instance;
+            //Task.Run(() =>
+            //{
+            //    try
+            //    {
+                    
+            //        //GetVideos(0, null, null, null, 2);
+            //        //GetVideos(0, null, null, null, 3);
+            //        //var nowPlaying = GetNowPlaying(1);
+            //        //var upcoming = GetUpcoming(1);
+            //        //GetVideos(0, null, null, null, 1);                    
+            //        GetPopular(1);
+            //        GetTopRated(1);
+            //        var imdbList = GetImdbTop250(1);
+            //        for (int i = 1; i < 17; i++)
+            //        {
+            //            GetImdbTop250(i + 1);
+            //        }
+            //        //var list = nowPlaying.Concat(upcoming).Concat(popularRes).Concat(topRatedRes).Concat(imdbList);
+            //        //foreach (var item in list)
+            //        //{
+            //        //    GetFullOverview(item.Id);
+            //        //    GetCastAndCrew(item.Id);
+            //        //    //GetVideos(item.Id, item.OriginalTitle, item.ReleaseDate, item.OriginalLanguage);
+            //        //    GetReviews(item.Id);
+            //        //    GetSimilar(item.Id, 1);
+            //        //}
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        TClient.LogError(ex);
+            //    }
+            //});
         }
 
         private List<Top250DataDetail> top250Movies = null;
@@ -225,11 +229,11 @@ namespace MovieBuddy
             try
             {
                 var key = movieId == 0 ? $"trailers_{Globals.Language}_{page}" : $"trailers_{movieId}";
-                return CacheRepo.Videos.GetOrCreate(key, () =>
-                {
+                //return CacheRepo.Videos.GetOrCreate(key, () =>
+                //{
                     var videos = GetTrailer(movieId, page);
                     return videos ?? null;
-                });
+                //});
             }
             catch (Exception ex)
             {

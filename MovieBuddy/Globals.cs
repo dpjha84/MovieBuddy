@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace MovieBuddy
 {
-    public static class Globals
+    public class Globals
     {
         public static Dictionary<string, string> LanguageMap = new Dictionary<string, string> {
             { "All", null },
@@ -195,6 +195,7 @@ namespace MovieBuddy
                 LocalCache.Instance.Set("MovieLanguage", selectedLanguage);
             }
         }
+        
 
         public static List<int> Years = Enumerable.Range(1951, 75).ToList();
         private static AlertDialog loading = null;

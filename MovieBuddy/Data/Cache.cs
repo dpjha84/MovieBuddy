@@ -85,6 +85,8 @@ namespace MovieBuddy.Data
             }
             return cacheEntry.Data;
         }
+
+        public bool ContainsKey(string key) => _cache.ContainsKey(key);
     }
 
     public class CacheItem<T>

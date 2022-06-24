@@ -4620,6 +4620,12 @@ namespace MovieBuddy
 			// aapt resource value: 0x7F0800A4
 			public const int watched = 2131230884;
 			
+			// aapt resource value: 0x7F0800A5
+			public const int youtube = 2131230885;
+			
+			// aapt resource value: 0x7F0800A6
+			public const int youtube1 = 2131230886;
+			
 			static Drawable()
 			{
 				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
@@ -5673,6 +5679,9 @@ namespace MovieBuddy
 			
 			// aapt resource value: 0x7F09015A
 			public const int wrap_content = 2131296602;
+			
+			// aapt resource value: 0x7F09015B
+			public const int youtubeButton = 2131296603;
 			
 			static Id()
 			{

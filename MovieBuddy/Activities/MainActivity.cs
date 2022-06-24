@@ -187,11 +187,13 @@ namespace MovieBuddy
             }
             dialog.Show();
         }
-
+        public static event StatusUpdateHandler MovieLanguageChanged;
+        public delegate void StatusUpdateHandler(object sender, EventArgs e);
         private void Rb_Click(object sender, EventArgs e)
         {
             RadioButton rb = (RadioButton)sender;
             Globals.Language = rb.Text;
+            MovieLanguageChanged(this, new EventArgs());
             var prevSelectedTab = tabs.SelectedTabPosition;
             SetupTabbedView(toolbar);
             tabs.GetTabAt(prevSelectedTab).Select();

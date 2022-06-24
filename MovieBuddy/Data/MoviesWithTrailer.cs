@@ -9,6 +9,8 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using TMDbLib.Objects.General;
 using TSMovie = TMDbLib.Objects.Search.SearchMovie;
 
@@ -17,30 +19,84 @@ namespace MovieBuddy.Data
     internal class MoviesWithTrailer
     {
         private readonly TClient tClient;
-        private Func<TSMovie, bool> filterNowPlaying;
-        private string nowPlayingBaseUrl;
         private readonly ConcurrentDictionary<string, int> totalPages = new ConcurrentDictionary<string, int>();
         public static MoviesWithTrailer Instance => _instance;
         private static readonly MoviesWithTrailer _instance = new MoviesWithTrailer();
-
+        private bool done;
         public MoviesWithTrailer()
         {
             tClient = new TClient();
+            MainActivity_MovieLanguageChanged(null, null);
+            MainActivity.MovieLanguageChanged += MainActivity_MovieLanguageChanged;
+        }
+
+        Thread trailerMaintenanceThread = null;
+        private void MainActivity_MovieLanguageChanged(object sender, EventArgs e)
+        {
+            while (trailerMaintenanceThread != null && trailerMaintenanceThread.IsAlive)
+            {
+                trailerMaintenanceThread.Abort();
+                trailerMaintenanceThread = null;
+            }
+            trailerMaintenanceThread = new Thread(() =>
+            {
+                try
+                {
+                    done = false;
+                    var language = Globals.Language;
+                    int page = 1;
+                    while (true)
+                    {
+                        var key = $"trailers_{language}_{page}";
+                        var data = CacheRepo.Videos.GetOrCreate(key, () =>
+                        {
+                            var videos = GetData(page);
+                            return videos ?? null;
+                        });
+                        if (data?.Count == 0)
+                        {
+                            done = true;
+                            break;
+                        }
+                        page++;
+                    }
+                }
+                catch (Exception ex)
+                {
+                }
+            });
+            trailerMaintenanceThread.Start();
         }
 
         List<TSMovie> nowPlaying = new List<TSMovie>();
         List<TSMovie> combinedList = new List<TSMovie>();
         List<TSMovie> upcoming = new List<TSMovie>();
         int start = 0, internalPage = 1;
-        List<string> vids = new List<string>();
-        Dictionary<int, List<string>> pagedData = new Dictionary<int, List<string>>();
         public List<string> Get(int page = 1)
         {
-            //if (pagedData.ContainsKey(page)) return pagedData[page];
-            if (page == 1)
+            int count = page == 1 ? 10 : 5;
+            var key = $"trailers_{Globals.Language}_{page}";
+            while (!CacheRepo.Videos.ContainsKey(key) && !done)
             {
-                internalPage = 1;
+                if (count <= 0)
+                    return null;
+                Thread.Sleep(200);
+                count--;
+            }
+            return !CacheRepo.Videos.ContainsKey(key) ? null :
+                CacheRepo.Videos.GetOrCreate(key, () =>
+                {
+                    var videos = GetData(page);
+                    return videos ?? null;
+                });
+        }
+
+        private List<string> GetData(int page)
+        {
+            if(page == 1)
+            {
                 start = 0;
+                internalPage = 1;
             }
 
             var videos = new List<string>();
@@ -63,36 +119,7 @@ namespace MovieBuddy.Data
                     break;
                 videos.AddRange(LoadTrailers(combinedList, videos.Count));
             }
-            //pagedData[page] = videos;
             return videos;
-
-            //if (npPage <= ucPage)
-            //{
-            //    if (prevNpPage < npPage)
-            //    {
-            //        nowPlaying = NowPlayingMovies.Instance.Get(npPage);
-            //        prevNpPage = npPage;
-            //    }
-            //    movies = nowPlaying;
-            //}
-            //else
-            //{
-            //    if (prevUcPage < ucPage)
-            //    {
-            //        upcoming = UpcomingMovies.Instance.Get(ucPage);
-            //        prevUcPage = ucPage;
-            //    }
-            //    movies = upcoming;
-            //}
-
-
-            //var videos = LoadTrailers(nowPlaying, "np");
-            //if (videos.Count < 5)
-            //{
-            //    upcoming = UpcomingMovies.Instance.Get(page);
-            //    videos.AddRange(LoadTrailers(upcoming, "uc"));
-            //}
-            //return videos;
         }
 
         private List<string> LoadTrailers(List<TSMovie> movies, int existingCount)
@@ -118,19 +145,7 @@ namespace MovieBuddy.Data
                     }
                 }
                 if (videos.Count + existingCount >= 5)
-                {
-                    //if (i == movies.Count - 1)
-                    //{
-                    //    npStart = ucStart = 0;
-                    //    if (type == "np")
-                    //        npPage++;
-                    //    else
-                    //        ucPage++;
-                    //}                        
-                    //else
-                    //    npStart = ucStart = i+1;
                     break;
-                }
             }
             if (i == movies.Count)
             {

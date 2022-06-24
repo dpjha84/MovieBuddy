@@ -30,6 +30,7 @@ namespace MovieBuddy
             //ResetPages();
             movieAdapter = new VideosAdapter();
             movieAdapter.ItemClick += OnItemClick;
+            movieAdapter.YoutubeClick += OnYoutubeItemClick;
             return movieAdapter;
         }
 
@@ -49,6 +50,13 @@ namespace MovieBuddy
             var recyclerViewState = rv.GetLayoutManager().OnSaveInstanceState();
             movieAdapter.LoadVideos(data);
             rv.GetLayoutManager().OnRestoreInstanceState(recyclerViewState);
+        }
+
+        protected override void OnYoutubeItemClick(object sender, int position)
+        {
+            var videoId = (sender as VideosAdapter).videos[position];
+            Intent intent = new Intent(Intent.ActionView, Android.Net.Uri.Parse($"https://www.youtube.com/embed/{videoId}"));
+            StartActivity(intent);
         }
 
         protected override void OnItemClick(object sender, int position)
