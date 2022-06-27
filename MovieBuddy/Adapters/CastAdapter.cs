@@ -40,7 +40,7 @@ namespace MovieBuddy
             Helper.SetImage(context, searchPerson.ProfilePath, vh.CastImage, Resource.Drawable.NoCast);
         }
 
-        protected override RecyclerView.ViewHolder GetViewHolder(View view, View contentView, View parentView)
+        protected override RecyclerView.ViewHolder GetViewHolder(View view)
         {
             return new CastViewHolder(view, OnClick);
         }
@@ -75,7 +75,7 @@ namespace MovieBuddy
             Helper.SetImage(context, Cast[position].ProfilePath, vh.CastImage, Resource.Drawable.NoCast);
         }
 
-        protected override RecyclerView.ViewHolder GetViewHolder(View view, View contentView, View parentView)
+        protected override RecyclerView.ViewHolder GetViewHolder(View view)
         {
             return new CastViewHolder(view, OnClick);
         }

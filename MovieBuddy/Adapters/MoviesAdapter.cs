@@ -44,7 +44,7 @@ namespace MovieBuddy
 
         protected virtual string GetExtraText(TSearchMovie movie) => movie.GenreIds?.Count > 0 ? MovieManager.Instance.GetGenreText(movie.GenreIds[0]) : "";
 
-        protected override RecyclerView.ViewHolder GetViewHolder(View view, View contentView = null, View parentView = null)
+        protected override RecyclerView.ViewHolder GetViewHolder(View view)
         {
             return new MovieViewHolder(view, OnClick);
         }

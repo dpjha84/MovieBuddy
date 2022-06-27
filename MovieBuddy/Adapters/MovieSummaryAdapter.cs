@@ -54,7 +54,7 @@ namespace MovieBuddy
             return GetViewHolder(itemView);
         }
 
-        protected override RecyclerView.ViewHolder GetViewHolder(View view, View contentView = null, View parentView = null)
+        protected override RecyclerView.ViewHolder GetViewHolder(View view)
         {
             return new MovieSummaryViewHolder(view, OnClick);
         }

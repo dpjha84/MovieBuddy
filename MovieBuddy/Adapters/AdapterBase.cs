@@ -13,10 +13,10 @@ namespace MovieBuddy
         public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
         {
             View itemView = LayoutInflater.From(parent.Context).Inflate(Resource.Layout.CardViewItem, parent, false);
-            View mainView = LayoutInflater.From(parent.Context).Inflate(Resource.Layout.fragment_blank, parent, false);
+            //View mainView = LayoutInflater.From(parent.Context).Inflate(Resource.Layout.fragment_blank, parent, false);
             return GetViewHolder(itemView);
         }
 
-        protected abstract RecyclerView.ViewHolder GetViewHolder(View view, View contentView = null, View parentView = null);
+        protected abstract RecyclerView.ViewHolder GetViewHolder(View view);
     }
 }
