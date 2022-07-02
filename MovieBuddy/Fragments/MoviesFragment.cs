@@ -1,4 +1,5 @@
 using Android.Content;
+using Android.Gms.Ads;
 using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
@@ -108,6 +109,12 @@ namespace MovieBuddy
         {
             try
             {
+                //var FinalAd = AdWrapper.ConstructFullPageAdd(this.Context, "ca-app-pub-3940256099942544/1033173712");
+                //var intlistener = new adlistener();
+                //intlistener.AdLoaded += () => { if (FinalAd.IsLoaded) FinalAd.Show(); };
+                //FinalAd.AdListener = intlistener;
+                //FinalAd.CustomBuild();
+
                 base.OnItemClick(sender, position);
                 var movie = (sender as MoviesAdapter).movies[position];
                 Intent intent = new Intent(this.Context, typeof(MovieInfoActivity));
@@ -146,6 +153,55 @@ namespace MovieBuddy
             if (movieAdapter != null)
                 movieAdapter.ItemClick -= OnItemClick;
             base.OnDestroy();
+        }
+    }
+
+    public static class AdWrapper
+    {
+        public static InterstitialAd ConstructFullPageAdd(Context con, string UnitID)
+        {
+            var ad = new InterstitialAd(con);
+            ad.AdUnitId = UnitID;
+            return ad;
+        }
+
+        public static InterstitialAd CustomBuild(this InterstitialAd ad)
+        {
+            var requestbuilder = new AdRequest.Builder();
+            ad.LoadAd(requestbuilder.Build());
+            return ad;
+        }
+    }
+
+    public class adlistener : AdListener
+    {
+        // Declare the delegate (if using non-generic pattern).
+        public delegate void AdLoadedEvent();
+        public delegate void AdClosedEvent();
+        public delegate void AdOpenedEvent();
+
+
+
+        // Declare the event.
+        public event AdLoadedEvent AdLoaded;
+        public event AdClosedEvent AdClosed;
+        public event AdOpenedEvent AdOpened;
+
+        public override void OnAdLoaded()
+        {
+            if (AdLoaded != null) this.AdLoaded();
+            base.OnAdLoaded();
+        }
+
+        public override void OnAdClosed()
+        {
+            if (AdClosed != null) this.AdClosed();
+            base.OnAdClosed();
+        }
+        public override void OnAdOpened()
+        {
+            if (AdOpened != null) this.AdOpened();
+            base.OnAdOpened();
         }
     }
 

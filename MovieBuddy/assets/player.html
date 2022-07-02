@@ -23,6 +23,12 @@
                 height: '700',
                 width: '100%',
                 videoId: urlParams.get('videoId'),
+                playerVars: {
+                    'playsinline': 1,
+                    'rel': 0,
+                    'modestbranding': 1,
+                    'fs': 0,
+                },
                 events: {
                     'onReady': onPlayerReady,
                     //'onStateChange': onPlayerStateChange

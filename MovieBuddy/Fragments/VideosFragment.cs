@@ -54,49 +54,74 @@ namespace MovieBuddy
 
         protected override void OnYoutubeItemClick(object sender, int position)
         {
-            var videoId = (sender as VideosAdapter).videos[position];
-            Intent intent = new Intent(Intent.ActionView, Android.Net.Uri.Parse($"https://www.youtube.com/embed/{videoId}"));
-            StartActivity(intent);
+            DoAfterAd(() =>
+            {
+                var videoId = (sender as VideosAdapter).videos[position];
+                Intent intent = new Intent(Intent.ActionView, Android.Net.Uri.Parse($"https://www.youtube.com/embed/{videoId}"));
+                StartActivity(intent);
+            });
         }
 
         protected override void OnItemClick(object sender, int position)
         {
             try
             {
-                var vh = rv.FindViewHolderForAdapterPosition(position) as VideosViewHolder;
-                vh.WebView.Visibility = ViewStates.Visible;
-                var videoId = (sender as VideosAdapter).videos[position];
-                WebSettings webSettings = vh.WebView.Settings;
-                webSettings.JavaScriptEnabled = true;
-                webSettings.MediaPlaybackRequiresUserGesture = false;
-                webSettings.CacheMode = CacheModes.CacheElseNetwork;
-                //vh.WebView.SetWebViewClient(new MyWebViewClient());
-                if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.Kitkat)
-                    vh.WebView.SetLayerType(LayerType.Hardware, null);
-                else
-                    vh.WebView.SetLayerType(LayerType.Software, null);
+                DoAfterAd(() =>
+                {
+                    var vh = rv.FindViewHolderForAdapterPosition(position) as VideosViewHolder;
+                    vh.WebView.Visibility = ViewStates.Visible;
+                    var videoId = (sender as VideosAdapter).videos[position];
+                    WebSettings webSettings = vh.WebView.Settings;
+                    webSettings.JavaScriptEnabled = true;
+                    webSettings.MediaPlaybackRequiresUserGesture = false;
+                    webSettings.CacheMode = CacheModes.CacheElseNetwork;
+                    //vh.WebView.SetWebViewClient(new MyWebViewClient());
+                    if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.Kitkat)
+                        vh.WebView.SetLayerType(LayerType.Hardware, null);
+                    else
+                        vh.WebView.SetLayerType(LayerType.Software, null);
 
-                //vh.WebView.SetWebChromeClient(new FullScreenClient(vh.ParentLayout, vh.ContentLayout));
-                //webView.SetWebChromeClient(new WebChromeClient());
-                webSettings.SetLayoutAlgorithm(WebSettings.LayoutAlgorithm.NarrowColumns);
-                vh.WebView.SetWebViewClient(new WebViewClient());
-                vh.WebView.SetWebChromeClient(new WebChromeClient());
-                webSettings.SavePassword = true;
-                webSettings.SaveFormData = true;
-                webSettings.SetEnableSmoothTransition(true);
-                webSettings.LoadWithOverviewMode = true;
-                webSettings.UseWideViewPort = true;
-                webSettings.SetRenderPriority(WebSettings.RenderPriority.High);
-                webSettings.SetAppCacheEnabled(true);
-                vh.WebView.ScrollBarStyle = ScrollbarStyles.InsideOverlay;
-                webSettings.DomStorageEnabled = true;
+                    //vh.WebView.SetWebChromeClient(new FullScreenClient(vh.ParentLayout, vh.ContentLayout));
+                    //webView.SetWebChromeClient(new WebChromeClient());
+                    webSettings.SetLayoutAlgorithm(WebSettings.LayoutAlgorithm.NarrowColumns);
+                    vh.WebView.SetWebViewClient(new WebViewClient());
+                    vh.WebView.SetWebChromeClient(new WebChromeClient());
+                    webSettings.SavePassword = true;
+                    webSettings.SaveFormData = true;
+                    webSettings.SetEnableSmoothTransition(true);
+                    webSettings.LoadWithOverviewMode = true;
+                    webSettings.UseWideViewPort = true;
+                    webSettings.SetRenderPriority(WebSettings.RenderPriority.High);
+                    webSettings.SetAppCacheEnabled(true);
+                    vh.WebView.ScrollBarStyle = ScrollbarStyles.InsideOverlay;
+                    webSettings.DomStorageEnabled = true;
 
-                vh.WebView.LoadUrl($"file:///android_asset/player.html?videoId={videoId}");
+                    vh.WebView.LoadUrl($"file:///android_asset/player.html?videoId={videoId}");
+                });
             }
             catch (Exception ex)
             {
                 Toast.MakeText(Application.Context, ex.ToString(), ToastLength.Long).Show();
             }
+        }
+
+        private void DoAfterAd(Action action)
+        {
+            var FinalAd = AdWrapper.ConstructFullPageAdd(this.Context, "ca-app-pub-3940256099942544/1033173712");
+            var intlistener = new adlistener();
+            intlistener.AdLoaded += () =>
+            {
+                if (FinalAd.IsLoaded)
+                {
+                    FinalAd.Show();
+                }
+            };
+            intlistener.AdClosed += () =>
+            {
+                action();
+            };
+            FinalAd.AdListener = intlistener;
+            FinalAd.CustomBuild();
         }
 
         public class MyWebViewClient : WebViewClient

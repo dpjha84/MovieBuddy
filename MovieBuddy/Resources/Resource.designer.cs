@@ -6588,6 +6588,9 @@ namespace MovieBuddy
 			// aapt resource value: 0x7F110056
 			public const int status_bar_notification_info_overflow = 2131820630;
 			
+			// aapt resource value: 0x7F110057
+			public const int video_ad_unit_id = 2131820631;
+			
 			static String()
 			{
 				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
