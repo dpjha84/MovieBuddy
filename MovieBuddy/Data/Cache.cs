@@ -12,7 +12,7 @@ namespace MovieBuddy.Data
     public class CacheRepo
     {
         private static readonly Lazy<Cache<Dictionary<string, string>>> summary = new Lazy<Cache<Dictionary<string, string>>>(() => new Cache<Dictionary<string, string>>("MovieSummaryCache"));
-        private static readonly Lazy<Cache<List<string>>> videos = new Lazy<Cache<List<string>>>(() => new Cache<List<string>>("MovieVideosCache"));
+        private static readonly Lazy<Cache<List<VideoData>>> videos = new Lazy<Cache<List<VideoData>>>(() => new Cache<List<VideoData>>("MovieVideosCache"));
         private static readonly Lazy<Cache<TCredits>> casts = new Lazy<Cache<TCredits>>(() => new Cache<TCredits>("MovieCastsCache"));
         private static readonly Lazy<Cache<List<ReviewBase>>> reviews = new Lazy<Cache<List<ReviewBase>>>(() => new Cache<List<ReviewBase>>("MovieReviewsCache"));
         private static readonly Lazy<Cache<List<TSMovie>>> similar = new Lazy<Cache<List<TSMovie>>>(() => new Cache<List<TSMovie>>("MovieSimilarCache"));
@@ -23,7 +23,7 @@ namespace MovieBuddy.Data
         private static readonly Lazy<Cache<List<TSMovie>>> upcoming = new Lazy<Cache<List<TSMovie>>>(() => new Cache<List<TSMovie>>("UpcomingMovies"));
 
         public static Cache<Dictionary<string, string>> Summary => summary.Value;
-        public static Cache<List<string>> Videos => videos.Value;
+        public static Cache<List<VideoData>> Videos => videos.Value;
         public static Cache<TCredits> Casts => casts.Value;
         public static Cache<List<ReviewBase>> Reviews => reviews.Value;
         public static Cache<List<TSMovie>> Similar => similar.Value;

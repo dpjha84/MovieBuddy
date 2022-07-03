@@ -76,6 +76,7 @@
     <Compile Include="Activities\ActivityBase.cs" />
     <Compile Include="Activities\CastInfoActivity.cs" />
     <Compile Include="Activities\ExploreActivity.cs" />
+    <Compile Include="Activities\VideoViewer.cs" />
     <Compile Include="Activities\ImageViewer.cs" />
     <Compile Include="Activities\MainActivity.cs" />
     <Compile Include="Activities\MovieInfoActivity.cs" />
@@ -662,6 +663,17 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\youtube1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\VideoViewer.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResourceAnalysisConfig Include="Resources\values\dimens.xml">
+      <SubType>Designer</SubType>
+    </AndroidResourceAnalysisConfig>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

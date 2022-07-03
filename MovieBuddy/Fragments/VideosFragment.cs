@@ -8,6 +8,7 @@ using Android.Widget;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TMDbLib.Objects.Search;
 
 namespace MovieBuddy
 {
@@ -30,7 +31,7 @@ namespace MovieBuddy
             //ResetPages();
             movieAdapter = new VideosAdapter();
             movieAdapter.ItemClick += OnItemClick;
-            movieAdapter.YoutubeClick += OnYoutubeItemClick;
+            movieAdapter.YoutubeClick += OnPosterClick;
             return movieAdapter;
         }
 
@@ -47,57 +48,76 @@ namespace MovieBuddy
             var data = MovieManager.Instance.GetVideos(MovieId, MovieName, relaseDate, lang, page++);
             if (data == null)
                 return;
+
             var recyclerViewState = rv.GetLayoutManager().OnSaveInstanceState();
             movieAdapter.LoadVideos(data);
             rv.GetLayoutManager().OnRestoreInstanceState(recyclerViewState);
         }
 
-        protected override void OnYoutubeItemClick(object sender, int position)
+        protected override void OnPosterClick(object sender, int position)
         {
-            DoAfterAd(() =>
-            {
-                var videoId = (sender as VideosAdapter).videos[position];
-                Intent intent = new Intent(Intent.ActionView, Android.Net.Uri.Parse($"https://www.youtube.com/embed/{videoId}"));
-                StartActivity(intent);
-            });
+            var videoId = (sender as VideosAdapter).videos[position].VideoId;
+            var movie = (sender as VideosAdapter).videos[position].Movie;
+            Intent intent = new Intent(this.Context, typeof(MovieInfoActivity));
+            Bundle b = new Bundle();
+            b.PutInt("movieId", movie.Id);
+            b.PutString("movieName", movie.Title);
+            b.PutString("movieReleaseDate", movie.ReleaseDate.HasValue ? movie.ReleaseDate.ToString() : null);
+            b.PutString("movieLanguage", movie.OriginalLanguage);
+            var backdrop = movie.BackdropPath;
+            b.PutString("imageUrl", !string.IsNullOrWhiteSpace(backdrop) ? backdrop : movie.PosterPath);
+            intent.PutExtras(b);
+            StartActivity(intent);
+            Activity.OverridePendingTransition(Resource.Animation.@Side_in_right, Resource.Animation.@Side_out_left);
         }
 
         protected override void OnItemClick(object sender, int position)
         {
             try
             {
-                DoAfterAd(() =>
-                {
+                //DoAfterAd(() =>
+                //{
                     var vh = rv.FindViewHolderForAdapterPosition(position) as VideosViewHolder;
-                    vh.WebView.Visibility = ViewStates.Visible;
-                    var videoId = (sender as VideosAdapter).videos[position];
-                    WebSettings webSettings = vh.WebView.Settings;
-                    webSettings.JavaScriptEnabled = true;
-                    webSettings.MediaPlaybackRequiresUserGesture = false;
-                    webSettings.CacheMode = CacheModes.CacheElseNetwork;
-                    //vh.WebView.SetWebViewClient(new MyWebViewClient());
-                    if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.Kitkat)
-                        vh.WebView.SetLayerType(LayerType.Hardware, null);
-                    else
-                        vh.WebView.SetLayerType(LayerType.Software, null);
+                    //vh.WebView.Visibility = ViewStates.Visible;
+                    var videoId = (sender as VideosAdapter).videos[position].VideoId;
 
-                    //vh.WebView.SetWebChromeClient(new FullScreenClient(vh.ParentLayout, vh.ContentLayout));
-                    //webView.SetWebChromeClient(new WebChromeClient());
-                    webSettings.SetLayoutAlgorithm(WebSettings.LayoutAlgorithm.NarrowColumns);
-                    vh.WebView.SetWebViewClient(new WebViewClient());
-                    vh.WebView.SetWebChromeClient(new WebChromeClient());
-                    webSettings.SavePassword = true;
-                    webSettings.SaveFormData = true;
-                    webSettings.SetEnableSmoothTransition(true);
-                    webSettings.LoadWithOverviewMode = true;
-                    webSettings.UseWideViewPort = true;
-                    webSettings.SetRenderPriority(WebSettings.RenderPriority.High);
-                    webSettings.SetAppCacheEnabled(true);
-                    vh.WebView.ScrollBarStyle = ScrollbarStyles.InsideOverlay;
-                    webSettings.DomStorageEnabled = true;
+                    Intent intent = new Intent(this.Context, typeof(VideoViewer));
+                    Bundle b = new Bundle();
+                    b.PutString("videoId", videoId);
+                    intent.PutExtras(b);
+                    StartActivity(intent);
+                    //Activity.OverridePendingTransition(Resource.Animation.@Side_in_right, Resource.Animation.@Side_out_left);
 
-                    vh.WebView.LoadUrl($"file:///android_asset/player.html?videoId={videoId}");
-                });
+                    //var vh = rv.FindViewHolderForAdapterPosition(position) as VideosViewHolder;
+                    //vh.WebView.Visibility = ViewStates.Visible;
+                    //var videoId = (sender as VideosAdapter).videos[position];
+                    //WebSettings webSettings = vh.WebView.Settings;
+                    //webSettings.JavaScriptEnabled = true;
+                    //webSettings.MediaPlaybackRequiresUserGesture = false;
+                    //webSettings.CacheMode = CacheModes.CacheElseNetwork;
+                    ////vh.WebView.SetWebViewClient(new MyWebViewClient());
+                    //if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.Kitkat)
+                    //    vh.WebView.SetLayerType(LayerType.Hardware, null);
+                    //else
+                    //    vh.WebView.SetLayerType(LayerType.Software, null);
+
+                    ////vh.WebView.SetWebChromeClient(new FullScreenClient(vh.ParentLayout, vh.ContentLayout));
+                    ////webView.SetWebChromeClient(new WebChromeClient());
+                    //webSettings.SetLayoutAlgorithm(WebSettings.LayoutAlgorithm.NarrowColumns);
+                    //vh.WebView.SetWebViewClient(new WebViewClient());
+                    //vh.WebView.SetWebChromeClient(new WebChromeClient());
+                    //webSettings.SavePassword = true;
+                    //webSettings.SaveFormData = true;
+                    //webSettings.SetEnableSmoothTransition(true);
+                    //webSettings.LoadWithOverviewMode = true;
+                    //webSettings.UseWideViewPort = true;
+                    //webSettings.SetRenderPriority(WebSettings.RenderPriority.High);
+                    //webSettings.SetAppCacheEnabled(true);
+                    //vh.WebView.ScrollBarStyle = ScrollbarStyles.InsideOverlay;
+                    //webSettings.DomStorageEnabled = true;
+
+                    //vh.WebView.LoadUrl($"file:///android_asset/player.html?videoId={videoId}");
+                //});
             }
             catch (Exception ex)
             {
@@ -124,20 +144,11 @@ namespace MovieBuddy
             FinalAd.CustomBuild();
         }
 
-        public class MyWebViewClient : WebViewClient
-        {
-            public override void OnPageFinished(WebView view, string url)
-            {
-                base.OnPageFinished(view, url);
-                view.LoadUrl("javascript:(function() { document.getElementsByTagName('video')[0].play(); })()");
-            }
-        }
-
         protected override int SpanCount
         {
             get
             {
-                return Resources.Configuration.Orientation == Android.Content.Res.Orientation.Portrait ? 1 : 2;
+                return Resources.Configuration.Orientation == Android.Content.Res.Orientation.Portrait ? 1 : 3;
             }
         }
 

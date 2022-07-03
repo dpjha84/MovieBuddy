@@ -1,8 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using TMDbLib.Objects.Search;
 
 namespace MovieBuddy
 {
+    public class VideoData
+    {
+        public string VideoId { get; set; }
+        public SearchMovie Movie { get; set; }
+    }
     public abstract class ClickableWithPagingAdapter<T> : AdapterBase, IClickableWithPagingAdapter<T>
     {
         public event EventHandler<int> ItemClick;
@@ -12,7 +18,7 @@ namespace MovieBuddy
             AddToCollection(data);
             NotifyDataSetChanged();
         }
-        public virtual void LoadVideos(List<string> data)
+        public virtual void LoadVideos(List<VideoData> data)
         {
             AddVideosToCollection(data);
             NotifyDataSetChanged();
@@ -23,7 +29,7 @@ namespace MovieBuddy
             ItemClick?.Invoke(this, position);
         }
 
-        public void OnYoutubeClick(int position)
+        public void OnPosterClick(int position)
         {
             YoutubeClick?.Invoke(this, position);
         }
@@ -31,6 +37,6 @@ namespace MovieBuddy
 
         protected abstract void AddToCollection(List<T> data);
 
-        protected virtual void AddVideosToCollection(List<string> data) { }
+        protected virtual void AddVideosToCollection(List<VideoData> data) { }
     }
 }

@@ -72,7 +72,7 @@ namespace MovieBuddy.Data
         List<TSMovie> combinedList = new List<TSMovie>();
         List<TSMovie> upcoming = new List<TSMovie>();
         int start = 0, internalPage = 1;
-        public List<string> Get(int page = 1)
+        public List<VideoData> Get(int page = 1)
         {
             int count = page == 1 ? 10 : 5;
             var key = $"trailers_{Globals.Language}_{page}";
@@ -91,7 +91,7 @@ namespace MovieBuddy.Data
                 });
         }
 
-        private List<string> GetData(int page)
+        private List<VideoData> GetData(int page)
         {
             if(page == 1)
             {
@@ -99,7 +99,7 @@ namespace MovieBuddy.Data
                 internalPage = 1;
             }
 
-            var videos = new List<string>();
+            var videos = new List<VideoData>();
             while (videos.Count < 5)
             {
                 if (start == 0)
@@ -122,9 +122,9 @@ namespace MovieBuddy.Data
             return videos;
         }
 
-        private List<string> LoadTrailers(List<TSMovie> movies, int existingCount)
+        private List<VideoData> LoadTrailers(List<TSMovie> movies, int existingCount)
         {
-            var videos = new List<string>();
+            var videos = new List<VideoData>();
             if (movies == null)
                 return videos;
             int i;
@@ -140,7 +140,7 @@ namespace MovieBuddy.Data
                         && item.Key.IsValidVideo()
                         )
                     {
-                        videos.Add(item.Key);
+                        videos.Add(new VideoData { VideoId = item.Key, Movie = movies[i] });
                         break;
                     }
                 }

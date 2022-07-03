@@ -206,7 +206,7 @@ namespace MovieBuddy
             return res1.Results;
         }
 
-        private List<string> GetTrailer(int movieId, int page)
+        private List<VideoData> GetTrailer(int movieId, int page)
         {
             if (movieId == 0)
             {
@@ -220,11 +220,11 @@ namespace MovieBuddy
             {
                 var videos = tClient.GetMovieVideosAsync(movieId).Result.Results;
                 if (videos == null || videos.Count == 0) return null;
-                return videos.Where(x => !string.IsNullOrWhiteSpace(x.Key)).Select(x => x.Key).ToList();
+                return videos.Where(x => !string.IsNullOrWhiteSpace(x.Key)).Select(x => new VideoData { VideoId = x.Key }).ToList();
             }
         }
 
-        public List<string> GetVideos(int movieId, string movieName, DateTime? releaseDate, string lang, int page = 1)
+        public List<VideoData> GetVideos(int movieId, string movieName, DateTime? releaseDate, string lang, int page = 1)
         {
             try
             {

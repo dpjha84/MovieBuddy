@@ -70,7 +70,7 @@ namespace MovieBuddy
             ShowLoading();
         }
 
-        protected virtual void OnYoutubeItemClick(object sender, int position)
+        protected virtual void OnPosterClick(object sender, int position)
         {
         }
     }
