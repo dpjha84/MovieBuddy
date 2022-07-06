@@ -2,6 +2,7 @@ using Android.Content;
 using Android.OS;
 using Android.Support.V7.Widget;
 using System;
+using System.Linq;
 
 namespace MovieBuddy
 {
@@ -49,13 +50,14 @@ namespace MovieBuddy
         }
 
         private int page = 1;
-        protected override void GetData()
+        protected override bool GetData()
         {
             var data = MovieManager.Instance.GetCastAndCrew(MovieId, page++);
-            if (data == null) return;
+            if (data == null || !data.Any()) return false;
             var recyclerViewState = rv.GetLayoutManager().OnSaveInstanceState();
             castAdapter.LoadData(data);
             rv.GetLayoutManager().OnRestoreInstanceState(recyclerViewState);
+            return true;
         }
 
         protected override RecyclerView.Adapter SetAdapter()

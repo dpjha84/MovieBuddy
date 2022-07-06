@@ -1,14 +1,11 @@
 ﻿using Android.App;
 using Android.Content;
+using Android.Gms.Ads;
 using Android.OS;
 using Android.Support.V7.Widget;
-using Android.Views;
-using Android.Webkit;
 using Android.Widget;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using TMDbLib.Objects.Search;
 
 namespace MovieBuddy
 {
@@ -36,7 +33,7 @@ namespace MovieBuddy
         }
 
         private int page = 1;
-        protected override void GetData()
+        protected override bool GetData()
         {
             var date = Arguments.GetString("relaseDate");
             DateTime? relaseDate = null;
@@ -44,18 +41,19 @@ namespace MovieBuddy
                 relaseDate = DateTime.Parse(date);
             var lang = Arguments.GetString("lang");
             if (MovieId > 0 && page > 1)
-                return;
+                return false;
             var data = MovieManager.Instance.GetVideos(MovieId, MovieName, relaseDate, lang, page++);
-            if (data == null)
-                return;
+            if (data == null || !data.Any()) return false;
 
             var recyclerViewState = rv.GetLayoutManager().OnSaveInstanceState();
             movieAdapter.LoadVideos(data);
             rv.GetLayoutManager().OnRestoreInstanceState(recyclerViewState);
+            return true;
         }
 
         protected override void OnPosterClick(object sender, int position)
         {
+            base.ShowLoading();
             var videoId = (sender as VideosAdapter).videos[position].VideoId;
             var movie = (sender as VideosAdapter).videos[position].Movie;
             Intent intent = new Intent(this.Context, typeof(MovieInfoActivity));
@@ -68,17 +66,16 @@ namespace MovieBuddy
             b.PutString("imageUrl", !string.IsNullOrWhiteSpace(backdrop) ? backdrop : movie.PosterPath);
             intent.PutExtras(b);
             StartActivity(intent);
-            Activity.OverridePendingTransition(Resource.Animation.@Side_in_right, Resource.Animation.@Side_out_left);
+            //Activity.OverridePendingTransition(Resource.Animation.@Side_in_right, Resource.Animation.@Side_out_left);
         }
 
         protected override void OnItemClick(object sender, int position)
         {
             try
             {
-                //DoAfterAd(() =>
-                //{
+                DoAfterAd(() =>
+                {
                     var vh = rv.FindViewHolderForAdapterPosition(position) as VideosViewHolder;
-                    //vh.WebView.Visibility = ViewStates.Visible;
                     var videoId = (sender as VideosAdapter).videos[position].VideoId;
 
                     Intent intent = new Intent(this.Context, typeof(VideoViewer));
@@ -86,38 +83,7 @@ namespace MovieBuddy
                     b.PutString("videoId", videoId);
                     intent.PutExtras(b);
                     StartActivity(intent);
-                    //Activity.OverridePendingTransition(Resource.Animation.@Side_in_right, Resource.Animation.@Side_out_left);
-
-                    //var vh = rv.FindViewHolderForAdapterPosition(position) as VideosViewHolder;
-                    //vh.WebView.Visibility = ViewStates.Visible;
-                    //var videoId = (sender as VideosAdapter).videos[position];
-                    //WebSettings webSettings = vh.WebView.Settings;
-                    //webSettings.JavaScriptEnabled = true;
-                    //webSettings.MediaPlaybackRequiresUserGesture = false;
-                    //webSettings.CacheMode = CacheModes.CacheElseNetwork;
-                    ////vh.WebView.SetWebViewClient(new MyWebViewClient());
-                    //if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.Kitkat)
-                    //    vh.WebView.SetLayerType(LayerType.Hardware, null);
-                    //else
-                    //    vh.WebView.SetLayerType(LayerType.Software, null);
-
-                    ////vh.WebView.SetWebChromeClient(new FullScreenClient(vh.ParentLayout, vh.ContentLayout));
-                    ////webView.SetWebChromeClient(new WebChromeClient());
-                    //webSettings.SetLayoutAlgorithm(WebSettings.LayoutAlgorithm.NarrowColumns);
-                    //vh.WebView.SetWebViewClient(new WebViewClient());
-                    //vh.WebView.SetWebChromeClient(new WebChromeClient());
-                    //webSettings.SavePassword = true;
-                    //webSettings.SaveFormData = true;
-                    //webSettings.SetEnableSmoothTransition(true);
-                    //webSettings.LoadWithOverviewMode = true;
-                    //webSettings.UseWideViewPort = true;
-                    //webSettings.SetRenderPriority(WebSettings.RenderPriority.High);
-                    //webSettings.SetAppCacheEnabled(true);
-                    //vh.WebView.ScrollBarStyle = ScrollbarStyles.InsideOverlay;
-                    //webSettings.DomStorageEnabled = true;
-
-                    //vh.WebView.LoadUrl($"file:///android_asset/player.html?videoId={videoId}");
-                //});
+                });
             }
             catch (Exception ex)
             {
@@ -127,8 +93,13 @@ namespace MovieBuddy
 
         private void DoAfterAd(Action action)
         {
-            var FinalAd = AdWrapper.ConstructFullPageAdd(this.Context, "ca-app-pub-3940256099942544/1033173712");
+            //var FinalAd = AdWrapper.ConstructFullPageAdd(Context, "ca-app-pub-3940256099942544/1033173712"); //test ad
+            var FinalAd = AdWrapper.ConstructFullPageAdd(Context, "ca-app-pub-9351754143985661/8006168632");
             var intlistener = new adlistener();
+            intlistener.AdFailedToLoad += () =>
+            {
+                action();
+            };
             intlistener.AdLoaded += () =>
             {
                 if (FinalAd.IsLoaded)
@@ -144,6 +115,11 @@ namespace MovieBuddy
             FinalAd.CustomBuild();
         }
 
+        private void Intlistener_AdFailedToLoad()
+        {
+            throw new NotImplementedException();
+        }
+
         protected override int SpanCount
         {
             get
@@ -153,5 +129,63 @@ namespace MovieBuddy
         }
 
         protected override void ResetPages() { }
+    }
+
+    public static class AdWrapper
+    {
+        public static InterstitialAd ConstructFullPageAdd(Context con, string UnitID)
+        {
+            var ad = new InterstitialAd(con)
+            {
+                AdUnitId = UnitID
+            };
+            return ad;
+        }
+
+        public static InterstitialAd CustomBuild(this InterstitialAd ad)
+        {
+            var requestbuilder = new AdRequest.Builder();
+            ad.LoadAd(requestbuilder.Build());
+            return ad;
+        }
+    }
+
+    public class adlistener : AdListener
+    {
+        // Declare the delegate (if using non-generic pattern).
+        public delegate void AdLoadedEvent();
+        public delegate void AdClosedEvent();
+        public delegate void AdOpenedEvent();
+        public delegate void AdFailedToLoadEvent();
+
+
+        // Declare the event.
+        public event AdLoadedEvent AdLoaded;
+        public event AdClosedEvent AdClosed;
+        public event AdOpenedEvent AdOpened;
+        public event AdFailedToLoadEvent AdFailedToLoad;
+
+        public override void OnAdLoaded()
+        {
+            if (AdLoaded != null) this.AdLoaded();
+            base.OnAdLoaded();
+        }
+
+        public override void OnAdClosed()
+        {
+            if (AdClosed != null) this.AdClosed();
+            base.OnAdClosed();
+        }
+        public override void OnAdOpened()
+        {
+            if (AdOpened != null) this.AdOpened();
+            base.OnAdOpened();
+        }
+
+        public override void OnAdFailedToLoad(int p0)
+        {
+            if (AdFailedToLoad != null) this.AdFailedToLoad();
+            base.OnAdFailedToLoad(p0);
+        }
     }
 }

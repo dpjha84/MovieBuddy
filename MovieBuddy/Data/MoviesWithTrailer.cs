@@ -1,17 +1,8 @@
-﻿using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using TMDbLib.Objects.General;
 using TSMovie = TMDbLib.Objects.Search.SearchMovie;
 
 namespace MovieBuddy.Data
@@ -30,7 +21,7 @@ namespace MovieBuddy.Data
             MainActivity.MovieLanguageChanged += MainActivity_MovieLanguageChanged;
         }
 
-        Thread trailerMaintenanceThread = null;
+        private Thread trailerMaintenanceThread = null;
         private void MainActivity_MovieLanguageChanged(object sender, EventArgs e)
         {
             while (trailerMaintenanceThread != null && trailerMaintenanceThread.IsAlive)
@@ -61,17 +52,17 @@ namespace MovieBuddy.Data
                         page++;
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                 }
             });
             trailerMaintenanceThread.Start();
         }
 
-        List<TSMovie> nowPlaying = new List<TSMovie>();
-        List<TSMovie> combinedList = new List<TSMovie>();
-        List<TSMovie> upcoming = new List<TSMovie>();
-        int start = 0, internalPage = 1;
+        private List<TSMovie> nowPlaying = new List<TSMovie>();
+        private List<TSMovie> combinedList = new List<TSMovie>();
+        private List<TSMovie> upcoming = new List<TSMovie>();
+        private int start = 0, internalPage = 1;
         public List<VideoData> Get(int page = 1)
         {
             int count = page == 1 ? 10 : 5;
@@ -93,7 +84,7 @@ namespace MovieBuddy.Data
 
         private List<VideoData> GetData(int page)
         {
-            if(page == 1)
+            if (page == 1)
             {
                 start = 0;
                 internalPage = 1;
@@ -109,10 +100,10 @@ namespace MovieBuddy.Data
                         : new List<TSMovie>();
 
                     upcoming = UpcomingMovies.Instance.TotalPages == 0 || internalPage <= UpcomingMovies.Instance.TotalPages
-                        ? UpcomingMovies.Instance.Get(internalPage) ?? new List<TSMovie>()
+                        ? UpcomingMovies.Instance.Get(internalPage).OrderByDescending(x => x.ReleaseDate).ToList() ?? new List<TSMovie>()
                         : new List<TSMovie>();
 
-                    combinedList = nowPlaying.Concat(upcoming).ToList();
+                    combinedList = upcoming.Concat(nowPlaying).ToList();
                 }
                 if (internalPage > NowPlayingMovies.Instance.TotalPages &&
                        internalPage > UpcomingMovies.Instance.TotalPages)
@@ -153,7 +144,7 @@ namespace MovieBuddy.Data
                 start = 0;
             }
             else
-                start = i+1;
+                start = i + 1;
             return videos;
         }
     }

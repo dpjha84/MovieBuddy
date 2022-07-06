@@ -1,10 +1,4 @@
-﻿using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,8 +11,8 @@ namespace MovieBuddy.Data
     internal class NowPlayingMovies
     {
         private readonly TClient tClient;
-        private Func<TSMovie, bool> filterNowPlaying;
-        private string nowPlayingBaseUrl;
+        private readonly Func<TSMovie, bool> filterNowPlaying;
+        private readonly string nowPlayingBaseUrl;
         private readonly ConcurrentDictionary<string, int> totalPages = new ConcurrentDictionary<string, int>();
         public static NowPlayingMovies Instance => _instance;
         private static readonly NowPlayingMovies _instance = new NowPlayingMovies();
@@ -69,7 +63,7 @@ namespace MovieBuddy.Data
                     totalPages[Globals.Language] = result.TotalPages;
                     return result.Results.Where(filterNowPlaying).ToList();
                 }
-            });            
+            });
         }
 
         private string BuildUrl(string startDate, string sortBy, string endDate = null)

@@ -8,6 +8,7 @@ using Android.Views;
 using Android.Widget;
 using Refractored.Fab;
 using System;
+using System.Linq;
 using static Android.Widget.AbsListView;
 
 namespace MovieBuddy
@@ -27,6 +28,7 @@ namespace MovieBuddy
                 View rootView = inflater.Inflate(Resource.Layout.fragment_blank, container, false);
 
                 rv = rootView.FindViewById<RecyclerView>(Resource.Id.rv_recycler_view);
+                var emptyView = rootView.FindViewById<TextView>(Resource.Id.empty_view);
                 nsv = rootView.FindViewById<NestedScrollView>(Resource.Id.nsv);
                 rv.NestedScrollingEnabled = false;
                 rv.HasFixedSize = true;
@@ -39,7 +41,20 @@ namespace MovieBuddy
                 var adapter1 = SetAdapter();
 
                 adapter1.HasStableIds = true;
-                GetData();
+                bool dataAvailable = GetData();
+                if (adapter1 is VideosAdapter va)
+                {
+                    if (!va.videos.Any())
+                    {
+                        rv.Visibility = ViewStates.Gone;
+                        emptyView.Visibility = ViewStates.Visible;
+                    }
+                    else
+                    {
+                        rv.Visibility = ViewStates.Visible;
+                        emptyView.Visibility = ViewStates.Gone;
+                    }
+                }
                 rv.SetAdapter(adapter1);
                 HideLoading();
                 return rootView;
@@ -66,7 +81,7 @@ namespace MovieBuddy
 
         protected virtual void SetupOnScroll() { }
 
-        protected virtual void GetData() { }
+        protected virtual bool GetData() { return true; }
 
         protected virtual int SpanCount
         {

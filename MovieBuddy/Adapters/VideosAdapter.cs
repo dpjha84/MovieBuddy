@@ -1,5 +1,4 @@
-﻿using Android.Content;
-using Android.Support.V7.Widget;
+﻿using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Webkit;
 using Android.Widget;
@@ -21,7 +20,7 @@ namespace MovieBuddy
         protected override void AddVideosToCollection(List<VideoData> data)
         {
             videos.AddRange(data);
-            
+
         }
 
         public override long GetItemId(int position)
@@ -38,37 +37,18 @@ namespace MovieBuddy
         {
             VideosViewHolder vh = holder as VideosViewHolder;
             var videoData = videos[position];
-            vh.MovieName.Text = videoData.Movie.Title;
+
             Helper.SetImage(vh.Thumbnail.Context, $"https://img.youtube.com/vi/{videoData.VideoId}/0.jpg", vh.Thumbnail, Resource.Drawable.noimage, true);
             if (videoData.Movie == null)
+            {
                 vh.Poster.Visibility = ViewStates.Gone;
+                vh.MovieName.Visibility = ViewStates.Gone;
+            }
             else
+            {
                 Helper.SetImage(vh.Poster.Context, videoData.Movie.PosterPath, vh.Poster, Resource.Drawable.noimage);
-
-            //Helper.SetImage(vh.Poster.Context, $"https://img.youtube.com/vi/{videoData.VideoId}/0.jpg", vh.Poster, Resource.Drawable.noimage, true);
-
-            //var url = $"<iframe width=\"100%\" height=\"600\" src=\"{myYouTubeVideoUrl}\" frameborder=\"0\" allowfullscreen/>";
-            //WebSettings webSettings = vh.WebView.Settings;
-            //webSettings.JavaScriptEnabled = true;
-            //webSettings.CacheMode = CacheModes.CacheElseNetwork;
-            //if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.Kitkat)
-            //    vh.WebView.SetLayerType(LayerType.Hardware, null);
-            //else
-            //    vh.WebView.SetLayerType(LayerType.Software, null);
-
-            ////vh.WebView.SetWebChromeClient(new FullScreenClient(vh.ParentLayout, vh.ContentLayout));
-            //vh.WebView.SetWebChromeClient(new WebChromeClient());
-            //webSettings.SetLayoutAlgorithm(WebSettings.LayoutAlgorithm.NarrowColumns);
-            //webSettings.SavePassword = true;
-            //webSettings.SaveFormData = true;
-            //webSettings.SetEnableSmoothTransition(true);
-            //webSettings.LoadWithOverviewMode = true;
-            //webSettings.UseWideViewPort = true;
-            //webSettings.SetRenderPriority(WebSettings.RenderPriority.High);
-            //webSettings.SetAppCacheEnabled(true);
-            //vh.WebView.ScrollBarStyle = ScrollbarStyles.InsideOverlay;
-            //webSettings.DomStorageEnabled = true;
-            //vh.WebView.LoadData(url, "text/html", "utf-8");
+                vh.MovieName.Text = videoData.Movie.Title;
+            }
         }
 
         protected override RecyclerView.ViewHolder GetViewHolder(View view)
@@ -104,8 +84,8 @@ namespace MovieBuddy
             //View itemView = LayoutInflater.From(parent.Context).Inflate(Resource.Layout.CardViewItem, parent, false);
 
             ParentLayout = itemView.FindViewById<CardView>(Resource.Id.videoCardView);
-            if(DeviceDisplay.MainDisplayInfo.Orientation == DisplayOrientation.Landscape)
-            ParentLayout.LayoutParameters.Height = (int)DeviceDisplay.MainDisplayInfo.Height/2;
+            if (DeviceDisplay.MainDisplayInfo.Orientation == DisplayOrientation.Landscape)
+                ParentLayout.LayoutParameters.Height = (int)DeviceDisplay.MainDisplayInfo.Height / 2;
             Thumbnail = itemView.FindViewById<ImageView>(Resource.Id.mediaPreview);
             Poster = itemView.FindViewById<ImageView>(Resource.Id.mediaPreview1);
             MovieName = itemView.FindViewById<TextView>(Resource.Id.movieName);

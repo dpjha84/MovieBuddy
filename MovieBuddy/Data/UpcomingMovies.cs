@@ -11,8 +11,8 @@ namespace MovieBuddy.Data
     internal class UpcomingMovies
     {
         private readonly TClient tClient;
-        private Func<TSMovie, bool> filterUpcoming;
-        private string upcomingBaseUrl;
+        private readonly Func<TSMovie, bool> filterUpcoming;
+        private readonly string upcomingBaseUrl;
         private readonly ConcurrentDictionary<string, int> totalPages = new ConcurrentDictionary<string, int>();
         public static UpcomingMovies Instance => _instance;
         private static readonly UpcomingMovies _instance = new UpcomingMovies();

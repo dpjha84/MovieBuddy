@@ -32,7 +32,7 @@
             android:id="@+id/movieName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/secondaryText"
+            android:textColor="#FDFDFD"
             android:textSize="16dp"
             android:padding="5dp"
             android:gravity="center"/>

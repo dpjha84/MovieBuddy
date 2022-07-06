@@ -1,6 +1,7 @@
 ﻿using Android.Content;
 using Android.OS;
 using Android.Support.V7.Widget;
+using System.Linq;
 using TMDbLib.Objects.Search;
 
 namespace MovieBuddy
@@ -19,13 +20,14 @@ namespace MovieBuddy
         }
 
         protected int page = 1;
-        protected override void GetData()
+        protected override bool GetData()
         {
             var data = MovieManager.Instance.SearchPerson(Query, page++);
-            if (data == null) return;
+            if (data == null || !data.Any()) return false;
             var recyclerViewState = rv.GetLayoutManager().OnSaveInstanceState();
             searchPersonAdapter.LoadData(data);
             rv.GetLayoutManager().OnRestoreInstanceState(recyclerViewState);
+            return true;
         }
 
         protected override RecyclerView.Adapter SetAdapter()

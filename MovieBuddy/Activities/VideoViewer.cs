@@ -59,7 +59,7 @@ namespace MovieBuddy
             webSettings.DomStorageEnabled = true;
             //webView.SetInitialScale(GetScale());
             //if (DeviceDisplay.MainDisplayInfo.Orientation == DisplayOrientation.Portrait)
-                webView.LoadUrl($"file:///android_asset/player.html?videoId={Intent.GetStringExtra("videoId")}");
+            webView.LoadUrl($"file:///android_asset/player.html?videoId={Intent.GetStringExtra("videoId")}");
             //else
             //    webView.LoadUrl($"file:///android_asset/player1.html?videoId={Intent.GetStringExtra("videoId")}");
         }

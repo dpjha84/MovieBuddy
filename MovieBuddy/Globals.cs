@@ -1,5 +1,4 @@
 ﻿using Android.App;
-using Android.Content;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -195,10 +194,10 @@ namespace MovieBuddy
                 LocalCache.Instance.Set("MovieLanguage", selectedLanguage);
             }
         }
-        
+
 
         public static List<int> Years = Enumerable.Range(1951, 75).ToList();
-        private static AlertDialog loading = null;
+        private static readonly AlertDialog loading = null;
         //public static AlertDialog Loading(Context context)
         //{
         //    //if(loading == null)

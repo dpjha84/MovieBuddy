@@ -59,10 +59,10 @@ namespace MovieBuddy
                 //Toast.MakeText(this.Context, $"Calls: {TClientBase.calls}", ToastLength.Long).Show();
                 base.OnCreate(savedInstanceState);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
-            
+
         }
 
         protected virtual void OnItemClick(object sender, int position)

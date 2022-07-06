@@ -1,6 +1,7 @@
 ﻿using Android.Content;
 using Android.OS;
 using Android.Support.V7.Widget;
+using System.Linq;
 using TMDbLib.Objects.General;
 
 namespace MovieBuddy
@@ -17,13 +18,14 @@ namespace MovieBuddy
             return frag1;
         }
 
-        protected override void GetData()
+        protected override bool GetData()
         {
             var data = MovieManager.Instance.GetPopularPersons(page++);
-            if (data == null) return;
+            if (data == null || !data.Any()) return false;
             var recyclerViewState = rv.GetLayoutManager().OnSaveInstanceState();
             popularPersonAdapter.LoadData(data);
             rv.GetLayoutManager().OnRestoreInstanceState(recyclerViewState);
+            return true;
         }
 
         protected override RecyclerView.Adapter SetAdapter()
